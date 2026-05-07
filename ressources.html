@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiches d'aide — Arbitrage JAJ Meylan HB 25-26</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge: #E8001D;
+    --noir: #0D0D0D;
+    --blanc: #F5F2EC;
+    --gris: #1A1A1A;
+    --gris-mid: #2E2E2E;
+    --accent: #FFD100;
+    --texte-doux: #9A9A9A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .top-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  header {
+    padding: 2.5rem 3rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .logo-badge {
+    width: 52px;
+    height: 52px;
+    background: var(--rouge);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: white;
+    flex-shrink: 0;
+    letter-spacing: 1px;
+  }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--blanc);
+    line-height: 1;
+  }
+
+  .header-text p {
+    font-size: 0.72rem;
+    color: var(--texte-doux);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .header-contact {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: var(--texte-doux);
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  .header-contact strong {
+    color: var(--accent);
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .subnav {
+    padding: 0 3rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+    gap: 0;
+  }
+
+  .subnav a {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--texte-doux);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .subnav a.active,
+  .subnav a:hover {
+    color: var(--blanc);
+    border-bottom-color: var(--rouge);
+  }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 3.5rem 3rem 2.5rem;
+    border-bottom: 1px solid #222;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '08';
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14rem;
+    color: rgba(255,255,255,0.025);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .page-header .label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin-bottom: 0.8rem;
+  }
+
+  .page-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .page-header p {
+    margin-top: 0.8rem;
+    font-size: 0.82rem;
+    color: var(--texte-doux);
+    font-weight: 300;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  /* CATÉGORIES */
+  .categories {
+    padding: 2.5rem 3rem;
+  }
+
+  .cat-section {
+    margin-bottom: 3rem;
+  }
+
+  .cat-label {
+    font-size: 0.62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--texte-doux);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #222;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .cat-label::before {
+    content: '';
+    width: 20px;
+    height: 2px;
+    background: var(--rouge);
+  }
+
+  /* LISTE DE RESSOURCES */
+  .resources-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+  }
+
+  .resource-item {
+    background: var(--gris);
+    padding: 1.4rem 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    text-decoration: none;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resource-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.25s ease;
+  }
+
+  .resource-item:hover {
+    background: var(--gris-mid);
+  }
+
+  .resource-item:hover::before {
+    transform: scaleY(1);
+  }
+
+  .res-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    min-width: 28px;
+    letter-spacing: 1px;
+  }
+
+  .res-icon {
+    width: 38px;
+    height: 38px;
+    background: #252525;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .res-body {
+    flex: 1;
+  }
+
+  .res-body h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--blanc);
+    letter-spacing: 0.3px;
+  }
+
+  .res-body p {
+    font-size: 0.72rem;
+    color: var(--texte-doux);
+    font-weight: 300;
+    margin-top: 2px;
+  }
+
+  .res-tag {
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.05);
+    color: var(--texte-doux);
+    border: 1px solid #333;
+    flex-shrink: 0;
+  }
+
+  .res-arrow {
+    color: var(--texte-doux);
+    font-size: 0.8rem;
+    transition: transform 0.2s, color 0.2s;
+  }
+
+  .resource-item:hover .res-arrow {
+    transform: translateX(4px);
+    color: var(--blanc);
+  }
+
+  /* BANDEAU BAS DE PAGE */
+  .cta-banner {
+    margin: 0 3rem 3rem;
+    background: var(--rouge);
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-between;
+  }
+
+  .cta-banner .cta-text h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: white;
+  }
+
+  .cta-banner .cta-text p {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.75);
+    margin-top: 2px;
+  }
+
+  .cta-btn {
+    background: white;
+    color: var(--rouge);
+    padding: 0.7rem 1.6rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-decoration: none;
+    border-radius: 2px;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .cta-btn:hover {
+    background: var(--accent);
+    color: var(--noir);
+  }
+
+  footer {
+    padding: 1.5rem 3rem;
+    border-top: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer p {
+    font-size: 0.68rem;
+    color: var(--texte-doux);
+    letter-spacing: 1px;
+  }
+
+  footer a {
+    font-size: 0.68rem;
+    color: var(--texte-doux);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+
+  footer a:hover { color: var(--rouge); }
+
+  .bottom-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  @media (max-width: 700px) {
+    header, .subnav, .page-header, .categories, .cta-banner, footer {
+      padding-left: 1.2rem;
+      padding-right: 1.2rem;
+    }
+    .cta-banner { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .page-header::before { display: none; }
+    .header-contact { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <div class="logo-badge">MHB</div>
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+  </div>
+  <div class="header-contact">
+    <strong>Responsable Arbitrage</strong>
+    Xavier — 06.22.10.37.49
+  </div>
+</header>
+
+<nav class="subnav">
+  <a href="index.html">Accueil</a>
+  <a href="ressources.html" class="active">Fiches d'aide</a>
+</nav>
+
+<div class="page-header">
+  <p class="label">Documentation · Accompagnement</p>
+  <h2>Fiches d'aide<br>pédagogiques</h2>
+  <p>Ensemble des documents de référence pour l'accompagnement et la formation des Juges-Arbitres Jeunes.</p>
+</div>
+
+<main class="categories">
+
+  <!-- SECTION RAPPORT & RÈGLES -->
+  <div class="cat-section">
+    <div class="cat-label">Rapports & Rédaction</div>
+    <div class="resources-list">
+
+      <a class="resource-item" href="https://drive.google.com/file/d/1sl0aMVZKCvaD_yc__2YFpl2j6kl89gaA/view?usp=drive_link" target="_blank">
+        <span class="res-number">01</span>
+        <div class="res-icon">✍️</div>
+        <div class="res-body">
+          <h4>Écriture d'un rapport d'arbitre</h4>
+          <p>Méthodologie et structure pour rédiger un rapport d'arbitrage complet</p>
+        </div>
+        <span class="res-tag">PDF</span>
+        <span class="res-arrow">→</span>
+      </a>
+
+      <a class="resource-item" href="https://drive.google.com/file/d/1YaJvwbNLrNsdeLEBHpuJW2Af9aWx35mr/view?usp=drive_link" target="_blank">
+        <span class="res-number">02</span>
+        <div class="res-icon">📖</div>
+        <div class="res-body">
+          <h4>Livret de l'arbitrage</h4>
+          <p>Guide complet de référence pour les arbitres Meylan HB</p>
+        </div>
+        <span class="res-tag">PDF</span>
+        <span class="res-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- SECTION DÉCISIONS & TECHNIQUES -->
+  <div class="cat-section">
+    <div class="cat-label">Décisions & Techniques d'arbitrage</div>
+    <div class="resources-list">
+
+      <a class="resource-item" href="https://drive.google.com/file/d/1kllQ4e2zwCoSFmqPsS7rIyRnEgItF0rf/view?usp=drive_link" target="_blank">
+        <span class="res-number">03</span>
+        <div class="res-icon">⚖️</div>
+        <div class="res-body">
+          <h4>Critères de décision</h4>
+          <p>Grille d'aide à la prise de décision arbitrale sur le terrain</p>
+        </div>
+        <span class="res-tag">PDF</span>
+        <span class="res-arrow">→</span>
+      </a>
+
+      <a class="resource-item" href="https://drive.google.com/file/d/1ZU8QYjFX6iaFhpUljebpWfFjQdEqN-z_/view?usp=drive_link" target="_blank">
+        <span class="res-number">04</span>
+        <div class="res-icon">🏃</div>
+        <div class="res-body">
+          <h4>Définition d'une O.M.B.</h4>
+          <p>Obstruction au Mouvement du Buteur — définition et critères d'application</p>
+        </div>
+        <span class="res-tag">PDF</span>
+        <span class="res-arrow">→</span>
+      </a>
+
+      <a class="resource-item" href="https://drive.google.com/file/d/14-XoZ6SqJKD-BCe-ki4vdW4BHDJUel4t/view?usp=drive_link" target="_blank">
+        <span class="res-number">05</span>
+        <div class="res-icon">🎯</div>
+        <div class="res-body">
+          <h4>Exécution d'un jet franc</h4>
+          <p>Règles et procédure pour l'arbitrage du jet franc</p>
+        </div>
+        <span class="res-tag">PDF</span>
+        <span class="res-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- SECTION SANCTIONS -->
+  <div class="cat-section">
+    <div class="cat-label">Sanctions & Comportements</div>
+    <div class="resources-list">
+
+      <a class="resource-item" href="https://drive.google.com/file/d/188r93o96DXhRB62t6WMjY_uoxSiysE2w/view?usp=drive_link" target="_blank">
+        <span class="res-number">06</span>
+        <div class="res-icon">🟨</div>
+        <div class="res-body">
+          <h4>Sanctions aux irrégularités et comportements antisportifs</h4>
+          <p>Tableau des sanctions applicables selon les infractions constatées</p>
+        </div>
+        <span class="res-tag">PDF</span>
+        <span class="res-arrow">→</span>
+      </a>
+
+      <a class="resource-item" href="https://drive.google.com/file/d/1Yx6KOomj0qwSvuAUZUBouaPSGMCJIykP/view?usp=drive_link" target="_blank">
+        <span class="res-number">07</span>
+        <div class="res-icon">🔴</div>
+        <div class="res-body">
+          <h4>Échelle des sanctions personnelles</h4>
+          <p>Progression avertissement → exclusion → disqualification → rapport</p>
+        </div>
+        <span class="res-tag">PDF</span>
+        <span class="res-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- SECTION RÈGLEMENTS -->
+  <div class="cat-section">
+    <div class="cat-label">Règlements compétition</div>
+    <div class="resources-list">
+
+      <a class="resource-item" href="https://drive.google.com/file/d/1b-qDzjRFM2z8AzYuvf1-Ecf0LoTd9I0A/view?usp=drivesdk" target="_blank">
+        <span class="res-number">08</span>
+        <div class="res-icon">🏅</div>
+        <div class="res-body">
+          <h4>Extrait règlement particulier — Coupe Jacques Battu</h4>
+          <p>Dispositions spécifiques applicables lors de la coupe Jacques Battu</p>
+        </div>
+        <span class="res-tag">PDF</span>
+        <span class="res-arrow">→</span>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+
+<div class="cta-banner">
+  <div class="cta-text">
+    <h3>Prêt à compléter un suivi ?</h3>
+    <p>Accéder directement au formulaire de saisie des suivis pédagogiques 25-26.</p>
+  </div>
+  <a class="cta-btn" href="https://docs.google.com/forms/d/e/1FAIpQLSce_t-AMhSYUC9wQLP5uaB38PSvTd4v7Ooc1Ur5UfZ678qlCw/viewform?usp=dialog" target="_blank">Compléter un suivi →</a>
+</div>
+
+<footer>
+  <p>© 2025-2026 Meylan Handball Club · Responsable Arbitrage</p>
+  <a href="index.html">← Retour à l'accueil</a>
+</footer>
+
+<div class="bottom-stripe"></div>
+
+</body>
+</html>

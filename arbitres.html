@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbitres — JAJ Meylan HB 25-26</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge: #E8001D;
+    --noir: #0D0D0D;
+    --blanc: #F5F2EC;
+    --gris: #1A1A1A;
+    --gris-mid: #252525;
+    --gris-light: #2E2E2E;
+    --accent: #FFD100;
+    --vert: #00C46A;
+    --texte-doux: #7A7A7A;
+    --border: #222;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  /* ─── CHROME ─── */
+  .top-stripe { height: 4px; background: linear-gradient(90deg, var(--rouge), var(--accent), var(--rouge)); }
+
+  header {
+    padding: 2rem 3rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .logo-badge {
+    width: 48px; height: 48px; background: var(--rouge); border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue'; font-size: 1.3rem; color: #fff; letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  .header-text h1 { font-family: 'Bebas Neue'; font-size: 1.5rem; letter-spacing: 3px; line-height: 1; }
+  .header-text p { font-size: 0.7rem; color: var(--texte-doux); letter-spacing: 2px; text-transform: uppercase; margin-top: 3px; }
+
+  .subnav {
+    padding: 0 3rem; border-bottom: 1px solid var(--border); display: flex;
+  }
+  .subnav a {
+    padding: 0.85rem 1.3rem; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;
+    color: var(--texte-doux); text-decoration: none; border-bottom: 2px solid transparent; transition: .2s;
+  }
+  .subnav a.active, .subnav a:hover { color: var(--blanc); border-bottom-color: var(--rouge); }
+
+  /* ─── SYNC STATUS ─── */
+  .sync-bar {
+    padding: 0.6rem 3rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    background: #111;
+    transition: background .3s;
+  }
+  .sync-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--texte-doux);
+    transition: background .3s;
+    flex-shrink: 0;
+  }
+  .sync-bar.loading .sync-dot { background: var(--accent); animation: pulse 1s infinite; }
+  .sync-bar.ok .sync-dot { background: var(--vert); }
+  .sync-bar.error .sync-dot { background: var(--rouge); }
+  .sync-bar.saving .sync-dot { background: var(--accent); animation: pulse .6s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .sync-label { color: var(--texte-doux); }
+  .sync-bar.ok .sync-label { color: var(--vert); }
+  .sync-bar.error .sync-label { color: var(--rouge); }
+  .sync-time { margin-left: auto; color: #444; font-size: 0.62rem; }
+
+  /* ─── CONFIG BANNER ─── */
+  .config-banner {
+    margin: 1.5rem 3rem;
+    background: rgba(255,209,0,0.06);
+    border: 1px solid rgba(255,209,0,0.25);
+    border-left: 3px solid var(--accent);
+    padding: 1.2rem 1.6rem;
+    border-radius: 2px;
+    display: none;
+  }
+  .config-banner.visible { display: block; }
+  .config-banner h4 { font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 2px; color: var(--accent); margin-bottom: 0.5rem; }
+  .config-banner p { font-size: 0.75rem; color: var(--texte-doux); line-height: 1.7; }
+  .config-banner code {
+    background: #1a1a1a; border: 1px solid #333; padding: 2px 6px;
+    border-radius: 2px; font-size: 0.78rem; color: var(--blanc);
+    font-family: 'Courier New', monospace;
+  }
+  .config-banner input[type="text"] {
+    width: 100%; margin-top: 0.8rem;
+    background: var(--gris-light); border: 1px solid #444; border-radius: 2px;
+    color: var(--blanc); font-family: 'DM Sans'; font-size: 0.82rem;
+    padding: 0.65rem 1rem; outline: none;
+  }
+  .config-banner input[type="text"]:focus { border-color: var(--accent); }
+  .config-btn {
+    margin-top: 0.8rem; padding: 0.6rem 1.4rem;
+    background: var(--accent); color: var(--noir);
+    font-family: 'Bebas Neue'; font-size: 0.9rem; letter-spacing: 2px;
+    border: none; border-radius: 2px; cursor: pointer; transition: opacity .2s;
+  }
+  .config-btn:hover { opacity: .85; }
+
+  /* ─── TOOLBAR ─── */
+  .toolbar {
+    padding: 1.8rem 3rem;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .toolbar-title {
+    font-family: 'Bebas Neue'; font-size: 1.8rem; letter-spacing: 4px; flex: 1;
+  }
+  .toolbar-title span { color: var(--rouge); }
+
+  .stats-pill {
+    display: flex; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 3px; overflow: hidden;
+  }
+  .stat-item {
+    background: var(--gris); padding: 0.5rem 1rem; text-align: center;
+  }
+  .stat-item .val { font-family: 'Bebas Neue'; font-size: 1.3rem; letter-spacing: 1px; color: var(--blanc); }
+  .stat-item .lbl { font-size: 0.58rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--texte-doux); margin-top: 1px; }
+
+  .btn-add {
+    background: var(--rouge); color: #fff; border: none; cursor: pointer;
+    padding: 0.7rem 1.4rem; font-family: 'Bebas Neue'; font-size: 0.95rem; letter-spacing: 2px;
+    border-radius: 2px; display: flex; align-items: center; gap: 0.5rem; transition: background .2s;
+    white-space: nowrap;
+  }
+  .btn-add:hover { background: #c8001a; }
+  .btn-add:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* ─── FILTRES ─── */
+  .filters {
+    padding: 1rem 3rem; display: flex; gap: 0.6rem; flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .filter-btn {
+    padding: 0.35rem 0.9rem; font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase;
+    background: var(--gris); color: var(--texte-doux); border: 1px solid var(--border);
+    border-radius: 2px; cursor: pointer; transition: .2s;
+  }
+  .filter-btn:hover, .filter-btn.active { background: var(--gris-light); color: var(--blanc); border-color: #444; }
+  .filter-btn.active { border-color: var(--rouge); color: var(--rouge); }
+
+  /* ─── GRILLE ARBITRES ─── */
+  .grid-wrap { padding: 2rem 3rem; }
+
+  #arbitres-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .arb-card {
+    background: var(--gris);
+    padding: 1.6rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    position: relative; overflow: hidden;
+    transition: background .2s;
+    animation: fadeIn .3s ease both;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .arb-card:hover { background: var(--gris-mid); }
+
+  .arb-card::before {
+    content: '';
+    position: absolute; left: 0; top: 0;
+    width: 3px; height: 100%;
+  }
+  .arb-card.actif::before { background: var(--vert); }
+  .arb-card.attente::before { background: var(--texte-doux); }
+
+  .card-top { display: flex; align-items: flex-start; gap: 1rem; }
+
+  .arb-avatar {
+    width: 44px; height: 44px; border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue'; font-size: 1.1rem; letter-spacing: 1px;
+    flex-shrink: 0;
+  }
+  .actif .arb-avatar  { background: rgba(0,196,106,.15); color: var(--vert); }
+  .attente .arb-avatar { background: rgba(122,122,122,.15); color: var(--texte-doux); }
+
+  .arb-info { flex: 1; min-width: 0; }
+  .arb-info h3 {
+    font-size: 0.95rem; font-weight: 600; color: var(--blanc);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .arb-info .arb-grade {
+    font-size: 0.68rem; color: var(--texte-doux); margin-top: 3px; line-height: 1.4;
+  }
+
+  .status-badge {
+    font-size: 0.58rem; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 2px; flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .badge-actif { background: rgba(0,196,106,.12); color: var(--vert); border: 1px solid rgba(0,196,106,.3); }
+  .badge-attente { background: rgba(122,122,122,.12); color: var(--texte-doux); border: 1px solid #333; }
+
+  .card-meta {
+    display: flex; gap: 0.6rem; flex-wrap: wrap;
+  }
+  .meta-chip {
+    font-size: 0.62rem; letter-spacing: 1px; text-transform: uppercase;
+    padding: 2px 7px; border-radius: 2px;
+    background: rgba(255,255,255,.04); color: var(--texte-doux);
+    border: 1px solid #2a2a2a;
+  }
+
+  .card-actions {
+    display: flex; gap: 0.5rem; margin-top: 0.2rem;
+  }
+  .btn-edit, .btn-del {
+    flex: 1; padding: 0.5rem; font-size: 0.68rem; letter-spacing: 1.5px;
+    text-transform: uppercase; border: none; border-radius: 2px; cursor: pointer; transition: .2s;
+  }
+  .btn-edit { background: var(--gris-light); color: var(--texte-doux); }
+  .btn-edit:hover { background: #3a3a3a; color: var(--blanc); }
+  .btn-del { background: transparent; color: #444; border: 1px solid #333; }
+  .btn-del:hover { background: rgba(232,0,29,.1); color: var(--rouge); border-color: rgba(232,0,29,.3); }
+
+  /* SKELETON LOADER */
+  .skeleton-card {
+    background: var(--gris);
+    padding: 1.6rem;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .skel {
+    background: linear-gradient(90deg, #222 25%, #2a2a2a 50%, #222 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 2px;
+  }
+  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+  /* EMPTY STATE */
+  .empty-state {
+    grid-column: 1/-1;
+    padding: 4rem 2rem; text-align: center;
+    color: var(--texte-doux); font-size: 0.82rem; line-height: 2;
+  }
+  .empty-state .big { font-family: 'Bebas Neue'; font-size: 3rem; letter-spacing: 4px; color: #222; display: block; margin-bottom: 0.5rem; }
+
+  /* ─── MODAL ─── */
+  .modal-backdrop {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,.75); z-index: 100;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(4px);
+  }
+  .modal-backdrop.open { display: flex; }
+
+  .modal {
+    background: var(--gris); border: 1px solid #333; border-radius: 4px;
+    width: 90%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+    animation: slideUp .25s ease;
+  }
+
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+
+  .modal-header {
+    padding: 1.5rem 2rem; border-bottom: 1px solid #2a2a2a;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-header h2 { font-family: 'Bebas Neue'; font-size: 1.3rem; letter-spacing: 3px; }
+  .modal-close {
+    background: none; border: none; color: var(--texte-doux); font-size: 1.3rem; cursor: pointer;
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    border-radius: 2px; transition: .2s;
+  }
+  .modal-close:hover { background: #333; color: var(--blanc); }
+
+  .modal-body { padding: 2rem; display: flex; flex-direction: column; gap: 1.4rem; }
+
+  .field { display: flex; flex-direction: column; gap: 0.5rem; }
+  .field label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--texte-doux); }
+
+  .field input, .field select {
+    background: var(--gris-light); border: 1px solid #333; border-radius: 2px;
+    color: var(--blanc); font-family: 'DM Sans'; font-size: 0.85rem;
+    padding: 0.7rem 1rem; outline: none; transition: border-color .2s;
+    -webkit-appearance: none;
+  }
+  .field input:focus, .field select:focus { border-color: var(--rouge); }
+  .field select option { background: #1a1a1a; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .modal-footer {
+    padding: 1.2rem 2rem; border-top: 1px solid #2a2a2a;
+    display: flex; gap: 0.8rem; justify-content: flex-end;
+  }
+  .btn-cancel {
+    padding: 0.65rem 1.2rem; background: none; border: 1px solid #333;
+    color: var(--texte-doux); font-family: 'DM Sans'; font-size: 0.8rem;
+    border-radius: 2px; cursor: pointer; transition: .2s;
+  }
+  .btn-cancel:hover { border-color: #555; color: var(--blanc); }
+  .btn-save {
+    padding: 0.65rem 1.6rem; background: var(--rouge); border: none;
+    color: #fff; font-family: 'Bebas Neue'; font-size: 0.95rem; letter-spacing: 2px;
+    border-radius: 2px; cursor: pointer; transition: background .2s;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .btn-save:hover { background: #c8001a; }
+  .btn-save:disabled { opacity: .5; cursor: not-allowed; }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 200;
+    background: var(--gris-light); border: 1px solid #333; border-left: 3px solid var(--vert);
+    padding: 0.8rem 1.4rem; border-radius: 3px;
+    font-size: 0.78rem; color: var(--blanc);
+    opacity: 0; transform: translateY(10px); transition: .3s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: none; }
+
+  footer {
+    padding: 1.2rem 3rem; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  footer p, footer a { font-size: 0.68rem; color: var(--texte-doux); text-decoration: none; letter-spacing: 1px; }
+  footer a:hover { color: var(--rouge); }
+
+  .bottom-stripe { height: 4px; background: linear-gradient(90deg, var(--rouge), var(--accent), var(--rouge)); }
+
+  @media (max-width: 700px) {
+    header, .subnav, .sync-bar, .toolbar, .filters, .grid-wrap, footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .toolbar { flex-direction: column; align-items: flex-start; }
+    .field-row { grid-template-columns: 1fr; }
+    .config-banner { margin-left: 1.2rem; margin-right: 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <div class="logo-badge">MHB</div>
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+  </div>
+</header>
+
+<nav class="subnav">
+  <a href="index.html">Accueil</a>
+  <a href="ressources.html">Fiches d'aide</a>
+  <a href="arbitres.html" class="active">Arbitres</a>
+</nav>
+
+<!-- BARRE DE STATUT SYNC -->
+<div class="sync-bar loading" id="sync-bar">
+  <div class="sync-dot"></div>
+  <span class="sync-label" id="sync-label">Connexion en cours…</span>
+  <span class="sync-time" id="sync-time"></span>
+</div>
+
+<!-- BANNIÈRE DE CONFIGURATION (visible si pas d'URL configurée) -->
+<div class="config-banner" id="config-banner">
+  <h4>⚙ Configuration requise</h4>
+  <p>
+    Pour synchroniser les données entre plusieurs PC, renseignez l'URL de votre Google Apps Script.<br>
+    Suivez les instructions du fichier <code>apps-script.js</code> fourni, puis collez l'URL de déploiement ci-dessous.
+  </p>
+  <input type="text" id="script-url-input" placeholder="https://script.google.com/macros/s/…/exec">
+  <br>
+  <button class="config-btn" onclick="saveScriptUrl()">Enregistrer et connecter</button>
+</div>
+
+<div class="toolbar">
+  <div class="toolbar-title">Annuaire <span>Arbitres</span></div>
+  <div class="stats-pill" id="stats-pills">
+    <div class="stat-item"><div class="val" id="stat-total">—</div><div class="lbl">Total</div></div>
+    <div class="stat-item"><div class="val" id="stat-actif">—</div><div class="lbl">Actifs</div></div>
+    <div class="stat-item"><div class="val" id="stat-attente">—</div><div class="lbl">En attente</div></div>
+  </div>
+  <button class="btn-add" onclick="openModal()" id="btn-add">＋ Ajouter un arbitre</button>
+</div>
+
+<div class="filters">
+  <button class="filter-btn active" data-filter="tous" onclick="setFilter(this)">Tous</button>
+  <button class="filter-btn" data-filter="actif" onclick="setFilter(this)">Actifs</button>
+  <button class="filter-btn" data-filter="attente" onclick="setFilter(this)">En attente</button>
+  <button class="filter-btn" data-filter="JAJ CLUB" onclick="setFilter(this)">JAJ Club</button>
+  <button class="filter-btn" data-filter="JAJ T3" onclick="setFilter(this)">JAJ T3</button>
+  <button class="filter-btn" data-filter="JAJ T2" onclick="setFilter(this)">JAJ T2</button>
+  <button class="filter-btn" data-filter="JAJ T1" onclick="setFilter(this)">JAJ T1</button>
+  <button class="filter-btn" data-filter="JA T3" onclick="setFilter(this)">JA T3</button>
+  <button class="filter-btn" data-filter="JA T2-T1" onclick="setFilter(this)">JA T2-T1</button>
+</div>
+
+<div class="grid-wrap">
+  <div id="arbitres-grid">
+    <!-- Skeleton loaders -->
+    <div class="skeleton-card">
+      <div class="skel" style="height:44px;width:44px;border-radius:3px"></div>
+      <div class="skel" style="height:14px;width:60%"></div>
+      <div class="skel" style="height:10px;width:40%"></div>
+    </div>
+    <div class="skeleton-card">
+      <div class="skel" style="height:44px;width:44px;border-radius:3px"></div>
+      <div class="skel" style="height:14px;width:55%"></div>
+      <div class="skel" style="height:10px;width:35%"></div>
+    </div>
+    <div class="skeleton-card">
+      <div class="skel" style="height:44px;width:44px;border-radius:3px"></div>
+      <div class="skel" style="height:14px;width:65%"></div>
+      <div class="skel" style="height:10px;width:45%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-backdrop" id="modal-backdrop" onclick="handleBackdropClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Ajouter un arbitre</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-id">
+
+      <div class="field-row">
+        <div class="field">
+          <label>Prénom *</label>
+          <input type="text" id="f-prenom" placeholder="Prénom">
+        </div>
+        <div class="field">
+          <label>Nom *</label>
+          <input type="text" id="f-nom" placeholder="NOM">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Grade *</label>
+        <select id="f-grade">
+          <option value="">— Sélectionner un grade —</option>
+          <option value="JAJ CLUB">Juge Arbitre Jeune CLUB</option>
+          <option value="JAJ T3">Juge Arbitre Jeune Territorial T3</option>
+          <option value="JAJ T2">Juge Arbitre Jeune Territorial T2</option>
+          <option value="JAJ T1">Juge Arbitre Jeune Territorial T1</option>
+          <option value="JA T3">Juge Arbitre Territorial T3</option>
+          <option value="JA T2-T1">Juge Arbitre Territorial T2-T1</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Statut *</label>
+        <select id="f-statut">
+          <option value="attente">En attente</option>
+          <option value="actif">Actif</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>Année de naissance</label>
+          <input type="number" id="f-annee" placeholder="2008" min="1990" max="2015">
+        </div>
+        <div class="field">
+          <label>Matchs arbitrés</label>
+          <input type="number" id="f-matchs" placeholder="0" min="0">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Suivis réalisés cette saison</label>
+        <input type="number" id="f-suivis" placeholder="0" min="0">
+      </div>
+
+      <div class="field">
+        <label>Note / Observations</label>
+        <input type="text" id="f-note" placeholder="Remarque libre…">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-save" id="btn-save" onclick="saveArbitre()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<footer>
+  <p>© 2025-2026 Meylan Handball Club · Responsable Arbitrage</p>
+  <a href="index.html">← Retour à l'accueil</a>
+</footer>
+<div class="bottom-stripe"></div>
+
+<script>
+  // ═══════════════════════════════════════════════════════════
+  //  CONFIGURATION
+  //  Remplacez la valeur ci-dessous par l'URL de votre
+  //  Google Apps Script déployé, OU laissez vide pour
+  //  utiliser l'interface de configuration intégrée.
+  // ═══════════════════════════════════════════════════════════
+  const HARDCODED_SCRIPT_URL = ''; // ex: 'https://script.google.com/macros/s/AKfy.../exec'
+
+  // ─── GRADES display ───
+  const GRADES = {
+    'JAJ CLUB': 'JAJ Club',
+    'JAJ T3':   'JAJ Territorial T3',
+    'JAJ T2':   'JAJ Territorial T2',
+    'JAJ T1':   'JAJ Territorial T1',
+    'JA T3':    'JA Territorial T3',
+    'JA T2-T1': 'JA Territorial T2-T1',
+  };
+
+  // ─── STATE ───
+  let arbitres = [];
+  let currentFilter = 'tous';
+  let editingId = null;
+  let scriptUrl = '';
+  let isConnected = false;
+
+  // ─── SCRIPT URL MANAGEMENT ───
+  function getScriptUrl() {
+    if (HARDCODED_SCRIPT_URL) return HARDCODED_SCRIPT_URL;
+    return sessionStorage.getItem('mhb_script_url') || localStorage.getItem('mhb_script_url') || '';
+  }
+
+  function saveScriptUrl() {
+    const input = document.getElementById('script-url-input').value.trim();
+    if (!input || !input.startsWith('https://script.google.com')) {
+      showToast('URL invalide. Elle doit commencer par https://script.google.com', 'error');
+      return;
+    }
+    localStorage.setItem('mhb_script_url', input);
+    scriptUrl = input;
+    document.getElementById('config-banner').classList.remove('visible');
+    loadArbitres();
+  }
+
+  // ─── SYNC STATUS ───
+  function setSyncStatus(state, label, time = '') {
+    const bar = document.getElementById('sync-bar');
+    bar.className = 'sync-bar ' + state;
+    document.getElementById('sync-label').textContent = label;
+    document.getElementById('sync-time').textContent = time;
+  }
+
+  function nowTime() {
+    return 'Dernière sync : ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+  }
+
+  // ─── LOAD FROM API ───
+  async function loadArbitres() {
+    if (!scriptUrl) {
+      setSyncStatus('error', 'Non configuré');
+      document.getElementById('config-banner').classList.add('visible');
+      document.getElementById('arbitres-grid').innerHTML = `<div class="empty-state"><span class="big">!</span>Configurez l'URL du script Google Apps Script<br>pour activer la synchronisation.</div>`;
+      document.getElementById('btn-add').disabled = true;
+      return;
+    }
+
+    setSyncStatus('loading', 'Chargement des données…');
+
+    try {
+      const resp = await fetch(`${scriptUrl}?action=getAll`, { method: 'GET' });
+      if (!resp.ok) throw new Error('HTTP ' + resp.status);
+      const json = await resp.json();
+
+      if (json.error) throw new Error(json.error);
+
+      arbitres = (json.arbitres || []).map(a => ({
+        ...a,
+        matchs: a.matchs !== '' && a.matchs !== null ? Number(a.matchs) : null,
+        suivis: a.suivis !== '' && a.suivis !== null ? Number(a.suivis) : null,
+        annee:  a.annee  !== '' && a.annee  !== null ? String(a.annee)  : null,
+      }));
+
+      isConnected = true;
+      document.getElementById('btn-add').disabled = false;
+      setSyncStatus('ok', 'Synchronisé', nowTime());
+      render();
+
+    } catch (err) {
+      console.error('loadArbitres error:', err);
+      setSyncStatus('error', 'Erreur de connexion — ' + err.message);
+      document.getElementById('arbitres-grid').innerHTML = `<div class="empty-state"><span class="big">✕</span>Impossible de charger les données.<br>Vérifiez l'URL du script et les permissions.</div>`;
+    }
+  }
+
+  // ─── API CALL ───
+  async function apiCall(body) {
+    setSyncStatus('saving', 'Enregistrement…');
+    const resp = await fetch(scriptUrl, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const json = await resp.json();
+    if (json.error) throw new Error(json.error);
+    setSyncStatus('ok', 'Synchronisé', nowTime());
+    return json;
+  }
+
+  // ─── RENDER ───
+  function render() {
+    const grid = document.getElementById('arbitres-grid');
+
+    const total = arbitres.length;
+    const actifs = arbitres.filter(a => a.statut === 'actif').length;
+    document.getElementById('stat-total').textContent = total;
+    document.getElementById('stat-actif').textContent = actifs;
+    document.getElementById('stat-attente').textContent = total - actifs;
+
+    let filtered = arbitres;
+    if (currentFilter === 'actif') filtered = arbitres.filter(a => a.statut === 'actif');
+    else if (currentFilter === 'attente') filtered = arbitres.filter(a => a.statut === 'attente');
+    else if (currentFilter !== 'tous') filtered = arbitres.filter(a => a.grade === currentFilter);
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><span class="big">${total === 0 ? '0' : '—'}</span>${total === 0 ? 'Aucun arbitre enregistré.<br>Cliquez sur <strong>+ Ajouter un arbitre</strong> pour commencer.' : 'Aucun arbitre pour ce filtre.'}</div>`;
+      return;
+    }
+
+    const sorted = [...filtered].sort((a, b) => {
+      if (a.statut !== b.statut) return a.statut === 'actif' ? -1 : 1;
+      return a.nom.localeCompare(b.nom);
+    });
+
+    grid.innerHTML = sorted.map((a, i) => {
+      const ini = ((a.prenom[0] || '') + (a.nom[0] || '')).toUpperCase();
+      const chips = [];
+      if (a.annee) chips.push(`Né ${a.annee}`);
+      if (a.matchs != null && a.matchs !== '') chips.push(`${a.matchs} match${a.matchs > 1 ? 's' : ''}`);
+      if (a.suivis != null && a.suivis !== '') chips.push(`${a.suivis} suivi${a.suivis > 1 ? 's' : ''}`);
+      const chipsHtml = chips.map(c => `<span class="meta-chip">${c}</span>`).join('');
+      const noteHtml = a.note ? `<div style="font-size:.72rem;color:var(--texte-doux);font-style:italic;line-height:1.5;border-top:1px solid #2a2a2a;padding-top:.8rem">${a.note}</div>` : '';
+      return `
+      <div class="arb-card ${a.statut}" style="animation-delay:${i * 0.04}s">
+        <div class="card-top">
+          <div class="arb-avatar">${ini}</div>
+          <div class="arb-info">
+            <h3>${a.prenom} ${a.nom.toUpperCase()}</h3>
+            <div class="arb-grade">${GRADES[a.grade] || a.grade}</div>
+          </div>
+          <span class="status-badge ${a.statut === 'actif' ? 'badge-actif' : 'badge-attente'}">${a.statut === 'actif' ? 'Actif' : 'En attente'}</span>
+        </div>
+        ${chips.length ? `<div class="card-meta">${chipsHtml}</div>` : ''}
+        ${noteHtml}
+        <div class="card-actions">
+          <button class="btn-edit" onclick="openModal('${a.id}')">✎ Modifier</button>
+          <button class="btn-del" onclick="deleteArbitre('${a.id}')">✕</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // ─── FILTER ───
+  function setFilter(btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    render();
+  }
+
+  // ─── MODAL ───
+  function openModal(id = null) {
+    if (!isConnected) { showToast('Connectez-vous d'abord au script Google.', 'error'); return; }
+    editingId = id;
+    document.getElementById('modal-title').textContent = id ? 'Modifier l\'arbitre' : 'Ajouter un arbitre';
+
+    if (id) {
+      const a = arbitres.find(x => x.id == id);
+      if (!a) return;
+      document.getElementById('f-prenom').value = a.prenom;
+      document.getElementById('f-nom').value = a.nom;
+      document.getElementById('f-grade').value = a.grade;
+      document.getElementById('f-statut').value = a.statut;
+      document.getElementById('f-annee').value = a.annee || '';
+      document.getElementById('f-matchs').value = a.matchs ?? '';
+      document.getElementById('f-suivis').value = a.suivis ?? '';
+      document.getElementById('f-note').value = a.note || '';
+    } else {
+      ['f-prenom','f-nom','f-annee','f-matchs','f-suivis','f-note'].forEach(fid => document.getElementById(fid).value = '');
+      document.getElementById('f-grade').value = '';
+      document.getElementById('f-statut').value = 'attente';
+    }
+    document.getElementById('modal-backdrop').classList.add('open');
+    setTimeout(() => document.getElementById('f-prenom').focus(), 100);
+  }
+
+  function closeModal() {
+    document.getElementById('modal-backdrop').classList.remove('open');
+    editingId = null;
+  }
+
+  function handleBackdropClick(e) {
+    if (e.target === document.getElementById('modal-backdrop')) closeModal();
+  }
+
+  // ─── SAVE ───
+  async function saveArbitre() {
+    const prenom = document.getElementById('f-prenom').value.trim();
+    const nom = document.getElementById('f-nom').value.trim();
+    const grade = document.getElementById('f-grade').value;
+    const statut = document.getElementById('f-statut').value;
+
+    if (!prenom || !nom || !grade) {
+      showToast('Prénom, nom et grade sont obligatoires.', 'error'); return;
+    }
+
+    const btn = document.getElementById('btn-save');
+    btn.disabled = true;
+    btn.textContent = '…';
+
+    const data = {
+      id: editingId || null,
+      prenom, nom, grade, statut,
+      annee: document.getElementById('f-annee').value || null,
+      matchs: document.getElementById('f-matchs').value !== '' ? parseInt(document.getElementById('f-matchs').value) : null,
+      suivis: document.getElementById('f-suivis').value !== '' ? parseInt(document.getElementById('f-suivis').value) : null,
+      note: document.getElementById('f-note').value.trim() || null,
+    };
+
+    try {
+      const result = await apiCall({ action: 'save', data });
+      if (!data.id) data.id = result.id;
+
+      if (editingId) {
+        const idx = arbitres.findIndex(a => a.id == editingId);
+        arbitres[idx] = { ...arbitres[idx], ...data };
+        showToast('Fiche mise à jour ✓');
+      } else {
+        arbitres.push(data);
+        showToast('Arbitre ajouté ✓');
+      }
+
+      closeModal(); render();
+    } catch (err) {
+      showToast('Erreur : ' + err.message, 'error');
+      setSyncStatus('error', 'Erreur lors de l\'enregistrement');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Enregistrer';
+    }
+  }
+
+  // ─── DELETE ───
+  async function deleteArbitre(id) {
+    const a = arbitres.find(x => x.id == id);
+    if (!confirm(`Supprimer ${a.prenom} ${a.nom} ?`)) return;
+
+    try {
+      await apiCall({ action: 'delete', id });
+      arbitres = arbitres.filter(x => x.id != id);
+      render();
+      showToast('Arbitre supprimé.');
+    } catch (err) {
+      showToast('Erreur : ' + err.message, 'error');
+    }
+  }
+
+  // ─── TOAST ───
+  function showToast(msg, type = 'ok') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.borderLeftColor = type === 'error' ? 'var(--rouge)' : 'var(--vert)';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  // ─── KEYBOARD ───
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'Enter' && document.getElementById('modal-backdrop').classList.contains('open')) {
+      if (document.activeElement.tagName !== 'BUTTON') saveArbitre();
+    }
+  });
+
+  // ─── INIT ───
+  scriptUrl = getScriptUrl();
+  loadArbitres();
+
+  // Auto-refresh toutes les 60 secondes
+  setInterval(() => { if (isConnected) loadArbitres(); }, 60000);
+</script>
+</body>
+</html>
