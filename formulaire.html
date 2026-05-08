@@ -933,19 +933,103 @@
     tbody.appendChild(tr);
   });
 
-  document.getElementById('suiviForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const requiredIds = ['ja1', 'accompagnateur', 'rencontre'];
-    let valid = true;
-    requiredIds.forEach(id => {
-      const el = document.getElementById(id);
-      el.classList.remove('error');
-      if (!el.value.trim()) {
-        el.classList.add('error');
-        valid = false;
+document.getElementById('suiviForm').addEventListener('submit', async function(e) {
+
+  e.preventDefault();
+
+  // VALIDATION
+  const requiredIds = ['ja1', 'accompagnateur', 'rencontre'];
+  let valid = true;
+
+  requiredIds.forEach(id => {
+
+    const el = document.getElementById(id);
+
+    el.classList.remove('error');
+
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      valid = false;
+    }
+
+  });
+
+  if (!valid) {
+
+    const first = requiredIds.find(id =>
+      !document.getElementById(id).value.trim()
+    );
+
+    document.getElementById(first).focus();
+
+    return;
+  }
+
+  // OBJET DES DONNÉES
+  const formData = {
+
+    ja1: document.getElementById('ja1').value,
+    ja2: document.getElementById('ja2').value,
+    accompagnateur: document.getElementById('accompagnateur').value,
+    rencontre: document.getElementById('rencontre').value,
+    points: document.getElementById('points').value
+
+  };
+
+  // NOTES DES CRITÈRES
+  for (let i = 0; i < 13; i++) {
+
+    const checked = document.querySelector(
+      `input[name="crit_${i}"]:checked`
+    );
+
+    formData[`crit_${i}`] = checked
+      ? checked.value
+      : "";
+
+  }
+
+  try {
+
+    // ENVOI À GOOGLE APPS SCRIPT
+    await fetch(
+      "https://script.google.com/macros/s/AKfycbxI1AyFfpuWn-ufbFmL1wwZuVq5TEisRarUAHvQZh3O3D6CmGSGHcET3X7rEDket4nf/exec",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
       }
+    );
+
+    // MESSAGE SUCCESS
+    const banner = document.getElementById('success-banner');
+
+    banner.style.display = 'block';
+
+    banner.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
     });
-    if (!valid) {
+
+    this.reset();
+
+    setTimeout(() => {
+      banner.style.display = 'none';
+    }, 5000);
+
+  } catch(error) {
+
+    console.error(error);
+
+    alert("Erreur lors de l'envoi du formulaire.");
+
+  }
+
+});
+
+  if (!valid) {
       const first = requiredIds.find(id => !document.getElementById(id).value.trim());
       document.getElementById(first).focus();
       return;
