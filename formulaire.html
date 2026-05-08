@@ -905,14 +905,14 @@
     "Impression générale et autre",
     "Communication entre arbitres"
   ];
-
+ 
   const cols = [
     { key: 'ins',  label: 'Insuffisant',  cls: 'col-ins'  },
     { key: 'opt',  label: 'A optimiser',  cls: 'col-opt'  },
     { key: 'cor',  label: 'Correct',      cls: 'col-cor'  },
     { key: 'tres', label: 'Très correct', cls: 'col-tres' },
   ];
-
+ 
   const tbody = document.getElementById('evalBody');
   criteres.forEach((crit, i) => {
     const tr = document.createElement('tr');
@@ -932,104 +932,20 @@
     });
     tbody.appendChild(tr);
   });
-
-document.getElementById('suiviForm').addEventListener('submit', async function(e) {
-
-  e.preventDefault();
-
-  // VALIDATION
-  const requiredIds = ['ja1', 'accompagnateur', 'rencontre'];
-  let valid = true;
-
-  requiredIds.forEach(id => {
-
-    const el = document.getElementById(id);
-
-    el.classList.remove('error');
-
-    if (!el.value.trim()) {
-      el.classList.add('error');
-      valid = false;
-    }
-
-  });
-
-  if (!valid) {
-
-    const first = requiredIds.find(id =>
-      !document.getElementById(id).value.trim()
-    );
-
-    document.getElementById(first).focus();
-
-    return;
-  }
-
-  // OBJET DES DONNÉES
-  const formData = {
-
-    ja1: document.getElementById('ja1').value,
-    ja2: document.getElementById('ja2').value,
-    accompagnateur: document.getElementById('accompagnateur').value,
-    rencontre: document.getElementById('rencontre').value,
-    points: document.getElementById('points').value
-
-  };
-
-  // NOTES DES CRITÈRES
-  for (let i = 0; i < 13; i++) {
-
-    const checked = document.querySelector(
-      `input[name="crit_${i}"]:checked`
-    );
-
-    formData[`crit_${i}`] = checked
-      ? checked.value
-      : "";
-
-  }
-
-  try {
-
-    // ENVOI À GOOGLE APPS SCRIPT
-    await fetch(
-      "https://script.google.com/macros/s/AKfycbxI1AyFfpuWn-ufbFmL1wwZuVq5TEisRarUAHvQZh3O3D6CmGSGHcET3X7rEDket4nf/exec",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
+ 
+  document.getElementById('suiviForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const requiredIds = ['ja1', 'accompagnateur', 'rencontre'];
+    let valid = true;
+    requiredIds.forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.remove('error');
+      if (!el.value.trim()) {
+        el.classList.add('error');
+        valid = false;
       }
-    );
-
-    // MESSAGE SUCCESS
-    const banner = document.getElementById('success-banner');
-
-    banner.style.display = 'block';
-
-    banner.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center'
     });
-
-    this.reset();
-
-    setTimeout(() => {
-      banner.style.display = 'none';
-    }, 5000);
-
-  } catch(error) {
-
-    console.error(error);
-
-    alert("Erreur lors de l'envoi du formulaire.");
-
-  }
-
-});
-
-  if (!valid) {
+    if (!valid) {
       const first = requiredIds.find(id => !document.getElementById(id).value.trim());
       document.getElementById(first).focus();
       return;
