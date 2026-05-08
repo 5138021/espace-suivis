@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiches d'aide — Arbitrage JAJ Meylan HB 25-26</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge: #E8001D;
+    --noir: #0D0D0D;
+    --blanc: #F5F2EC;
+    --gris: #1A1A1A;
+    --gris-mid: #2E2E2E;
+    --accent: #FFD100;
+    --texte-doux: #9A9A9A;
+    --bleu: #4A9FFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .top-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  header {
+    padding: 2.5rem 3rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .logo-badge {
+    width: 52px;
+    height: 52px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: white;
+    flex-shrink: 0;
+    letter-spacing: 1px;
+  }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--blanc);
+    line-height: 1;
+  }
+
+  .header-text p {
+    font-size: 0.72rem;
+    color: var(--texte-doux);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .header-contact {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: var(--texte-doux);
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  .header-contact strong {
+    color: var(--accent);
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .subnav {
+    padding: 0 3rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+    gap: 0;
+  }
+
+  .subnav a {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--texte-doux);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .subnav a.active,
+  .subnav a:hover {
+    color: var(--blanc);
+    border-bottom-color: var(--bleu);
+  }
+
+  /* PAGE HEADER */
+  .page-header {
+    padding: 3.5rem 3rem 2.5rem;
+    border-bottom: 1px solid #222;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .page-header::before {
+    content: '08';
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 14rem;
+    color: rgba(255,255,255,0.025);
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .page-header .label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bleu);
+    margin-bottom: 0.8rem;
+  }
+
+  .page-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .page-header p {
+    margin-top: 0.8rem;
+    font-size: 0.82rem;
+    color: var(--texte-doux);
+    font-weight: 300;
+    max-width: 500px;
+    line-height: 1.6;
+  }
+
+  /* CATÉGORIES */
+  .categories {
+    padding: 2.5rem 3rem;
+  }
+
+  .cat-section {
+    margin-bottom: 3rem;
+  }
+
+  .cat-label {
+    font-size: 0.62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--texte-doux);
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #222;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .cat-label::before {
+    content: '';
+    width: 20px;
+    height: 2px;
+    background: var(--bleu);
+  }
+
+  /* LISTE DE RESSOURCES */
+  .resources-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+  }
+
+  .resource-item {
+    background: var(--gris);
+    padding: 1.4rem 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    text-decoration: none;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .resource-item::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.25s ease;
+  }
+
+  .resource-item:hover {
+    background: var(--gris-mid);
+  }
+
+  .resource-item:hover::before {
+    transform: scaleY(1);
+  }
+
+  .res-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    min-width: 28px;
+    letter-spacing: 1px;
+  }
+
+  .res-icon {
+    width: 38px;
+    height: 38px;
+    background: #252525;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .res-body {
+    flex: 1;
+  }
+
+  .res-body h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--blanc);
+    letter-spacing: 0.3px;
+  }
+
+  .res-body p {
+    font-size: 0.72rem;
+    color: var(--texte-doux);
+    font-weight: 300;
+    margin-top: 2px;
+  }
+
+  .res-tag {
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.05);
+    color: var(--texte-doux);
+    border: 1px solid #333;
+    flex-shrink: 0;
+  }
+
+  .res-arrow {
+    color: var(--texte-doux);
+    font-size: 0.8rem;
+    transition: transform 0.2s, color 0.2s;
+  }
+
+  .resource-item:hover .res-arrow {
+    transform: translateX(4px);
+    color: var(--blanc);
+  }
+
+  /* BANDEAU BAS DE PAGE */
+  .cta-banner {
+    margin: 0 3rem 3rem;
+    background: var(--bleu);
+    padding: 2rem 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-between;
+  }
+
+  .cta-banner .cta-text h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: white;
+  }
+
+  .cta-banner .cta-text p {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.75);
+    margin-top: 2px;
+  }
+
+  .cta-btn {
+    background: white;
+    color: var(--bleu);
+    padding: 0.7rem 1.6rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-decoration: none;
+    border-radius: 2px;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .cta-btn:hover {
+    background: var(--accent);
+    color: var(--noir);
+  }
+
+  footer {
+    padding: 1.5rem 3rem;
+    border-top: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer p {
+    font-size: 0.68rem;
+    color: var(--texte-doux);
+    letter-spacing: 1px;
+  }
+
+  footer a {
+    font-size: 0.68rem;
+    color: var(--texte-doux);
+    text-decoration: none;
+    letter-spacing: 1px;
+    transition: color 0.2s;
+  }
+
+  footer a:hover { color: var(--rouge); }
+
+  .bottom-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  @media (max-width: 700px) {
+    header, .subnav, .page-header, .categories, .cta-banner, footer {
+      padding-left: 1.2rem;
+      padding-right: 1.2rem;
+    }
+    .cta-banner { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .page-header::before { display: none; }
+    .header-contact { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <img class="logo-badge" src="MHB_logo.png"/>
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+  </div>
+</header>
+
+<nav class="subnav">
+  <a href="index.html">Accueil</a>
+  <a href="ressources.html" class="active">Fiches d'aide</a>
+</nav>
+
+<div class="page-header">
+  <p class="label">Documentation · Accompagnement</p>
+  <h2>Fiches d'aide<br>pédagogiques</h2>
+  <p>Ensemble des documents de référence pour l'accompagnement et la formation des Juges-Arbitres Jeunes.</p>
+</div>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --noir:     #0D0D0D;
+      --gris:     #111111;
+      --gris-mid: #1A1A1A;
+      --border:   #1E1E1E;
+      --blanc:    #F5F2EC;
+      --muted:    #9A9A9A;
+      --bleu:     #4A9FFF;
+      --jaune:    #FFD100;
+      --rouge:    #E8001D;
+      --ins:      #e53935;
+      --opt:      #fb8c00;
+      --cor:      #43a047;
+      --tres:     #4A9FFF;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #1a1a1a;
+      color: var(--blanc);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 16px 60px;
+    }
+
+    /* ── STRIPE ── */
+    .top-stripe {
+      height: 4px;
+      background: linear-gradient(90deg, var(--rouge) 0%, var(--jaune) 50%, var(--rouge) 100%);
+    }
+
+    /* ── WRAPPER ── */
+    .wrap {
+      width: 100%;
+      max-width: 860px;
+      background: var(--noir);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,.6);
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: #0a0a0a;
+      padding: 18px 28px;
+      border-bottom: 1px solid #1e1e1e;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    header img {
+      height: 40px;
+    }
+
+    .header-text h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: 3px;
+      color: var(--blanc);
+      line-height: 1;
+    }
+
+    .header-text p {
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    nav {
+      margin-left: auto;
+      display: flex;
+      gap: 4px;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.72rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 3px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--blanc);
+      border-bottom-color: var(--bleu);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding: 36px 28px 28px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: 'ARBITRAGE';
+      position: absolute;
+      right: -8px;
+      bottom: -12px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 8rem;
+      color: rgba(255,255,255,0.025);
+      pointer-events: none;
+      letter-spacing: 4px;
+      white-space: nowrap;
+    }
+
+    .hero-label {
+      font-size: 0.62rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--bleu);
+      margin-bottom: 10px;
+    }
+
+    .hero h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: 4px;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .hero h2 span { color: var(--bleu); }
+
+    .hero p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ── MAIN ── */
+    main {
+      padding: 28px 28px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── SECTION CARD ── */
+    .section-card {
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--bleu);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      background: #0a0a0a;
+      padding: 11px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.82rem;
+      letter-spacing: 2.5px;
+      color: var(--bleu);
+      text-transform: uppercase;
+    }
+
+    .section-body {
+      background: var(--gris);
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ── FIELDS ── */
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 560px) {
+      .row-2 { grid-template-columns: 1fr; }
+      header { flex-wrap: wrap; }
+      nav { display: none; }
+      .hero::after { display: none; }
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    .field label .req { color: var(--jaune); }
+    .field label .opt { color: #444; font-weight: 300; text-transform: none; letter-spacing: 0; }
+
+    .field input[type="text"],
+    .field textarea {
+      width: 100%;
+      background: var(--noir);
+      border: 1px solid #2e2e2e;
+      border-radius: 4px;
+      padding: 10px 14px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      color: var(--blanc);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .field input[type="text"]:focus,
+    .field textarea:focus {
+      border-color: var(--bleu);
+      box-shadow: 0 0 0 3px rgba(74,159,255,0.1);
+    }
+
+    .field input[type="text"].error { border-color: var(--ins) !important; }
+
+    .field input::placeholder,
+    .field textarea::placeholder { color: #333; }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* ── EVAL TABLE ── */
+    .eval-wrap { overflow-x: auto; }
+
+    table.eval {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.76rem;
+      min-width: 500px;
+    }
+
+    table.eval thead tr { background: #080808; }
+
+    table.eval thead th {
+      padding: 12px 10px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 2px;
+      text-align: center;
+      white-space: nowrap;
+      border-bottom: 1px solid #222;
+    }
+
+    table.eval thead th:first-child {
+      text-align: left;
+      padding-left: 18px;
+      width: 44%;
+      color: var(--muted);
+    }
+
+    table.eval thead th.h-ins  { color: var(--ins); }
+    table.eval thead th.h-opt  { color: var(--opt); }
+    table.eval thead th.h-cor  { color: var(--cor); }
+    table.eval thead th.h-tres { color: var(--tres); }
+
+    table.eval tbody tr {
+      border-bottom: 1px solid #181818;
+      transition: background 0.1s;
+    }
+
+    table.eval tbody tr:hover { background: #161616; }
+
+    table.eval tbody td {
+      padding: 11px 10px;
+      vertical-align: middle;
+    }
+
+    table.eval tbody td:first-child {
+      padding-left: 18px;
+      font-weight: 400;
+      color: #c0c0c0;
+      line-height: 1.4;
+      font-size: 0.74rem;
+    }
+
+    table.eval tbody td:not(:first-child) { text-align: center; }
+
+    /* ── RADIOS ── */
+    .radio-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .radio-wrap input[type="radio"] { display: none; }
+
+    .radio-wrap label {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.15s;
+      margin: 0;
+      font-size: 0;
+    }
+
+    .col-ins  .radio-wrap label:hover,
+    .col-ins  input[type="radio"]:checked + label { border-color: var(--ins);  background: var(--ins); }
+    .col-opt  .radio-wrap label:hover,
+    .col-opt  input[type="radio"]:checked + label { border-color: var(--opt);  background: var(--opt); }
+    .col-cor  .radio-wrap label:hover,
+    .col-cor  input[type="radio"]:checked + label { border-color: var(--cor);  background: var(--cor); }
+    .col-tres .radio-wrap label:hover,
+    .col-tres input[type="radio"]:checked + label { border-color: var(--tres); background: var(--tres); }
+
+    /* ── LEGEND ── */
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 10px 18px 12px;
+      justify-content: flex-end;
+      background: #080808;
+      border-top: 1px solid #1a1a1a;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.62rem;
+      color: #555;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* ── SUBMIT ── */
+    .submit-area {
+      text-align: center;
+      padding-top: 6px;
+    }
+
+    button[type="submit"] {
+      background: transparent;
+      border: 1.5px solid var(--bleu);
+      color: var(--bleu);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 3px;
+      padding: 13px 44px;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, transform 0.1s;
+    }
+
+    button[type="submit"]:hover {
+      background: var(--bleu);
+      color: var(--noir);
+    }
+
+    button[type="submit"]:active { transform: scale(0.98); }
+
+    /* ── SUCCESS ── */
+    #success-banner {
+      display: none;
+      background: rgba(67,160,71,0.1);
+      border: 1px solid var(--cor);
+      color: var(--cor);
+      border-radius: 4px;
+      padding: 14px 20px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 0.85rem;
+      letter-spacing: 0.5px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #0a0a0a;
+      padding: 16px 28px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 0.65rem;
+      color: #444;
+      letter-spacing: 1px;
+    }
+
+    footer a {
+      font-size: 0.65rem;
+      color: #444;
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+
+    footer a:hover { color: var(--bleu); }
+
+    .bottom-stripe {
+      height: 4px;
+      background: linear-gradient(90deg, var(--rouge) 0%, var(--jaune) 50%, var(--rouge) 100%);
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top-stripe"></div>
+
+  <header>
+    <img src="https://5138021.github.io/espace-suivis/MHB_logo.png" alt="Meylan HB" />
+    <div class="header-text">
+      <h1>Suivi Pédagogique</h1>
+      <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+    </div>
+    <nav>
+      <a href="https://5138021.github.io/espace-suivis/index.html">Accueil</a>
+      <a href="https://5138021.github.io/espace-suivis/ressources.html">Fiches d'aide</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <p class="hero-label">📋 Formulaire de suivi</p>
+    <h2>Suivi d'arbitrage <span>25-26</span></h2>
+    <p>Renseigner l'évaluation pédagogique à l'issue d'une rencontre arbitrée.</p>
+  </div>
+
+  <main>
+
+    <div id="success-banner">✓ &nbsp;Le suivi a bien été enregistré. Merci !</div>
+
+    <form id="suiviForm" novalidate>
+
+      <!-- IDENTITÉ -->
+      <div class="section-card">
+        <div class="section-header"><h3>Identité des arbitres</h3></div>
+        <div class="section-body">
+          <div class="row-2">
+            <div class="field">
+              <label for="ja1">Juge-Arbitre 1 <span class="req">*</span></label>
+              <input type="text" id="ja1" name="ja1" placeholder="Ex : Lucas" required />
+            </div>
+            <div class="field">
+              <label for="ja2">Juge-Arbitre 2 <span class="opt">(facultatif)</span></label>
+              <input type="text" id="ja2" name="ja2" placeholder="Ex : Théo" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="accompagnateur">Juge Accompagnateur <span class="req">*</span></label>
+            <input type="text" id="accompagnateur" name="accompagnateur" placeholder="Ex : Marc" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- RENCONTRE -->
+      <div class="section-card">
+        <div class="section-header"><h3>Informations sur la rencontre</h3></div>
+        <div class="section-body">
+          <div class="field">
+            <label for="rencontre">Date, heure, catégorie et adversaire <span class="req">*</span></label>
+            <input type="text" id="rencontre" name="rencontre"
+              placeholder="Ex : 08/05/2026 · 14h00 · -13M · vs HBC2E" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- GRILLE D'ÉVALUATION -->
+      <div class="section-card">
+        <div class="section-header"><h3>Grille d'évaluation</h3></div>
+        <div class="eval-wrap">
+          <table class="eval">
+            <thead>
+              <tr>
+                <th>Critère</th>
+                <th class="h-ins">Insuffisant</th>
+                <th class="h-opt">À optimiser</th>
+                <th class="h-cor">Correct</th>
+                <th class="h-tres">Très correct</th>
+              </tr>
+            </thead>
+            <tbody id="evalBody"></tbody>
+          </table>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--ins)"></div>Insuffisant</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--opt)"></div>À optimiser</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--cor)"></div>Correct</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--tres)"></div>Très correct</div>
+        </div>
+      </div>
+
+      <!-- POINTS À TRAVAILLER -->
+      <div class="section-card">
+        <div class="section-header"><h3>Points à travailler</h3></div>
+        <div class="section-body">
+          <div class="field">
+            <label for="points">Axes de progression <span class="opt">(facultatif)</span></label>
+            <textarea id="points" name="points"
+              placeholder="Décrivez les axes de progression à travailler lors du prochain match…"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-area">
+        <button type="submit">Envoyer le suivi →</button>
+      </div>
+
+    </form>
+  </main>
+
+  <footer>
+    <p>© 2025-2026 Meylan Handball · Responsable Arbitrage</p>
+    <a href="ressources.html">Fiches d'aide →</a>
+  </footer>
+
+  <div class="bottom-stripe"></div>
+</div>
+
+<script>
+  const criteres = [
+    "Comprend le jeu, n'arrête pas forcément le jeu",
+    "Appréciation des duels (contact entre attaquants et défenseurs)",
+    "Sanctions sportives, jets francs — 7 mètres, cohérence",
+    "Sanctions disciplinaires, échelle des sanctions, sanction adaptée, proportionnalité : sportive / disciplinaire",
+    "Placement et déplacement, coopération, arbitre domine l'autre",
+    "Geste et coup de sifflet, communication",
+    "Personnalité : autorité, responsable / décideur / réactif",
+    "Marcher / dribble / pied, 3 secondes",
+    "Empiètement, renvoi, défense en zone, but après retombée en zone",
+    "Jeu passif",
+    "Autres règles, engagement, ordre (lieu des jets)",
+    "Impression générale et autre",
+    "Communication entre arbitres"
+  ];
+
+  const cols = [
+    { key: 'ins',  label: 'Insuffisant',  cls: 'col-ins'  },
+    { key: 'opt',  label: 'A optimiser',  cls: 'col-opt'  },
+    { key: 'cor',  label: 'Correct',      cls: 'col-cor'  },
+    { key: 'tres', label: 'Très correct', cls: 'col-tres' },
+  ];
+
+  const tbody = document.getElementById('evalBody');
+  criteres.forEach((crit, i) => {
+    const tr = document.createElement('tr');
+    const tdLabel = document.createElement('td');
+    tdLabel.textContent = crit;
+    tr.appendChild(tdLabel);
+    cols.forEach(col => {
+      const td = document.createElement('td');
+      td.className = col.cls;
+      const uid = `crit_${i}_${col.key}`;
+      td.innerHTML = `
+        <div class="radio-wrap">
+          <input type="radio" name="crit_${i}" id="${uid}" value="${col.label}" />
+          <label for="${uid}" title="${col.label}"></label>
+        </div>`;
+      tr.appendChild(td);
+    });
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('suiviForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const requiredIds = ['ja1', 'accompagnateur', 'rencontre'];
+    let valid = true;
+    requiredIds.forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.remove('error');
+      if (!el.value.trim()) {
+        el.classList.add('error');
+        valid = false;
+      }
+    });
+    if (!valid) {
+      const first = requiredIds.find(id => !document.getElementById(id).value.trim());
+      document.getElementById(first).focus();
+      return;
+    }
+    const banner = document.getElementById('success-banner');
+    banner.style.display = 'block';
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    this.reset();
+    setTimeout(() => { banner.style.display = 'none'; }, 5000);
+  });
+</script>
+
+</body>
+</html>
