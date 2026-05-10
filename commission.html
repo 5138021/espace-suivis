@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Commission Arbitrage — Meylan HB 25-26</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red:       #C8102E;
+      --red-dark:  #9b0d23;
+      --gold:      #F0A500;
+      --dark:      #0d0d0d;
+      --surface:   #161616;
+      --card:      #1e1e1e;
+      --border:    #2a2a2a;
+      --muted:     #5a5a5a;
+      --light:     #e8e8e8;
+      --white:     #ffffff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Barlow', sans-serif;
+      background: var(--dark);
+      color: var(--light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--surface);
+      border-bottom: 3px solid var(--red);
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    header img {
+      height: 52px;
+      width: auto;
+    }
+    .header-text h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--white);
+    }
+    .header-text p {
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    nav {
+      margin-left: auto;
+      display: flex;
+      gap: 1.4rem;
+    }
+    nav a {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--white); }
+
+    /* ── HERO BAND ── */
+    .hero {
+      background: linear-gradient(135deg, var(--red-dark) 0%, var(--red) 50%, #e8213e 100%);
+      padding: 3.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: 'ARBITRAGE';
+      position: absolute;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 14rem;
+      color: rgba(0,0,0,0.12);
+      letter-spacing: -0.04em;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .hero h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      position: relative;
+    }
+    .hero p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.75);
+      margin-top: 0.5rem;
+      letter-spacing: 0.04em;
+      position: relative;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 2.5rem 2rem 1.2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .section-label h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      padding: 0 2rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+      position: relative;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+      border-color: var(--red);
+    }
+    .card.example {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px var(--gold);
+    }
+    .example-badge {
+      position: absolute;
+      top: 10px; right: 10px;
+      background: var(--gold);
+      color: var(--dark);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+      z-index: 2;
+    }
+
+    /* Photo area */
+    .card-photo {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #252525;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .card-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .card-photo .placeholder-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--muted);
+    }
+    .card-photo .placeholder-icon svg {
+      width: 56px; height: 56px;
+      opacity: 0.35;
+    }
+    .card-photo .placeholder-icon span {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    /* Accent bar */
+    .card-accent {
+      height: 3px;
+      background: var(--red);
+    }
+    .card.example .card-accent {
+      background: var(--gold);
+    }
+
+    /* Info */
+    .card-info {
+      padding: 1rem 1rem 1.2rem;
+      flex: 1;
+    }
+    .card-grade {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.35rem;
+    }
+    .card.example .card-grade { color: var(--gold); }
+
+    .card-name {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: 1.2rem;
+      line-height: 1.15;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .card-firstname {
+      font-family: 'Barlow', sans-serif;
+      font-weight: 300;
+      font-size: 0.88rem;
+      color: var(--light);
+      margin-top: 0.15rem;
+    }
+
+    /* Placeholder name */
+    .placeholder-name {
+      height: 1rem;
+      background: var(--border);
+      border-radius: 2px;
+      margin-bottom: 0.4rem;
+    }
+    .placeholder-name.short { width: 60%; }
+    .placeholder-name.long  { width: 85%; }
+    .placeholder-name.xshort{ width: 40%; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── EDIT NOTICE ── */
+    .edit-notice {
+      max-width: 1200px;
+      margin: 2rem auto 0;
+      padding: 0 2rem;
+    }
+    .edit-notice-inner {
+      background: #1a1a0e;
+      border: 1px solid #3a3a10;
+      border-left: 3px solid var(--gold);
+      border-radius: 3px;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.82rem;
+      color: #b0a060;
+      line-height: 1.6;
+    }
+    .edit-notice-inner strong { color: var(--gold); }
+    code {
+      background: rgba(240,165,0,0.1);
+      border: 1px solid rgba(240,165,0,0.2);
+      border-radius: 2px;
+      padding: 1px 5px;
+      font-size: 0.78rem;
+      font-family: monospace;
+      color: var(--gold);
+    }
+
+    @media (max-width: 640px) {
+      .hero h2 { font-size: 2rem; }
+      .hero::before { font-size: 6rem; }
+      nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <img src="https://5138021.github.io/espace-suivis/MHB_logo.png" alt="Meylan HB" onerror="this.style.display='none'" />
+    <div class="header-text">
+      <h1>Meylan Handball</h1>
+      <p>Commission Arbitrage · Saison 25-26</p>
+    </div>
+    <nav>
+      <a href="index.html">Accueil</a>
+      <a href="ressources.html">Fiches d'aide</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero">
+    <h2>Commission Arbitrage</h2>
+    <p>Meylan Handball · Saison 2025-2026</p>
+  </div>
+
+  <!-- EDIT NOTICE -->
+  <div class="edit-notice">
+    <div class="edit-notice-inner">
+      <strong>📝 Comment remplir cette page :</strong>
+      Pour chaque arbitre, remplace <code><!-- Prénom --></code>, <code><!-- NOM --></code> et <code><!-- Grade --></code> par les vraies valeurs.
+      Pour la photo, remplace <code>src="URL_PHOTO"</code> par l'URL de l'image, ou supprime la balise <code>&lt;img&gt;</code> pour garder l'icône vide.
+      La carte en <span style="color:var(--gold)">or</span> est un exemple déjà rempli.
+    </div>
+  </div>
+
+  <!-- ═══════════ RESPONSABLES ═══════════ -->
+  <div class="section-label">
+    <h3>Responsables</h3>
+  </div>
+
+  <div class="grid">
+
+    <!-- ✅ EXEMPLE — À dupliquer pour chaque membre -->
+    <div class="card example">
+      <div class="example-badge">Exemple</div>
+      <div class="card-photo">
+        <!-- Remplace "URL_PHOTO" par le lien vers la photo -->
+        <!-- <img src="URL_PHOTO" alt="Photo de Martin Dupont" /> -->
+        <!-- Si pas de photo, laisse le bloc ci-dessous -->
+        <div class="placeholder-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          <span>Photo</span>
+        </div>
+      </div>
+      <div class="card-accent"></div>
+      <div class="card-info">
+        <div class="card-grade">Responsable Arbitrage</div>
+        <div class="card-name">DUPONT</div>
+        <div class="card-firstname">Martin</div>
+      </div>
+    </div>
+
+  </div><!-- /grid responsables -->
+
+  <!-- ═══════════ ARBITRES ═══════════ -->
+  <div class="section-label">
+    <h3>Arbitres</h3>
+  </div>
+
+  <div class="grid">
+
+    <!-- ARBITRE 1 -->
+    <div class="card">
+      <div class="card-photo">
+        <div class="placeholder-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+          <span>Photo</span>
+        </div>
+      </div>
+      <div class="card-accent"></div>
+      <div class="card-info">
+        <div class="card-grade"><!-- Grade --></div>
+        <div class="card-name"><!-- NOM --></div>
+        <div class="card-firstname"><!-- Prénom --></div>
+      </div>
+    </div>
+
+  </div><!-- /grid arbitres -->
+
+  <!-- FOOTER -->
+  <footer>
+    © 2025-2026 Meylan Handball Club · Commission Arbitrage
+  </footer>
+
+</body>
+</html>
