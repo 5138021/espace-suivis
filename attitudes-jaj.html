@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attitudes JAJ — Meylan HB 25-26</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge: #E8001D;
+    --noir: #0D0D0D;
+    --blanc: #F5F2EC;
+    --gris: #1A1A1A;
+    --gris-mid: #2E2E2E;
+    --accent: #FFD100;
+    --texte-doux: #9A9A9A;
+    --bleu: #4A9FFF;
+    --orange: #FF8C00;
+    --vert: #2ECC71;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .top-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  header {
+    padding: 2.5rem 3rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .logo-badge {
+    width: 75px;
+    height: 75px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--blanc);
+    line-height: 1;
+  }
+
+  .header-text p {
+    font-size: 0.72rem;
+    color: var(--texte-doux);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  nav.subnav {
+    padding: 0 3rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+    gap: 0;
+  }
+
+  .subnav a {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--texte-doux);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .subnav a.active, .subnav a:hover {
+    color: var(--blanc);
+    border-bottom-color: var(--bleu);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 4rem 3rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: 'ATTITUDES';
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12rem;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    letter-spacing: 4px;
+    white-space: nowrap;
+  }
+
+  .hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bleu);
+    margin-bottom: 1rem;
+  }
+
+  .hero h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    letter-spacing: 4px;
+    line-height: 1;
+    color: var(--blanc);
+  }
+
+  .hero h2 span { color: var(--bleu); }
+
+  .hero-sub {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--texte-doux);
+    font-weight: 300;
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  /* TABS */
+  .tabs-bar {
+    padding: 0 3rem;
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid #222;
+    margin-bottom: 2.5rem;
+  }
+
+  .tab-btn {
+    padding: 1rem 1.6rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--texte-doux);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn.active {
+    color: var(--blanc);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-btn:hover:not(.active) {
+    color: var(--blanc);
+  }
+
+  /* SECTION TITLES */
+  .section-label {
+    padding: 0 3rem 1.2rem;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--texte-doux);
+    border-bottom: 1px solid #222;
+    margin-bottom: 2rem;
+  }
+
+  /* TAB PANELS */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* SITUATION CARDS */
+  .situations-grid {
+    padding: 0 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 3rem;
+  }
+
+  .situation-card {
+    background: var(--gris);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .situation-card:hover { background: var(--gris-mid); }
+
+  .sit-header {
+    padding: 1.6rem 2rem 1.2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .sit-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    line-height: 1;
+    color: rgba(255,255,255,0.08);
+    flex-shrink: 0;
+    min-width: 50px;
+  }
+
+  .sit-meta { flex: 1; }
+
+  .sit-badge {
+    display: inline-block;
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    margin-bottom: 0.5rem;
+  }
+
+  .badge-banc { background: rgba(74,159,255,0.15); color: var(--bleu); border: 1px solid rgba(74,159,255,0.3); }
+  .badge-tribunes { background: rgba(255,140,0,0.15); color: var(--orange); border: 1px solid rgba(255,140,0,0.3); }
+
+  .sit-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.35rem;
+    letter-spacing: 2.5px;
+    color: var(--blanc);
+    line-height: 1.1;
+  }
+
+  .sit-subtitle {
+    font-size: 0.72rem;
+    color: var(--texte-doux);
+    font-style: italic;
+    margin-top: 0.3rem;
+    line-height: 1.4;
+  }
+
+  /* INTERVENTIONS STEPS */
+  .sit-body { padding: 1.2rem 2rem 1.6rem; }
+
+  .interventions { display: flex; flex-direction: column; gap: 0.8rem; }
+
+  .intervention {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .int-step {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    margin-top: 1px;
+  }
+
+  .step-1 { background: rgba(46,204,113,0.15); color: var(--vert); border: 1px solid rgba(46,204,113,0.3); }
+  .step-2 { background: rgba(255,209,0,0.12); color: var(--accent); border: 1px solid rgba(255,209,0,0.3); }
+  .step-3 { background: rgba(232,0,29,0.12); color: var(--rouge); border: 1px solid rgba(232,0,29,0.3); }
+
+  .int-content { flex: 1; }
+
+  .int-posture {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.25rem;
+  }
+
+  .posture-calme { color: var(--vert); }
+  .posture-ferme { color: var(--accent); }
+  .posture-drastique { color: var(--rouge); }
+
+  .int-desc {
+    font-size: 0.72rem;
+    color: var(--texte-doux);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* TRC SECTION */
+  .trc-section {
+    padding: 0 3rem 3rem;
+  }
+
+  .trc-intro {
+    background: var(--gris);
+    border: 1px solid #2a2a2a;
+    border-left: 3px solid var(--orange);
+    padding: 1.5rem 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .trc-intro-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    color: var(--orange);
+    margin-bottom: 0.6rem;
+  }
+
+  .trc-intro p {
+    font-size: 0.78rem;
+    color: var(--texte-doux);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .trc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 1.5rem;
+  }
+
+  .trc-card {
+    background: var(--gris);
+    padding: 1.5rem 2rem;
+  }
+
+  .trc-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .trc-card-title .trc-icon {
+    width: 28px; height: 28px;
+    background: rgba(255,209,0,0.1);
+    border-radius: 3px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    border: 1px solid rgba(255,209,0,0.2);
+  }
+
+  .trc-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .trc-card ul li {
+    font-size: 0.74rem;
+    color: var(--texte-doux);
+    line-height: 1.5;
+    padding-left: 1rem;
+    position: relative;
+    font-weight: 300;
+  }
+
+  .trc-card ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: rgba(255,209,0,0.4);
+    font-size: 0.65rem;
+  }
+
+  .trc-notice {
+    background: rgba(255,140,0,0.06);
+    border: 1px solid rgba(255,140,0,0.2);
+    padding: 1rem 1.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .trc-notice-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+
+  .trc-notice p {
+    font-size: 0.74rem;
+    color: var(--texte-doux);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .trc-notice strong { color: var(--orange); font-weight: 600; }
+
+  /* FOOTER */
+  footer {
+    margin-top: 3rem;
+    padding: 1.5rem 3rem;
+    border-top: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer p { font-size: 0.68rem; color: var(--texte-doux); letter-spacing: 1px; }
+  footer a { font-size: 0.68rem; color: var(--texte-doux); text-decoration: none; letter-spacing: 1px; transition: color 0.2s; }
+  footer a:hover { color: var(--rouge); }
+
+  .bottom-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  /* EXPANDABLE DETAIL */
+  .sit-detail {
+    display: none;
+    background: #111;
+    border-top: 1px solid #222;
+    padding: 1rem 2rem 1.2rem;
+  }
+
+  .sit-detail.open { display: block; }
+
+  .sit-detail p {
+    font-size: 0.74rem;
+    color: var(--texte-doux);
+    line-height: 1.7;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .sit-detail .examples {
+    margin-top: 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .sit-detail .example-quote {
+    font-size: 0.72rem;
+    color: rgba(74,159,255,0.8);
+    padding-left: 0.8rem;
+    border-left: 2px solid rgba(74,159,255,0.3);
+    font-style: italic;
+  }
+
+  .expand-btn {
+    background: none;
+    border: none;
+    color: var(--texte-doux);
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 0.7rem 2rem;
+    width: 100%;
+    text-align: left;
+    border-top: 1px solid #1e1e1e;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 0.2s;
+  }
+
+  .expand-btn:hover { color: var(--blanc); }
+  .expand-btn .arrow { transition: transform 0.2s; display: inline-block; }
+  .expand-btn.open .arrow { transform: rotate(90deg); }
+
+  @media (max-width: 700px) {
+    header, nav.subnav, .hero, .section-label, .situations-grid, .trc-section, footer, .tabs-bar {
+      padding-left: 1.2rem;
+      padding-right: 1.2rem;
+    }
+    .hero::before { display: none; }
+    .situations-grid { grid-template-columns: 1fr; }
+    .trc-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <img class="logo-badge" src="MHB_logo.png" style="width:75px;height:75px;border-radius:4px;" />
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+  </div>
+</header>
+
+<nav class="subnav">
+  <a href="index.html">Accueil</a>
+  <a href="ressources.html" class="active">Fiches d'aide</a>
+  <a href="commission.html">Commission</a>
+</nav>
+
+<main>
+
+  <section class="hero">
+    <p class="hero-label">Référentiel comportemental</p>
+    <h2>Attitudes à adopter<br><span>lors d'une rencontre JAJ</span></h2>
+    <p class="hero-sub">11 situations types depuis le banc et les tribunes — postures et interventions progressives du Juge Accompagnateur pour maintenir un climat serein autour du match.</p>
+  </section>
+
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('banc', this)">Banc &amp; Officiels</button>
+    <button class="tab-btn" onclick="switchTab('tribunes', this)">Tribunes &amp; Public</button>
+    <button class="tab-btn" onclick="switchTab('trc', this)">TRC — Temps de Régulation</button>
+  </div>
+
+  <!-- ===== ONGLET BANC ===== -->
+  <div id="tab-banc" class="tab-panel active">
+    <p class="section-label">9 situations depuis la zone de changement</p>
+    <div class="situations-grid">
+
+      <!-- CAS 1 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">01</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-banc">Banc / Officiels</span>
+            <div class="sit-title">Interrogatif</div>
+            <div class="sit-subtitle">Demande légitime, calme et factuelle</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Observateur</div>
+                <div class="int-desc">Ne pas intervenir — vérifier que la demande reste occasionnelle.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Prévoyant</div>
+                <div class="int-desc">Intervenir si la demande devient systématique. Considérer l'attitude comme perturbatrice (cf. cas n°2).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description du comportement</button>
+        <div class="sit-detail">
+          <p>Le coach effectue une demande légitime. Il reste calme, poli, mesuré. La demande est factuelle, sans interprétation ni réclamation.</p>
+        </div>
+      </div>
+
+      <!-- CAS 2 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">02</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-banc">Banc / Officiels</span>
+            <div class="sit-title">Perturbateur</div>
+            <div class="sit-subtitle">Attitude expressive non orientée vers l'arbitrage</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Apaisant</div>
+                <div class="int-desc">Faire signe gentiment à chaque équipe de se calmer.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Pédagogue</div>
+                <div class="int-desc">Se rendre auprès de l'entraîneur pour lui expliquer que son énervement peut avoir des conséquences sur l'ambiance générale et encourager indirectement la critique de l'arbitrage.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">3</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Ferme et Déterminé — TRC</div>
+                <div class="int-desc">Utilisation systématique du TRC. Réunir les 2 coaches et les prévenir. Le match doit reprendre.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description du comportement</button>
+        <div class="sit-detail">
+          <p>Attitude physique ou verbale expressive et exagérée, non orientée vers l'arbitrage :</p>
+          <div class="examples">
+            <div class="example-quote">Râler sur une action de son équipe</div>
+            <div class="example-quote">Réprimander fortement et ouvertement un joueur de manière voyante ou peu discrète</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAS 3 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">03</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-banc">Banc / Officiels</span>
+            <div class="sit-title">Déstabilisateur</div>
+            <div class="sit-subtitle">Tentatives d'influences indirectes</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Décontracté</div>
+                <div class="int-desc">Se rendre auprès de l'entraîneur pour exprimer clairement que vous n'êtes pas dupe et lui demander d'arrêter ses interventions.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Calme et Serein — TRC</div>
+                <div class="int-desc">Demander de ne plus commenter l'arbitrage. Rappeler qu'il peut interroger l'arbitre (cas n°1) ponctuellement et cordialement.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">3</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Serein mais Ferme — TRC</div>
+                <div class="int-desc">Réunir les 2 coaches, prévenir que ce comportement ne sera plus toléré et fera l'objet d'un rapport circonstancié.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description du comportement</button>
+        <div class="sit-detail">
+          <p>Tentatives d'influences « indirectes » formulées à haute voix, de manière à être entendues par l'arbitre :</p>
+          <div class="examples">
+            <div class="example-quote">« Ce n'est pas grave, l'arbitre n'a pas vu »</div>
+            <div class="example-quote">« La prochaine fois il sifflera »</div>
+            <div class="example-quote">« Il a le droit de se tromper »</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAS 4 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">04</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-banc">Banc / Officiels</span>
+            <div class="sit-title">Quémandeur</div>
+            <div class="sit-subtitle">Demande directe au juge-arbitre</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Serein mais Ferme</div>
+                <div class="int-desc">Se rendre auprès de l'entraîneur pour lui demander distinctement de cesser ce type de remarques et l'avertir de l'utilisation du TRC s'il recommençait.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Calme et Serein — TRC</div>
+                <div class="int-desc">Demander de ne plus commenter l'arbitrage. Rappeler le droit d'interroger l'arbitre (cas n°1) ponctuellement et cordialement.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">3</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Ferme et Déterminé — TRC</div>
+                <div class="int-desc">Utilisation systématique du TRC. Tolérance unique possible en cas de prise de conscience immédiate (geste d'excuse).</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description du comportement</button>
+        <div class="sit-detail">
+          <p>L'officiel effectue une demande directe au JAJ :</p>
+          <div class="examples">
+            <div class="example-quote">« Fais attention à tel joueur »</div>
+            <div class="example-quote">« Fais attention aux ceinturages… Aux bras accrochés... »</div>
+            <div class="example-quote">« Ce joueur ? Il a le droit de ceinturer ? »</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAS 5 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">05</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-banc">Banc / Officiels</span>
+            <div class="sit-title">Plaintif</div>
+            <div class="sit-subtitle">Divergence exprimée sans véhémence</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Calme et Serein</div>
+                <div class="int-desc">Se rendre auprès de l'entraîneur pour lui demander de ne plus commenter l'arbitrage. Lui rappeler le droit d'interroger l'arbitre (cas n°1) ponctuellement.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Serein mais Ferme — TRC</div>
+                <div class="int-desc">Réunir les 2 coaches et les prévenir que ce type de comportement ne sera plus toléré et fera l'objet d'un rapport sur la feuille de match.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">3</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Ferme et Déterminé — TRC</div>
+                <div class="int-desc">Utilisation systématique du TRC. Ne pas tolérer ces comportements. Le match doit reprendre si possible.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description du comportement</button>
+        <div class="sit-detail">
+          <p>L'officiel exprime sans véhémence une forme de divergence par rapport aux décisions prises (subjective ou objective) :</p>
+          <div class="examples">
+            <div class="example-quote">« C'était pareil tout à l'heure... »</div>
+            <div class="example-quote">« Il faut siffler pareil des deux côtés »</div>
+            <div class="example-quote">« Cela me semble sévère »</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAS 6 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">06</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-banc">Banc / Officiels</span>
+            <div class="sit-title">Mécontent</div>
+            <div class="sit-subtitle">Agitation muette et gestuelle</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Calme et Serein</div>
+                <div class="int-desc">Se rendre auprès de l'entraîneur pour lui demander de ne plus commenter l'arbitrage. Lui rappeler le droit d'interroger (cas n°1) ponctuellement et cordialement.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Serein mais Ferme — TRC</div>
+                <div class="int-desc">Réunir les 2 coaches, prévenir que ce comportement ne sera plus toléré et fera l'objet d'un rapport circonstancié.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">3</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Ferme et Déterminé — TRC</div>
+                <div class="int-desc">Utilisation systématique du TRC. Ne pas tolérer ces comportements. Le match doit reprendre si possible.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description du comportement</button>
+        <div class="sit-detail">
+          <p>Le coach ne dit rien mais montre sans énervement son mécontentement sur une décision d'arbitre :</p>
+          <div class="examples">
+            <div class="example-quote">Bras levés en croix ou au-dessus de la tête</div>
+            <div class="example-quote">Réaction sur G17 (Jeu Passif)</div>
+            <div class="example-quote">Petits sauts nerveux</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAS 7 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">07</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-banc">Banc / Officiels</span>
+            <div class="sit-title">Contestataire</div>
+            <div class="sit-subtitle">Critique ouverte sans virulence</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Calme et Serein</div>
+                <div class="int-desc">Se rendre auprès de l'entraîneur pour lui demander de ne plus commenter l'arbitrage, en rappelant le cas n°1.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Serein mais Ferme — TRC</div>
+                <div class="int-desc">Réunir les 2 coaches et les prévenir que ce comportement ne sera plus toléré — rapport sur la FDME.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">3</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Ferme et Déterminé — TRC</div>
+                <div class="int-desc">Utilisation systématique du TRC. Le match doit reprendre si possible.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description du comportement</button>
+        <div class="sit-detail">
+          <p>Le coach critique ouvertement l'arbitrage en exprimant spontanément (mais sans virulence) son désaccord :</p>
+          <div class="examples">
+            <div class="example-quote">« Noooooon… »</div>
+            <div class="example-quote">« Il n'y a pas faute ! »</div>
+            <div class="example-quote">« Marcher !!! » / « Passage en Force !!! »</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAS 8 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">08</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-banc">Banc / Officiels</span>
+            <div class="sit-title">Excédé</div>
+            <div class="sit-subtitle">Attitude excessive sur une décision arbitrale</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Serein mais Ferme</div>
+                <div class="int-desc">Intervention immédiate. Attitude démesurée issue des cas 5, 6 et 7 — rappel ferme des règles de comportement.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Ferme et Déterminé — TRC</div>
+                <div class="int-desc">Utilisation systématique du TRC. Droit à l'erreur possible en cas de prise de conscience immédiate, avec avertissement « c'est la dernière fois ».</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">3</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Drastique — TRC</div>
+                <div class="int-desc">Arrêt du match si situation irrémédiable. La COC statuera.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description du comportement</button>
+        <div class="sit-detail">
+          <p>Attitude physique ou verbale expressive et excessive sur une décision arbitrale. Attitude démesurée dans les comportements décrits aux cas 5, 6 &amp; 7.</p>
+        </div>
+      </div>
+
+      <!-- CAS 9 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">09</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-banc">Banc / Officiels</span>
+            <div class="sit-title">Outrancier</div>
+            <div class="sit-subtitle">Insultes, gestes déplacés, menaces</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Ferme et Déterminé — TRC immédiat</div>
+                <div class="int-desc">Intervention immédiate. Ne pas tolérer. Le match doit reprendre si possible.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Drastique — Arrêt du match</div>
+                <div class="int-desc">En cas de récidive ou d'impossibilité de remédier à la situation. La COC statuera.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description du comportement</button>
+        <div class="sit-detail">
+          <p>Comportements inadmissibles ne pouvant faire l'objet d'aucune tolérance :</p>
+          <div class="examples">
+            <div class="example-quote">Insultes !</div>
+            <div class="example-quote">Gestes déplacés !</div>
+            <div class="example-quote">Menaces !</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== ONGLET TRIBUNES ===== -->
+  <div id="tab-tribunes" class="tab-panel">
+    <p class="section-label">3 situations depuis les tribunes</p>
+    <div class="situations-grid">
+
+      <!-- CAS 10 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">10</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-tribunes">Tribunes / Public</span>
+            <div class="sit-title">Public Perturbateur</div>
+            <div class="sit-subtitle">Cris, moqueries</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Assertif</div>
+                <div class="int-desc">Demander au RSEC d'intervenir auprès du public. Rappeler les droits et devoirs de chacun aux personnes fautives. Demander au RSEC de rester à proximité.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Dissuasif — sans TRC</div>
+                <div class="int-desc">Demander au RSEC d'intervenir. Adopter une attitude pédagogique : rappeler les rôles, resituer les enjeux sportifs et formatifs, inviter à la bienveillance.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">3</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Préventif — TRC</div>
+                <div class="int-desc">Réunir les 2 coaches et les prévenir. Rapport circonstancié sur la FDME. Le match doit reprendre.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description</button>
+        <div class="sit-detail">
+          <p>Comportements perturbateurs sans engagement direct contre les arbitres :</p>
+          <div class="examples">
+            <div class="example-quote">Cris, moqueries</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAS 11 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">11</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-tribunes">Tribunes / Public</span>
+            <div class="sit-title">Public Contestataire</div>
+            <div class="sit-subtitle">Invectives, huées, sifflements</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Dissuasif — sans TRC</div>
+                <div class="int-desc">Demander au RSEC d'intervenir. Rappeler les rôles, resituer les enjeux sportifs et formatifs de la compétition, inviter à la bienveillance.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-2">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-ferme">Assertif — TRC</div>
+                <div class="int-desc">Demander au RSEC d'intervenir. Demander aux personnes fautives de quitter la salle pour reprendre le match.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description</button>
+        <div class="sit-detail">
+          <p>Contestation directe et bruyante de l'arbitrage depuis les tribunes :</p>
+          <div class="examples">
+            <div class="example-quote">Invectives, huées, sifflements</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAS 12 -->
+      <div class="situation-card">
+        <div class="sit-header">
+          <div class="sit-number">12</div>
+          <div class="sit-meta">
+            <span class="sit-badge badge-tribunes">Tribunes / Public</span>
+            <div class="sit-title">Public Outrancier</div>
+            <div class="sit-subtitle">Insultes, gestes déplacés, menaces</div>
+          </div>
+        </div>
+        <div class="sit-body">
+          <div class="interventions">
+            <div class="intervention">
+              <div class="int-step step-1">1</div>
+              <div class="int-content">
+                <div class="int-posture posture-calme">Dissuasif — sans TRC</div>
+                <div class="int-desc">Demander au RSEC d'intervenir immédiatement auprès du public. Demander aux personnes fautives de respecter le rôle de l'arbitre.</div>
+              </div>
+            </div>
+            <div class="intervention">
+              <div class="int-step step-3">2</div>
+              <div class="int-content">
+                <div class="int-posture posture-drastique">Assertif — TRC immédiat</div>
+                <div class="int-desc">Demander aux personnes fautives de quitter la salle. Rapport circonstancié obligatoire. La COC statuera si arrêt définitif.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="expand-btn" onclick="toggleDetail(this)"><span class="arrow">›</span> Voir la description</button>
+        <div class="sit-detail">
+          <p>Comportements inadmissibles depuis les tribunes :</p>
+          <div class="examples">
+            <div class="example-quote">Insultes !</div>
+            <div class="example-quote">Gestes déplacés !</div>
+            <div class="example-quote">Menaces !</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== ONGLET TRC ===== -->
+  <div id="tab-trc" class="tab-panel">
+    <p class="section-label">Temps de Régulation Comportemental — Uniquement pour les rencontres jeunes</p>
+    <div class="trc-section">
+
+      <div class="trc-intro">
+        <div class="trc-intro-title">🟠 Qu'est-ce que le TRC ?</div>
+        <p>Pour maintenir un climat sain et serein autour du match, le Juge Accompagnateur certifié (École d'Arbitrage / Club / Territorial / National) peut interrompre la rencontre en déposant un Temps de Régulation Comportemental (TRC). Ce dispositif est utilisable sur des rencontres jeunes jusqu'aux compétitions « moins de 18 ans » de tous niveaux (Départemental / Régional / National), arbitrées par un JAJ ou un binôme de JAJ.</p>
+      </div>
+
+      <div class="trc-grid">
+
+        <div class="trc-card">
+          <div class="trc-card-title"><div class="trc-icon">📋</div> Définitions clés</div>
+          <ul>
+            <li>Le TRC est indépendant des trois temps morts d'équipe (TME)</li>
+            <li>Il n'a pas de durée spécifique</li>
+            <li>Il permet de réguler le climat si l'attitude des officiels ou du public le nécessite</li>
+            <li>Le jeu reprend sur décision du JA, une fois le problème résolu</li>
+            <li>En cas d'impossibilité, le match peut être arrêté — la COC statuera</li>
+          </ul>
+        </div>
+
+        <div class="trc-card">
+          <div class="trc-card-title"><div class="trc-icon">⚙️</div> Protocole d'utilisation</div>
+          <ul>
+            <li>Demander au chronométreur d'arrêter le temps lors d'un ballon hors jeu (renvoi, jet franc, remise en jeu, jet de 7m, engagement)</li>
+            <li>Les joueurs restent sur l'espace de jeu</li>
+            <li>Si difficulté avec le public : faire appel au RSEC</li>
+            <li>Si difficulté avec un officiel : intervenir directement auprès de lui</li>
+            <li>Si difficulté avec un arbitre : intervenir auprès de lui</li>
+            <li>Une fois la situation régulée, reprendre par le jet correspondant</li>
+          </ul>
+        </div>
+
+        <div class="trc-card">
+          <div class="trc-card-title"><div class="trc-icon">📱</div> Sur la FDME</div>
+          <ul>
+            <li>Le bouton TRC (orange) arrête le chrono s'il est en marche</li>
+            <li>Le TRC est enregistré dans le déroulé de match</li>
+            <li>Le jeu peut reprendre à tout moment (pas de durée fixe)</li>
+            <li>Indiquer le nombre de TRC et les raisons dans la case « observations » (page de signature de la FDME)</li>
+          </ul>
+        </div>
+
+        <div class="trc-card">
+          <div class="trc-card-title"><div class="trc-icon">📝</div> Rapport après le match</div>
+          <ul>
+            <li>Relever le nombre de TRC utilisés par équipe</li>
+            <li>Pour chaque TRC : noter le moment du match, la durée et la raison</li>
+            <li>Envoyer le rapport au territoire qui statuera</li>
+            <li>Le club organisateur fournit un carton A4 orange plastifié « TRC » à l'identique des TME</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="trc-notice">
+        <div class="trc-notice-icon">⚠️</div>
+        <p>Le Juge Accompagnateur doit être <strong>majeur, certifié par l'ITFE</strong> et inscrit sur la feuille de match électronique, présent à la table de marque. Il peut déposer <strong>autant de TRC que nécessaire</strong>. Ce dispositif est réservé aux compétitions jusqu'aux moins de 18 ans de tout niveau.</p>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2025-2026 Meylan Handball · Responsable Arbitrage</p>
+  <a href="index.html">← Retour à l'accueil</a>
+</footer>
+
+<div class="bottom-stripe"></div>
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleDetail(btn) {
+    const detail = btn.nextElementSibling;
+    const isOpen = detail.classList.contains('open');
+    detail.classList.toggle('open', !isOpen);
+    btn.classList.toggle('open', !isOpen);
+    btn.querySelector('.arrow').textContent = isOpen ? '›' : '›';
+  }
+</script>
+
+</body>
+</html>
