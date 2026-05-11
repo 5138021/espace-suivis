@@ -1,0 +1,462 @@
+# Fichier HTML complet — Version EmailJS (sans Google Apps Script)
+
+Remplace entièrement ton fichier actuel par celui-ci.
+
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suivi Arbitrage — Meylan HB 25-26</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --noir:#0D0D0D;
+  --gris:#111111;
+  --border:#1E1E1E;
+  --blanc:#F5F2EC;
+  --muted:#9A9A9A;
+  --bleu:#4A9FFF;
+  --jaune:#FFD100;
+  --rouge:#E8001D;
+  --ins:#e53935;
+  --opt:#fb8c00;
+  --cor:#43a047;
+  --tres:#4A9FFF;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:var(--noir);
+  color:var(--blanc);
+  font-family:'DM Sans',sans-serif;
+}
+
+.top-stripe,.bottom-stripe{
+  height:4px;
+  background:linear-gradient(90deg,var(--rouge),var(--jaune),var(--rouge));
+}
+
+header{
+  background:#0a0a0a;
+  padding:18px 28px;
+  border-bottom:1px solid #1e1e1e;
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+header img{height:40px;}
+
+.header-text h1{
+  font-family:'Bebas Neue',sans-serif;
+  letter-spacing:3px;
+}
+
+.hero{
+  padding:36px 28px;
+  border-bottom:1px solid var(--border);
+}
+
+.hero-label{
+  color:var(--bleu);
+  font-size:.7rem;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+
+.hero h2{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:3rem;
+  letter-spacing:4px;
+}
+
+.hero span{color:var(--bleu);}
+
+.hero p:last-child{
+  color:var(--muted);
+  font-size:.85rem;
+}
+
+main{
+  padding:28px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.section-card{
+  border:1px solid var(--border);
+  border-left:3px solid var(--bleu);
+}
+
+.section-header{
+  background:#0a0a0a;
+  padding:12px 18px;
+  border-bottom:1px solid var(--border);
+}
+
+.section-header h3{
+  font-family:'Bebas Neue',sans-serif;
+  letter-spacing:2px;
+  color:var(--bleu);
+}
+
+.section-body{
+  background:var(--gris);
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.row-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+.field label{
+  display:block;
+  margin-bottom:8px;
+  font-size:.72rem;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.field input,
+.field textarea{
+  width:100%;
+  background:var(--noir);
+  border:1px solid #2e2e2e;
+  border-radius:4px;
+  padding:12px;
+  color:var(--blanc);
+  font-family:'DM Sans',sans-serif;
+}
+
+.field textarea{
+  min-height:100px;
+  resize:vertical;
+}
+
+.field input:focus,
+.field textarea:focus{
+  outline:none;
+  border-color:var(--bleu);
+}
+
+.eval-wrap{overflow-x:auto;}
+
+.eval{
+  width:100%;
+  border-collapse:collapse;
+  min-width:600px;
+}
+
+.eval th,
+.eval td{
+  border-bottom:1px solid #1c1c1c;
+  padding:12px;
+}
+
+.eval th{
+  font-family:'Bebas Neue',sans-serif;
+  letter-spacing:2px;
+}
+
+.eval td:first-child{
+  width:45%;
+  color:#ccc;
+}
+
+.eval input[type="radio"]{
+  transform:scale(1.2);
+}
+
+button{
+  background:transparent;
+  border:1px solid var(--bleu);
+  color:var(--bleu);
+  padding:14px 40px;
+  font-family:'Bebas Neue',sans-serif;
+  letter-spacing:3px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:var(--bleu);
+  color:black;
+}
+
+.submit-area{
+  text-align:center;
+}
+
+.banner{
+  display:none;
+  padding:16px;
+  border-radius:4px;
+  text-align:center;
+  font-weight:600;
+}
+
+#success-banner{
+  background:rgba(67,160,71,.1);
+  border:1px solid var(--cor);
+  color:var(--cor);
+}
+
+#error-banner{
+  background:rgba(229,57,53,.1);
+  border:1px solid var(--ins);
+  color:var(--ins);
+}
+
+footer{
+  background:#0a0a0a;
+  padding:16px 28px;
+  border-top:1px solid var(--border);
+  color:#555;
+  font-size:.7rem;
+}
+
+@media(max-width:700px){
+  .row-2{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <img src="https://5138021.github.io/espace-suivis/MHB_logo.png">
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+  </div>
+</header>
+
+<div class="hero">
+  <p class="hero-label">📋 Formulaire de suivi</p>
+  <h2>Suivi d'arbitrage <span>25-26</span></h2>
+  <p>Renseigner l'évaluation pédagogique à l'issue d'une rencontre arbitrée.</p>
+</div>
+
+<main>
+
+<div id="success-banner" class="banner">
+✓ Le suivi a bien été envoyé par email.
+</div>
+
+<div id="error-banner" class="banner">
+✗ Erreur lors de l'envoi.
+</div>
+
+<form id="suiviForm">
+
+<div class="section-card">
+<div class="section-header"><h3>Identité des arbitres</h3></div>
+<div class="section-body">
+
+<div class="row-2">
+<div class="field">
+<label>Juge-Arbitre 1 *</label>
+<input type="text" id="ja1" required>
+</div>
+
+<div class="field">
+<label>Juge-Arbitre 2</label>
+<input type="text" id="ja2">
+</div>
+</div>
+
+<div class="field">
+<label>Juge Accompagnateur *</label>
+<input type="text" id="accompagnateur" required>
+</div>
+
+</div>
+</div>
+
+<div class="section-card">
+<div class="section-header"><h3>Informations rencontre</h3></div>
+<div class="section-body">
+<div class="field">
+<label>Rencontre *</label>
+<input type="text" id="rencontre" required>
+</div>
+</div>
+</div>
+
+<div class="section-card">
+<div class="section-header"><h3>Grille d'évaluation</h3></div>
+<div class="eval-wrap">
+<table class="eval">
+<thead>
+<tr>
+<th>Critère</th>
+<th>Insuffisant</th>
+<th>À optimiser</th>
+<th>Correct</th>
+<th>Très correct</th>
+</tr>
+</thead>
+<tbody id="evalBody"></tbody>
+</table>
+</div>
+</div>
+
+<div class="section-card">
+<div class="section-header"><h3>Points à travailler</h3></div>
+<div class="section-body">
+<div class="field">
+<textarea id="points"></textarea>
+</div>
+</div>
+</div>
+
+<div class="submit-area">
+<button type="submit" id="submitBtn">Envoyer le suivi →</button>
+</div>
+
+</form>
+</main>
+
+<footer>
+© 2025-2026 Meylan Handball · Responsable Arbitrage
+</footer>
+
+<div class="bottom-stripe"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+
+// ─────────────────────────────
+// CONFIG EMAILJS
+// ─────────────────────────────
+
+emailjs.init("8mHDd4BaEwkycTRqI");
+
+const SERVICE_ID = "service_o4midvq";
+const TEMPLATE_ID = "template_l5mmsg3";
+
+// ─────────────────────────────
+// CRITÈRES
+// ─────────────────────────────
+
+const criteres = [
+"Comprend le jeu",
+"Appréciation des duels",
+"Sanctions sportives",
+"Sanctions disciplinaires",
+"Placement et déplacement",
+"Communication",
+"Personnalité",
+"Marcher / dribble",
+"Empiètement",
+"Jeu passif",
+"Autres règles",
+"Impression générale",
+"Communication entre arbitres"
+];
+
+const tbody = document.getElementById('evalBody');
+
+criteres.forEach((crit,i)=>{
+
+const tr = document.createElement('tr');
+
+tr.innerHTML = `
+<td>${crit}</td>
+<td><input type="radio" name="crit_${i}" value="Insuffisant"></td>
+<td><input type="radio" name="crit_${i}" value="À optimiser"></td>
+<td><input type="radio" name="crit_${i}" value="Correct"></td>
+<td><input type="radio" name="crit_${i}" value="Très correct"></td>
+`;
+
+tbody.appendChild(tr);
+});
+
+// ─────────────────────────────
+// ENVOI FORMULAIRE
+// ─────────────────────────────
+
+document.getElementById('suiviForm').addEventListener('submit', async function(e){
+
+  e.preventDefault();
+
+  const btn = document.getElementById('submitBtn');
+
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+
+  const evaluations = criteres.map((c,i)=>{
+    const checked = document.querySelector(`input[name="crit_${i}"]:checked`);
+    return `${c} : ${checked ? checked.value : 'Non renseigné'}`;
+  }).join('\n\n');
+
+  try {
+
+    await emailjs.send(
+      SERVICE_ID,
+      TEMPLATE_ID,
+      {
+        ja1: document.getElementById('ja1').value,
+        ja2: document.getElementById('ja2').value,
+        accompagnateur: document.getElementById('accompagnateur').value,
+        rencontre: document.getElementById('rencontre').value,
+        points: document.getElementById('points').value,
+        evaluations: evaluations
+      }
+    );
+
+    showBanner('success');
+    document.getElementById('suiviForm').reset();
+
+  } catch(err){
+
+    console.error(err);
+    showBanner('error');
+
+  } finally {
+
+    btn.disabled = false;
+    btn.textContent = 'Envoyer le suivi →';
+
+  }
+
+});
+
+function showBanner(type){
+
+  hideBanners();
+
+  const banner = document.getElementById(type === 'success'
+    ? 'success-banner'
+    : 'error-banner');
+
+  banner.style.display = 'block';
+
+  setTimeout(()=>{
+    banner.style.display = 'none';
+  },5000);
+}
+
+function hideBanners(){
+  document.getElementById('success-banner').style.display = 'none';
+  document.getElementById('error-banner').style.display = 'none';
+}
+
+</script>
+
+</body>
+</html>
