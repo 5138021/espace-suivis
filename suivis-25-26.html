@@ -497,6 +497,88 @@
     .suivi-accompagnateur, .score-badge { display: none; }
     .detail-grid { grid-template-columns: 1fr; }
     .search-wrap input { width: 140px; }
+    .export-btn { font-size: 0.65rem; }
+  }
+
+  /* EXPORT BUTTON */
+  .export-area {
+    padding: 0 3rem 2rem;
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid #1a1a1a;
+    margin-bottom: 0;
+  }
+
+  .export-label {
+    font-size: 0.62rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .export-btn {
+    background: none;
+    border: 1px solid rgba(232,0,29,0.4);
+    color: var(--rouge);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .export-btn:hover {
+    background: rgba(232,0,29,0.08);
+    border-color: var(--rouge);
+  }
+
+  .export-btn.all {
+    border-color: rgba(74,159,255,0.4);
+    color: var(--bleu);
+  }
+
+  .export-btn.all:hover {
+    background: rgba(74,159,255,0.08);
+    border-color: var(--bleu);
+  }
+
+  .export-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* ARBITRE PILLS */
+  .arbitre-pills {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .arbitre-pill {
+    background: none;
+    border: 1px solid #2a2a2a;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .arbitre-pill:hover {
+    border-color: var(--rouge);
+    color: var(--rouge);
+    background: rgba(232,0,29,0.06);
   }
 </style>
 </head>
@@ -556,6 +638,12 @@
       <span class="search-icon">⌕</span>
       <input type="text" id="searchInput" placeholder="Rechercher un arbitre…" oninput="renderList()" />
     </div>
+  </div>
+
+  <div class="export-area" id="exportArea">
+    <span class="export-label">Export PDF :</span>
+    <button class="export-btn all" onclick="exportTousBilans()">⬇ Tous les bilans</button>
+    <div class="arbitre-pills" id="arbitrePills"></div>
   </div>
 
   <p class="section-label">Évaluations enregistrées</p>
@@ -1772,6 +1860,412 @@ function setFilter(key, btn) {
 // INIT
 computeStats();
 renderList();
+renderArbitrePills();
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+
+// ─────────────────────────────────────────────────────
+// PDF EXPORT — FICHES BILANS INDIVIDUELS
+// ─────────────────────────────────────────────────────
+
+const NOTE_COLORS = {
+  'Insuffisant':  { r:229, g:57,  b:53  },
+  'À optimiser':  { r:251, g:140, b:0   },
+  'Correct':      { r:67,  g:160, b:71  },
+  'Très correct': { r:74,  g:159, b:255 },
+  '':             { r:80,  g:80,  b:80  }
+};
+
+const NOTE_SHORT = {
+  'Insuffisant':  'INSUF.',
+  'À optimiser':  'OPTIM.',
+  'Correct':      'CORRECT',
+  'Très correct': 'TRÈS COR.',
+  '':             'N/R'
+};
+
+function getArbitres() {
+  const set = new Set();
+  SUIVIS.forEach(s => { set.add(s.ja1); if(s.ja2) set.add(s.ja2); });
+  return [...set].sort();
+}
+
+function renderArbitrePills() {
+  const container = document.getElementById('arbitrePills');
+  container.innerHTML = getArbitres().map(a =>
+    `<button class="arbitre-pill" onclick="exportBilanArbitre('${a.replace(/'/g,"\\'")}')">⬇ ${a}</button>`
+  ).join('');
+}
+
+function getSuivisForArbitre(nom) {
+  return SUIVIS.filter(s => s.ja1 === nom || s.ja2 === nom)
+               .sort((a,b) => new Date(a.date) - new Date(b.date));
+}
+
+function wrapText(doc, text, x, y, maxWidth, lineHeight) {
+  const lines = doc.splitTextToSize(text, maxWidth);
+  lines.forEach(line => {
+    doc.text(line, x, y);
+    y += lineHeight;
+  });
+  return y;
+}
+
+function buildBilanPDF(nom) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+
+  const suivis = getSuivisForArbitre(nom);
+  const W = 210, H = 297;
+  const mL = 14, mR = 14, mT = 14;
+  const cW = W - mL - mR;
+
+  // Couleurs
+  const ROUGE = [232, 0, 29];
+  const NOIR  = [13, 13, 13];
+  const GRIS  = [26, 26, 26];
+  const BLANC = [245, 242, 236];
+  const MUTED = [120, 120, 120];
+  const BLEU  = [74, 159, 255];
+  const JAUNE = [255, 209, 0];
+
+  function newPage() {
+    doc.addPage();
+    // bande haut
+    doc.setFillColor(...ROUGE);
+    doc.rect(0, 0, W, 2, 'F');
+    doc.setFillColor(...JAUNE);
+    doc.rect(W/2 - 20, 0, 40, 2, 'F');
+    return mT + 8;
+  }
+
+  function stripe() {
+    doc.setFillColor(...ROUGE);
+    doc.rect(0, 0, W, 2, 'F');
+    doc.setFillColor(...JAUNE);
+    doc.rect(W/2 - 20, 0, 40, 2, 'F');
+  }
+
+  function stripeBottom(y) {
+    doc.setFillColor(...ROUGE);
+    doc.rect(0, H - 2, W, 2, 'F');
+    doc.setFillColor(...JAUNE);
+    doc.rect(W/2 - 20, H - 2, 40, 2, 'F');
+  }
+
+  // ── PAGE 1 HEADER ──
+  stripe();
+
+  // Fond header
+  doc.setFillColor(...NOIR);
+  doc.rect(0, 2, W, 38, 'F');
+
+  // Bande latérale rouge
+  doc.setFillColor(...ROUGE);
+  doc.rect(0, 2, 4, 38, 'F');
+
+  // Titre principal
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(22);
+  doc.setTextColor(...BLANC);
+  doc.text('BILAN INDIVIDUEL', mL + 6, 18);
+
+  doc.setFontSize(10);
+  doc.setTextColor(...MUTED);
+  doc.text('MEYLAN HANDBALL  ·  ARBITRAGE  ·  SAISON 25-26', mL + 6, 25);
+
+  // Nom arbitre
+  doc.setFillColor(...ROUGE);
+  doc.rect(mL + 6, 28, cW - 6, 8, 'F');
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(14);
+  doc.setTextColor(255, 255, 255);
+  doc.text(nom.toUpperCase(), mL + 10, 34.5);
+
+  // Stats rapides droite
+  const nbSuivis = suivis.length;
+  const allNotes = suivis.flatMap(s => Object.values(s.evaluations).filter(v=>v));
+  const counts = { 'Insuffisant':0,'À optimiser':0,'Correct':0,'Très correct':0 };
+  allNotes.forEach(v => { if(counts[v]!==undefined) counts[v]++; });
+  const statsX = mL + cW - 45;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.setTextColor(...MUTED);
+  doc.text(`${nbSuivis} suivi${nbSuivis>1?'s':''}`, statsX, 18);
+  doc.text(`${allNotes.length} critères évalués`, statsX, 23);
+  doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, statsX, 28);
+
+  let y = 48;
+
+  // ── RÉCAP GLOBAL ──
+  doc.setFillColor(20, 20, 20);
+  doc.rect(mL, y, cW, 22, 'F');
+
+  // Titre section
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(7);
+  doc.setTextColor(...MUTED);
+  doc.text('RÉCAPITULATIF SAISON', mL + 4, y + 6);
+
+  // 4 compteurs de notes
+  const noteKeys = ['Insuffisant','À optimiser','Correct','Très correct'];
+  const blockW = (cW - 8) / 4;
+  noteKeys.forEach((k, i) => {
+    const bx = mL + 4 + i * blockW;
+    const c = NOTE_COLORS[k];
+    doc.setFillColor(c.r, c.g, c.b);
+    doc.rect(bx, y + 9, blockW - 2, 1.5, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.setTextColor(c.r, c.g, c.b);
+    doc.text(String(counts[k]), bx, y + 19);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6);
+    doc.setTextColor(...MUTED);
+    doc.text(k.toUpperCase(), bx, y + 22.5);
+  });
+
+  y += 28;
+
+  // ── ANALYSE PAR CRITÈRE ──
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(...BLEU);
+  doc.text('ANALYSE PAR CRITÈRE', mL, y + 4);
+  doc.setDrawColor(...BLEU);
+  doc.setLineWidth(0.3);
+  doc.line(mL, y + 6, mL + cW, y + 6);
+  y += 10;
+
+  const critW = cW / 2 - 2;
+  CRITERES.forEach((crit, i) => {
+    const col = i % 2;
+    const cx = col === 0 ? mL : mL + critW + 4;
+
+    if (col === 0 && i > 0) y += 9;
+    if (y > H - 25) {
+      stripeBottom();
+      y = newPage();
+    }
+
+    // Compter les notes pour ce critère
+    const critCounts = { 'Insuffisant':0,'À optimiser':0,'Correct':0,'Très correct':0 };
+    suivis.forEach(s => {
+      const v = s.evaluations[crit] || '';
+      if(critCounts[v]!==undefined) critCounts[v]++;
+    });
+
+    // Trouver la note dominante
+    let maxN=0, dominant='';
+    Object.entries(critCounts).forEach(([k,v])=>{ if(v>maxN){ maxN=v; dominant=k; }});
+    const dc = dominant ? NOTE_COLORS[dominant] : {r:80,g:80,b:80};
+
+    // Fond ligne
+    doc.setFillColor(18, 18, 18);
+    doc.rect(cx, y - 1, critW, 8, 'F');
+
+    // Barre colorée gauche
+    doc.setFillColor(dc.r, dc.g, dc.b);
+    doc.rect(cx, y - 1, 2, 8, 'F');
+
+    // Nom critère
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(190, 190, 190);
+    const critShort = crit.length > 22 ? crit.substring(0,20)+'…' : crit;
+    doc.text(critShort, cx + 4, y + 4);
+
+    // Mini progress bars des notes
+    const barX = cx + critW - 38;
+    const barY = y + 1.5;
+    const barH = 2;
+    const totalForCrit = Object.values(critCounts).reduce((a,b)=>a+b,0) || 1;
+    let bx2 = barX;
+    noteKeys.forEach(k => {
+      const pct = critCounts[k] / totalForCrit;
+      const bw = pct * 36;
+      if(bw > 0) {
+        const nc = NOTE_COLORS[k];
+        doc.setFillColor(nc.r, nc.g, nc.b);
+        doc.rect(bx2, barY, bw, barH, 'F');
+        bx2 += bw;
+      }
+    });
+
+    // Note dominante label
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(5.5);
+    doc.setTextColor(dc.r, dc.g, dc.b);
+    doc.text(NOTE_SHORT[dominant] || 'N/R', cx + critW - 38, y + 7.5);
+  });
+
+  y += 16;
+
+  // ── DÉTAIL DES SUIVIS ──
+  if (y > H - 40) {
+    stripeBottom();
+    y = newPage();
+  }
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(...BLEU);
+  doc.text('DÉTAIL DES SUIVIS', mL, y + 4);
+  doc.setDrawColor(...BLEU);
+  doc.setLineWidth(0.3);
+  doc.line(mL, y + 6, mL + cW, y + 6);
+  y += 12;
+
+  suivis.forEach((s, idx) => {
+    // Estimer la hauteur nécessaire
+    const nbLignesPoints = s.points ? Math.ceil(s.points.length / 85) + 1 : 0;
+    const hNeeded = 14 + CRITERES.length * 5 + nbLignesPoints * 4 + 10;
+
+    if (y + hNeeded > H - 20) {
+      stripeBottom();
+      y = newPage();
+    }
+
+    // En-tête du suivi
+    doc.setFillColor(...NOIR);
+    doc.rect(mL, y, cW, 10, 'F');
+    doc.setFillColor(...ROUGE);
+    doc.rect(mL, y, 3, 10, 'F');
+
+    // Numéro
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(40, 40, 40);
+    doc.text(String(idx + 1).padStart(2, '0'), mL + 5, y + 8);
+
+    // Date
+    const d = new Date(s.date);
+    const dateStr = d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(...BLANC);
+    doc.text(dateStr.toUpperCase(), mL + 18, y + 5);
+
+    // Rencontre
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6.5);
+    doc.setTextColor(...MUTED);
+    const renc = s.rencontre.length > 55 ? s.rencontre.substring(0,53)+'…' : s.rencontre;
+    doc.text(renc, mL + 18, y + 9);
+
+    // Accompagnateur
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6);
+    doc.setTextColor(...MUTED);
+    doc.text(`JA: ${s.accompagnateur}`, mL + cW - 40, y + 5);
+
+    // Binôme
+    if(s.ja2) {
+      const partenaire = (s.ja1 === nom) ? s.ja2 : s.ja1;
+      doc.text(`Binôme: ${partenaire}`, mL + cW - 40, y + 9);
+    }
+
+    y += 13;
+
+    // Évaluations en 2 colonnes
+    const evalColW = cW / 2 - 2;
+    CRITERES.forEach((crit, ci) => {
+      const col2 = ci % 2;
+      const ex = col2 === 0 ? mL : mL + evalColW + 4;
+      const ey = ci % 2 === 0 ? y + Math.floor(ci/2)*5 : y + Math.floor(ci/2)*5;
+
+      const val = s.evaluations[crit] || '';
+      const nc = NOTE_COLORS[val] || NOTE_COLORS[''];
+
+      doc.setFillColor(16, 16, 16);
+      doc.rect(ex, ey - 0.5, evalColW, 4.5, 'F');
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(6.5);
+      doc.setTextColor(160, 160, 160);
+      const critCourt = crit.length > 24 ? crit.substring(0,22)+'…' : crit;
+      doc.text(critCourt, ex + 2, ey + 3);
+
+      // Badge note
+      const badgeW = 22;
+      doc.setFillColor(nc.r * 0.15, nc.g * 0.15, nc.b * 0.15);
+      doc.rect(ex + evalColW - badgeW - 1, ey, badgeW, 3.5, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(5);
+      doc.setTextColor(nc.r, nc.g, nc.b);
+      doc.text(NOTE_SHORT[val] || 'N/R', ex + evalColW - badgeW + 1, ey + 2.8);
+    });
+
+    y += Math.ceil(CRITERES.length / 2) * 5 + 3;
+
+    // Points à travailler
+    if (s.points) {
+      if (y > H - 25) { stripeBottom(); y = newPage(); }
+      doc.setFillColor(10, 10, 10);
+      doc.rect(mL, y, cW, 4, 'F');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(6);
+      doc.setTextColor(...MUTED);
+      doc.text('POINTS À TRAVAILLER', mL + 2, y + 3);
+      y += 5;
+
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(6.5);
+      doc.setTextColor(150, 150, 150);
+      const lines = doc.splitTextToSize(s.points, cW - 4);
+      lines.forEach(line => {
+        if (y > H - 18) { stripeBottom(); y = newPage(); }
+        doc.text(line, mL + 2, y + 3);
+        y += 4;
+      });
+      y += 2;
+    }
+
+    y += 6;
+    // Séparateur
+    doc.setDrawColor(25, 25, 25);
+    doc.setLineWidth(0.2);
+    doc.line(mL, y - 3, mL + cW, y - 3);
+  });
+
+  stripeBottom();
+
+  return doc;
+}
+
+function exportBilanArbitre(nom) {
+  const doc = buildBilanPDF(nom);
+  const safeName = nom.replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  doc.save(`Bilan_${safeName}_MHB_25-26.pdf`);
+}
+
+function exportTousBilans() {
+  const arbitres = getArbitres();
+  if (!arbitres.length) return;
+
+  const btn = document.querySelector('.export-btn.all');
+  btn.disabled = true;
+  btn.textContent = '⏳ Génération...';
+
+  // Téléchargement séquentiel avec délai pour ne pas bloquer le navigateur
+  let i = 0;
+  function next() {
+    if (i >= arbitres.length) {
+      btn.disabled = false;
+      btn.textContent = '⬇ Tous les bilans';
+      return;
+    }
+    const nom = arbitres[i++];
+    const doc = buildBilanPDF(nom);
+    const safeName = nom.replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    doc.save(`Bilan_${safeName}_MHB_25-26.pdf`);
+    setTimeout(next, 400);
+  }
+  setTimeout(next, 100);
+}
 
 </script>
 
