@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanctions Personnelles — Meylan HB 25-26</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge:   #E8001D;
+    --noir:    #0D0D0D;
+    --blanc:   #F5F2EC;
+    --gris:    #1A1A1A;
+    --gris-mid:#2E2E2E;
+    --accent:  #FFD100;
+    --muted:   #9A9A9A;
+    --bleu:    #4A9FFF;
+    --border:  #1E1E1E;
+
+    /* Couleurs sanction */
+    --jaune-sanction: #FFD100;
+    --rouge-sanction: #E8001D;
+    --bleu-sanction:  #4A9FFF;
+    --vert-sanction:  #2ECC71;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .top-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  header {
+    padding: 2.5rem 3rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .logo-badge { width:75px; height:75px; border-radius:4px; flex-shrink:0; }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--blanc);
+    line-height: 1;
+  }
+
+  .header-text p {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  nav.subnav {
+    padding: 0 3rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+  }
+
+  .subnav a {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .subnav a.active, .subnav a:hover {
+    color: var(--blanc);
+    border-bottom-color: var(--bleu);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 4rem 3rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: 'SANCTIONS';
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12rem;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    letter-spacing: 4px;
+    white-space: nowrap;
+  }
+
+  .hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin-bottom: 1rem;
+  }
+
+  .hero h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .hero h2 span { color: var(--accent); }
+
+  .hero-sub {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 580px;
+    line-height: 1.6;
+  }
+
+  /* TABS */
+  .tabs-bar {
+    padding: 0 3rem;
+    display: flex;
+    border-bottom: 1px solid #222;
+    margin-bottom: 2.5rem;
+  }
+
+  .tab-btn {
+    padding: 1rem 1.6rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn.active { color: var(--blanc); border-bottom-color: var(--accent); }
+  .tab-btn:hover:not(.active) { color: var(--blanc); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .section-label {
+    padding: 0 3rem 1.2rem;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid #222;
+    margin-bottom: 2rem;
+  }
+
+  /* ═══════════════════════════════════════
+     ÉCHELLE JOUEURS — TIMELINE VERTICALE
+  ═══════════════════════════════════════ */
+
+  .timeline-wrap {
+    padding: 0 3rem 3rem;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 0;
+  }
+
+  /* Colonne gauche : étapes */
+  .timeline-steps {
+    position: relative;
+    padding-right: 0;
+  }
+
+  /* Ligne verticale centrale */
+  .timeline-steps::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 24px;
+    bottom: 24px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--jaune-sanction), var(--rouge-sanction), var(--rouge-sanction), var(--bleu-sanction));
+    transform: translateX(-50%);
+    z-index: 0;
+  }
+
+  .t-step {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0;
+    padding: 1.2rem 0;
+  }
+
+  .t-step:last-child { margin-bottom: 0; }
+
+  .t-badge {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    border-radius: 3px;
+    position: relative;
+    z-index: 2;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .t-badge:hover { transform: scale(1.03); }
+
+  .t-badge.jaune {
+    background: rgba(255,209,0,0.12);
+    border: 1.5px solid rgba(255,209,0,0.4);
+  }
+
+  .t-badge.rouge {
+    background: rgba(232,0,29,0.12);
+    border: 1.5px solid rgba(232,0,29,0.4);
+  }
+
+  .t-badge.rouge-fort {
+    background: rgba(232,0,29,0.2);
+    border: 2px solid var(--rouge-sanction);
+  }
+
+  .t-badge.bleu {
+    background: rgba(74,159,255,0.12);
+    border: 1.5px solid rgba(74,159,255,0.4);
+  }
+
+  .t-badge-carton {
+    width: 28px;
+    height: 36px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.55rem;
+    letter-spacing: 1px;
+    color: var(--noir);
+    font-weight: 900;
+    flex-shrink: 0;
+  }
+
+  .carton-jaune  { background: var(--jaune-sanction); }
+  .carton-rouge  { background: var(--rouge-sanction); }
+  .carton-bleu   { background: var(--bleu-sanction); color: white; }
+  .carton-double { position: relative; }
+  .carton-double .c1 {
+    width: 24px; height: 32px; border-radius: 2px;
+    background: var(--rouge-sanction);
+    position: absolute; left: 0; top: 2px;
+  }
+  .carton-double .c2 {
+    width: 24px; height: 32px; border-radius: 2px;
+    background: var(--jaune-sanction);
+    position: absolute; right: 0; top: 0px;
+  }
+  .carton-double { width: 36px; height: 36px; }
+
+  .t-badge-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  .t-badge.jaune .t-badge-title     { color: var(--jaune-sanction); }
+  .t-badge.rouge .t-badge-title     { color: var(--rouge-sanction); }
+  .t-badge.rouge-fort .t-badge-title { color: var(--rouge-sanction); }
+  .t-badge.bleu .t-badge-title      { color: var(--bleu-sanction); }
+
+  .t-badge-sub {
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* Flèche entre étapes */
+  .t-arrow {
+    color: #333;
+    font-size: 1rem;
+    line-height: 1;
+    margin: -6px 0;
+  }
+
+  /* Colonne droite : règles */
+  .timeline-rules {
+    padding-left: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    align-self: start;
+  }
+
+  .rule-card {
+    background: var(--gris);
+    padding: 1rem 1.4rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    transition: background 0.15s;
+    cursor: default;
+  }
+
+  .rule-card:hover { background: var(--gris-mid); }
+
+  .rule-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-top: 2px;
+  }
+
+  .rule-icon.j { background: rgba(255,209,0,0.12); border: 1px solid rgba(255,209,0,0.3); }
+  .rule-icon.r { background: rgba(232,0,29,0.12);  border: 1px solid rgba(232,0,29,0.3); }
+  .rule-icon.b { background: rgba(74,159,255,0.12); border: 1px solid rgba(74,159,255,0.3); }
+  .rule-icon.n { background: rgba(100,100,100,0.1); border: 1px solid #2a2a2a; }
+
+  .rule-content h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.3rem;
+    line-height: 1;
+  }
+
+  .rule-icon.j + .rule-content h4 { color: var(--jaune-sanction); }
+  .rule-icon.r + .rule-content h4 { color: var(--rouge-sanction); }
+  .rule-icon.b + .rule-content h4 { color: var(--bleu-sanction); }
+  .rule-icon.n + .rule-content h4 { color: var(--muted); }
+
+  .rule-content p {
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .rule-content p strong {
+    color: var(--blanc);
+    font-weight: 600;
+  }
+
+  /* ═══════════════════════════════════════
+     ÉCHELLE OFFICIELS — 4 COLONNES
+  ═══════════════════════════════════════ */
+
+  .officiels-wrap {
+    padding: 0 3rem 3rem;
+  }
+
+  .officiels-flow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 2rem;
+  }
+
+  .off-step {
+    background: var(--gris);
+    padding: 1.8rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .off-step::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .off-step.jaune::before { background: var(--jaune-sanction); }
+  .off-step.rouge::before { background: var(--rouge-sanction); }
+  .off-step.bleu::before  { background: var(--bleu-sanction); }
+
+  .off-carton {
+    width: 36px;
+    height: 46px;
+    border-radius: 3px;
+  }
+
+  .off-carton.jaune { background: var(--jaune-sanction); }
+  .off-carton.rouge { background: var(--rouge-sanction); }
+  .off-carton.bleu  { background: var(--bleu-sanction); }
+
+  .off-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    line-height: 1.1;
+  }
+
+  .off-step.jaune .off-title { color: var(--jaune-sanction); }
+  .off-step.rouge .off-title { color: var(--rouge-sanction); }
+  .off-step.bleu  .off-title { color: var(--bleu-sanction); }
+
+  .off-sub {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: -4px;
+  }
+
+  .off-limit {
+    display: inline-block;
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 2px;
+    align-self: flex-start;
+  }
+
+  .off-step.jaune .off-limit { background: rgba(255,209,0,0.1); color: var(--jaune-sanction); border: 1px solid rgba(255,209,0,0.3); }
+  .off-step.rouge .off-limit { background: rgba(232,0,29,0.1); color: var(--rouge-sanction); border: 1px solid rgba(232,0,29,0.3); }
+  .off-step.bleu  .off-limit { background: rgba(74,159,255,0.1); color: var(--bleu-sanction); border: 1px solid rgba(74,159,255,0.3); }
+
+  .off-desc {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+    border-top: 1px solid #222;
+    padding-top: 0.8rem;
+    margin-top: 0.2rem;
+  }
+
+  .off-desc strong { color: var(--blanc); font-weight: 600; }
+
+  /* Flèches entre colonnes officiels */
+  .officiels-flow .off-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #333;
+    font-size: 1.2rem;
+    z-index: 2;
+    background: var(--gris);
+    padding: 0 2px;
+  }
+
+  /* ENCART PRINCIPE */
+  .principe-card {
+    background: rgba(232,0,29,0.06);
+    border: 1px solid rgba(232,0,29,0.25);
+    border-left: 3px solid var(--rouge);
+    padding: 1.2rem 1.8rem;
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .principe-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+
+  .principe-content p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .principe-content strong { color: var(--blanc); font-weight: 600; }
+
+  /* FOOTER */
+  footer {
+    margin-top: 3rem;
+    padding: 1.5rem 3rem;
+    border-top: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer p { font-size: 0.68rem; color: var(--muted); letter-spacing: 1px; }
+  footer a { font-size: 0.68rem; color: var(--muted); text-decoration: none; letter-spacing: 1px; transition: color 0.2s; }
+  footer a:hover { color: var(--rouge); }
+
+  .bottom-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  @media (max-width: 900px) {
+    header, nav.subnav, .hero, .section-label, .tabs-bar, footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .timeline-wrap { grid-template-columns: 1fr; padding-left: 1.2rem; padding-right: 1.2rem; }
+    .timeline-rules { padding-left: 0; }
+    .timeline-steps::before { display: none; }
+    .officiels-wrap { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .officiels-flow { grid-template-columns: 1fr 1fr; }
+    .officiels-flow .off-step::after { display: none; }
+    .hero::before { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .officiels-flow { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <img class="logo-badge" src="MHB_logo.png" />
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+  </div>
+</header>
+
+<nav class="subnav">
+  <a href="index.html">Accueil</a>
+  <a href="ressources.html" class="active">Fiches d'aide</a>
+</nav>
+
+<main>
+
+  <section class="hero">
+    <p class="hero-label">Référentiel réglementaire</p>
+    <h2>Échelle des <span>sanctions</span><br>personnelles</h2>
+    <p class="hero-sub">Progression des sanctions applicables aux joueurs et aux officiels d'équipe lors d'une rencontre de handball.</p>
+  </section>
+
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('joueurs', this)">Joueurs</button>
+    <button class="tab-btn" onclick="switchTab('officiels', this)">Officiels d'équipe</button>
+  </div>
+
+  <!-- ═══════ ONGLET JOUEURS ═══════ -->
+  <div id="tab-joueurs" class="tab-panel active">
+
+    <p class="section-label">Progression des sanctions — du plus léger au plus sévère</p>
+
+    <div class="timeline-wrap">
+
+      <!-- COLONNE GAUCHE : ÉTAPES -->
+      <div class="timeline-steps">
+
+        <div class="t-step">
+          <div class="t-badge jaune">
+            <div class="t-badge-carton carton-jaune">CJ</div>
+            <div class="t-badge-title">Avertissement</div>
+            <div class="t-badge-sub">Carton Jaune</div>
+          </div>
+        </div>
+
+        <div class="t-arrow" style="text-align:center">▼</div>
+
+        <div class="t-step">
+          <div class="t-badge rouge">
+            <div style="font-family:'Bebas Neue';font-size:1.8rem;color:var(--rouge-sanction);line-height:1">2'</div>
+            <div class="t-badge-title">1ère Exclusion</div>
+            <div class="t-badge-sub">2 minutes</div>
+          </div>
+        </div>
+
+        <div class="t-arrow" style="text-align:center">▼</div>
+
+        <div class="t-step">
+          <div class="t-badge rouge">
+            <div style="font-family:'Bebas Neue';font-size:1.8rem;color:var(--rouge-sanction);line-height:1">2'</div>
+            <div class="t-badge-title">2ème Exclusion</div>
+            <div class="t-badge-sub">2 minutes</div>
+          </div>
+        </div>
+
+        <div class="t-arrow" style="text-align:center">▼</div>
+
+        <div class="t-step">
+          <div class="t-badge rouge-fort">
+            <div style="display:flex;align-items:center;gap:6px">
+              <div style="font-family:'Bebas Neue';font-size:1.8rem;color:var(--rouge-sanction);line-height:1">2'</div>
+              <div style="color:#555;font-size:0.8rem">+</div>
+              <div class="t-badge-carton carton-rouge" style="width:22px;height:28px;font-size:0.45rem">CR</div>
+            </div>
+            <div class="t-badge-title">3ème Exclusion<br>Disqualifiante</div>
+            <div class="t-badge-sub">2' + Carton Rouge</div>
+          </div>
+        </div>
+
+        <div class="t-arrow" style="text-align:center">▼</div>
+
+        <div class="t-step">
+          <div class="t-badge rouge-fort">
+            <div class="t-badge-carton carton-rouge">CR</div>
+            <div class="t-badge-title">Disqualification</div>
+            <div class="t-badge-sub">Carton Rouge</div>
+          </div>
+        </div>
+
+        <div class="t-arrow" style="text-align:center">▼</div>
+
+        <div class="t-step">
+          <div class="t-badge bleu">
+            <div class="t-badge-carton carton-bleu">CB</div>
+            <div class="t-badge-title">Décision de<br>faire un rapport</div>
+            <div class="t-badge-sub">Carton Bleu</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- COLONNE DROITE : RÈGLES -->
+      <div class="timeline-rules">
+
+        <div class="rule-card">
+          <div class="rule-icon j">⚠️</div>
+          <div class="rule-content">
+            <h4>Avertissement — Carton Jaune</h4>
+            <p><strong>3 avertissements maximum par équipe.</strong> Un seul par joueur. Le carton jaune est attribué individuellement mais le compteur est collectif par équipe.</p>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-icon r">⏱</div>
+          <div class="rule-content">
+            <h4>Exclusion de 2 minutes</h4>
+            <p><strong>L'équipe est privée d'un joueur pendant la durée de l'exclusion.</strong> Le fautif reste sur le banc. En cas de 2 exclusions consécutives, la durée totale est de <strong>2' + 2' = 4 minutes</strong>.</p>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-icon r">➕</div>
+          <div class="rule-content">
+            <h4>Exclusion supplémentaire</h4>
+            <p>Si un joueur exclu ou disqualifié se rend coupable d'un <strong>comportement antisportif avant la reprise du jeu</strong>, il reçoit une exclusion supplémentaire de 2 minutes.</p>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-icon r">🟥</div>
+          <div class="rule-content">
+            <h4>3ème Exclusion — Disqualification</h4>
+            <p>La 3ème exclusion est automatiquement <strong>disqualifiante</strong> : elle est accompagnée d'un carton rouge et d'une exclusion de 2 minutes pour l'équipe.</p>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-icon r">🚫</div>
+          <div class="rule-content">
+            <h4>Disqualification — Carton Rouge</h4>
+            <p>La disqualification est <strong>toujours accompagnée d'une exclusion de 2 minutes</strong> pour l'équipe. Elle peut être <strong>sans rapport ou avec rapport</strong> selon la gravité. Le fautif doit <strong>quitter l'aire de jeu et la zone de changement</strong>. Il ne peut plus participer au jeu ni avoir de contact avec son équipe.</p>
+          </div>
+        </div>
+
+        <div class="rule-card">
+          <div class="rule-icon b">📋</div>
+          <div class="rule-content">
+            <h4>Rapport — Carton Bleu</h4>
+            <p>La décision de faire un rapport est matérialisée par un <strong>carton bleu</strong>. L'équipe est privée d'un joueur pendant <strong>2 minutes après une disqualification avec rapport</strong>. Le cas sera examiné par les instances disciplinaires compétentes.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ ONGLET OFFICIELS ═══════ -->
+  <div id="tab-officiels" class="tab-panel">
+
+    <p class="section-label">Progression des sanctions applicables aux officiels d'équipe</p>
+
+    <div class="officiels-wrap">
+
+      <div class="officiels-flow">
+
+        <div class="off-step jaune">
+          <div class="off-carton jaune"></div>
+          <div>
+            <div class="off-title">Avertissement</div>
+            <div class="off-sub">Carton Jaune</div>
+          </div>
+          <div class="off-limit">1 seul pour tous les officiels</div>
+          <div class="off-desc">Un seul avertissement est possible pour l'ensemble du banc officiel. Toute l'équipe d'encadrement est concernée par ce premier niveau de sanction.</div>
+        </div>
+
+        <div class="off-step rouge">
+          <div style="font-family:'Bebas Neue';font-size:2.5rem;color:var(--rouge-sanction);line-height:1">2'</div>
+          <div>
+            <div class="off-title">Exclusion</div>
+            <div class="off-sub">2 minutes</div>
+          </div>
+          <div class="off-limit">1 seule pour tous les officiels</div>
+          <div class="off-desc">Une seule exclusion de 2 minutes possible pour tous les officiels. L'équipe est privée d'un joueur sur le terrain pendant la durée de l'exclusion.</div>
+        </div>
+
+        <div class="off-step rouge">
+          <div class="off-carton rouge"></div>
+          <div>
+            <div class="off-title">Disqualification</div>
+            <div class="off-sub">Carton Rouge</div>
+          </div>
+          <div class="off-limit">1 par officiel</div>
+          <div class="off-desc">La disqualification s'applique <strong>individuellement</strong> à chaque officiel. Elle est accompagnée d'une exclusion de 2 minutes pour l'équipe. L'officiel disqualifié doit quitter la zone de changement.</div>
+        </div>
+
+        <div class="off-step bleu">
+          <div class="off-carton bleu"></div>
+          <div>
+            <div class="off-title">Rapport</div>
+            <div class="off-sub">Carton Bleu</div>
+          </div>
+          <div class="off-limit">1 par officiel</div>
+          <div class="off-desc">La décision de faire un rapport concerne <strong>l'officiel individuellement</strong>. Le dossier est transmis aux instances disciplinaires territoriales ou nationales.</div>
+        </div>
+
+      </div>
+
+      <div class="principe-card">
+        <div class="principe-icon">⚖️</div>
+        <div class="principe-content">
+          <p><strong>Principe fondamental :</strong> L'arbitre protège le joueur. Il sanctionne toutes les irrégularités réalisées ou potentielles qui mettent ou pourraient mettre en danger <strong>l'intégrité physique du joueur</strong>. La progressivité des sanctions vise à maintenir un cadre de jeu sécurisé et respectueux pour tous les participants.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2025-2026 Meylan Handball · Responsable Arbitrage</p>
+  <a href="ressources.html">← Fiches d'aide</a>
+</footer>
+
+<div class="bottom-stripe"></div>
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rapport d'arbitre — Meylan HB 25-26</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge:  #E8001D;
+    --noir:   #0D0D0D;
+    --blanc:  #F5F2EC;
+    --gris:   #1A1A1A;
+    --gris-mid:#2E2E2E;
+    --accent: #FFD100;
+    --muted:  #9A9A9A;
+    --bleu:   #4A9FFF;
+    --bleu-cb:#1565C0;
+    --vert:   #2ECC71;
+    --border: #1E1E1E;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .top-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  header {
+    padding: 2.5rem 3rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .logo-badge { width:75px; height:75px; border-radius:4px; flex-shrink:0; }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--blanc);
+    line-height: 1;
+  }
+
+  .header-text p {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  nav.subnav {
+    padding: 0 3rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+  }
+
+  .subnav a {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .subnav a.active, .subnav a:hover { color: var(--blanc); border-bottom-color: var(--bleu); }
+
+  /* HERO */
+  .hero {
+    padding: 4rem 3rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: 'RAPPORT';
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12rem;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    letter-spacing: 4px;
+    white-space: nowrap;
+  }
+
+  .hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bleu);
+    margin-bottom: 1rem;
+  }
+
+  .hero h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .hero h2 .cb {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--bleu);
+  }
+
+  .hero h2 .cb .mini-carton {
+    display: inline-block;
+    width: 28px;
+    height: 36px;
+    background: var(--bleu);
+    border-radius: 3px;
+    vertical-align: middle;
+    margin-bottom: 4px;
+  }
+
+  .hero-sub {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+
+  /* TABS */
+  .tabs-bar {
+    padding: 0 3rem;
+    display: flex;
+    border-bottom: 1px solid #222;
+    margin-bottom: 2.5rem;
+  }
+
+  .tab-btn {
+    padding: 1rem 1.6rem;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab-btn.active { color: var(--blanc); border-bottom-color: var(--bleu); }
+  .tab-btn:hover:not(.active) { color: var(--blanc); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .section-label {
+    padding: 0 3rem 1.2rem;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid #222;
+    margin-bottom: 2rem;
+  }
+
+  /* ═══════════════════════
+     INTRO / CARTON BLEU
+  ═══════════════════════ */
+
+  .intro-wrap {
+    padding: 0 3rem 2.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+  }
+
+  .intro-card {
+    background: var(--gris);
+    padding: 1.8rem 2rem;
+  }
+
+  .intro-card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 2.5px;
+    color: var(--bleu);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .intro-card-title .carton-cb {
+    width: 20px; height: 26px;
+    background: var(--bleu);
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .intro-card p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .intro-card p + p { margin-top: 0.8rem; }
+
+  .intro-card p strong { color: var(--blanc); font-weight: 600; }
+
+  .intro-card p em { color: var(--accent); font-style: normal; }
+
+  /* Règle importante */
+  .rule-importante {
+    background: rgba(74,159,255,0.06);
+    border-left: 3px solid var(--bleu);
+    padding: 1rem 1.2rem;
+    margin-top: 1rem;
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .rule-importante strong { color: var(--bleu); }
+
+  /* Délai badge */
+  .delai-badge {
+    display: inline-block;
+    background: rgba(255,209,0,0.1);
+    border: 1px solid rgba(255,209,0,0.3);
+    color: var(--accent);
+    font-size: 0.62rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-top: 0.8rem;
+  }
+
+  /* ═══════════════════════
+     STRUCTURE DU RAPPORT
+  ═══════════════════════ */
+
+  .structure-wrap {
+    padding: 0 3rem 2.5rem;
+  }
+
+  /* 3 colonnes intro/dev/concl */
+  .structure-cols {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 2rem;
+  }
+
+  .struct-col {
+    background: var(--gris);
+    padding: 1.6rem 1.8rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .struct-col::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .struct-col.intro-col::before { background: var(--vert); }
+  .struct-col.dev-col::before   { background: var(--accent); }
+  .struct-col.concl-col::before { background: var(--rouge); }
+
+  .struct-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    line-height: 1;
+    color: rgba(255,255,255,0.05);
+    position: absolute;
+    bottom: 10px;
+    right: 14px;
+  }
+
+  .struct-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+  }
+
+  .struct-col.intro-col .struct-title { color: var(--vert); }
+  .struct-col.dev-col   .struct-title { color: var(--accent); }
+  .struct-col.concl-col .struct-title { color: var(--rouge); }
+
+  .struct-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .struct-item {
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .struct-item::before {
+    content: '—';
+    flex-shrink: 0;
+    font-size: 0.65rem;
+    margin-top: 1px;
+  }
+
+  .struct-col.intro-col .struct-item::before { color: var(--vert); }
+  .struct-col.dev-col   .struct-item::before { color: var(--accent); }
+  .struct-col.concl-col .struct-item::before { color: var(--rouge); }
+
+  .struct-item strong { color: var(--blanc); font-weight: 600; }
+
+  /* CHECKLIST */
+  .checklist-section {
+    margin-bottom: 2rem;
+  }
+
+  .checklist-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .checklist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+  }
+
+  .check-item {
+    background: var(--gris);
+    padding: 0.9rem 1.4rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.5;
+    font-weight: 300;
+    transition: background 0.15s;
+  }
+
+  .check-item:hover { background: var(--gris-mid); }
+
+  .check-box {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #333;
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .check-box.checked {
+    background: var(--vert);
+    border-color: var(--vert);
+  }
+
+  .check-box.checked::after {
+    content: '✓';
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .check-label { flex: 1; }
+  .check-label strong { color: var(--blanc); font-weight: 600; }
+
+  /* CONSEILS RÉDACTION */
+  .conseils-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 2rem;
+  }
+
+  .conseil-card {
+    background: var(--gris);
+    padding: 1.4rem 1.8rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .conseil-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .conseil-icon.do   { background: rgba(46,204,113,0.12); border: 1px solid rgba(46,204,113,0.25); }
+  .conseil-icon.dont { background: rgba(232,0,29,0.10);   border: 1px solid rgba(232,0,29,0.25);  }
+  .conseil-icon.info { background: rgba(74,159,255,0.10); border: 1px solid rgba(74,159,255,0.25); }
+  .conseil-icon.warn { background: rgba(255,209,0,0.10);  border: 1px solid rgba(255,209,0,0.25);  }
+
+  .conseil-body h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.4rem;
+  }
+
+  .conseil-icon.do   + .conseil-body h4 { color: var(--vert); }
+  .conseil-icon.dont + .conseil-body h4 { color: var(--rouge); }
+  .conseil-icon.info + .conseil-body h4 { color: var(--bleu); }
+  .conseil-icon.warn + .conseil-body h4 { color: var(--accent); }
+
+  .conseil-body p {
+    font-size: 0.73rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .conseil-body p strong { color: var(--blanc); font-weight: 600; }
+
+  /* ═══════════════════════
+     EXEMPLE
+  ═══════════════════════ */
+
+  .exemple-wrap {
+    padding: 0 3rem 3rem;
+  }
+
+  .exemple-intro {
+    background: rgba(74,159,255,0.06);
+    border: 1px solid rgba(74,159,255,0.2);
+    border-left: 3px solid var(--bleu);
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .exemple-intro strong { color: var(--bleu); }
+
+  .exemple-doc {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    padding: 2.5rem 3rem;
+    position: relative;
+  }
+
+  .exemple-doc::before {
+    content: 'EXEMPLE';
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 3px;
+    color: #2a2a2a;
+  }
+
+  .exemple-section {
+    margin-bottom: 2rem;
+  }
+
+  .exemple-section:last-child { margin-bottom: 0; }
+
+  .exemple-tag {
+    display: inline-block;
+    font-size: 0.55rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 2px;
+    margin-bottom: 0.7rem;
+    font-weight: 600;
+  }
+
+  .tag-intro  { background: rgba(46,204,113,0.12); color: var(--vert);   border: 1px solid rgba(46,204,113,0.3); }
+  .tag-dev    { background: rgba(255,209,0,0.10);  color: var(--accent); border: 1px solid rgba(255,209,0,0.3); }
+  .tag-concl  { background: rgba(232,0,29,0.10);   color: var(--rouge);  border: 1px solid rgba(232,0,29,0.3); }
+
+  .exemple-text {
+    font-size: 0.8rem;
+    color: #bbb;
+    line-height: 1.8;
+    font-style: italic;
+    font-weight: 300;
+    border-left: 2px solid #2a2a2a;
+    padding-left: 1.2rem;
+  }
+
+  .exemple-text .highlight-vert   { color: var(--vert);   font-style: normal; font-weight: 600; }
+  .exemple-text .highlight-jaune  { color: var(--accent); font-style: normal; font-weight: 600; }
+  .exemple-text .highlight-rouge  { color: var(--rouge);  font-style: normal; font-weight: 600; }
+  .exemple-text .highlight-bleu   { color: var(--bleu);   font-style: normal; font-weight: 600; }
+
+  .exemple-sep {
+    border: none;
+    border-top: 1px dashed #2a2a2a;
+    margin: 1.5rem 0;
+  }
+
+  /* ═══════════════════════
+     TYPES DE RAPPORTS
+  ═══════════════════════ */
+
+  .types-wrap {
+    padding: 0 3rem 3rem;
+  }
+
+  .types-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 2rem;
+  }
+
+  .type-card {
+    background: var(--gris);
+    padding: 1.8rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .type-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .type-card.discipline::before  { background: var(--rouge); }
+  .type-card.reclamation::before { background: var(--accent); }
+  .type-card.colle::before       { background: var(--vert); }
+
+  .type-letter {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+
+  .type-card.discipline  .type-letter { color: var(--rouge); }
+  .type-card.reclamation .type-letter { color: var(--accent); }
+  .type-card.colle       .type-letter { color: var(--vert); }
+
+  .type-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.8rem;
+    color: var(--blanc);
+  }
+
+  .type-desc {
+    font-size: 0.73rem;
+    color: var(--muted);
+    line-height: 1.6;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .type-desc strong { color: var(--blanc); font-weight: 600; }
+
+  .type-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    border-top: 1px solid #222;
+    padding-top: 1rem;
+  }
+
+  .type-item {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.5;
+    font-weight: 300;
+    padding-left: 0.8rem;
+    position: relative;
+  }
+
+  .type-item::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    font-size: 0.65rem;
+  }
+
+  .type-card.discipline  .type-item::before { color: rgba(232,0,29,0.5); }
+  .type-card.reclamation .type-item::before { color: rgba(255,209,0,0.5); }
+  .type-card.colle       .type-item::before { color: rgba(46,204,113,0.5); }
+
+  /* PRINCIPE UN RAPPORT PAR FAIT */
+  .principe-wrap {
+    background: rgba(232,0,29,0.06);
+    border: 1px solid rgba(232,0,29,0.2);
+    border-left: 3px solid var(--rouge);
+    padding: 1.2rem 1.8rem;
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .principe-wrap .icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+
+  .principe-wrap p {
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .principe-wrap p strong { color: var(--blanc); font-weight: 600; }
+  .principe-wrap p em { color: var(--rouge); font-style: normal; font-weight: 600; }
+
+  /* DÉLAIS */
+  .delais-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+  }
+
+  .delai-card {
+    background: var(--gris);
+    padding: 1.2rem 1.6rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .delai-badge-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 50px;
+  }
+
+  .delai-text h4 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--blanc);
+    margin-bottom: 0.2rem;
+  }
+
+  .delai-text p {
+    font-size: 0.7rem;
+    color: var(--muted);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 3rem;
+    padding: 1.5rem 3rem;
+    border-top: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer p { font-size: 0.68rem; color: var(--muted); letter-spacing: 1px; }
+  footer a { font-size: 0.68rem; color: var(--muted); text-decoration: none; letter-spacing: 1px; transition: color 0.2s; }
+  footer a:hover { color: var(--rouge); }
+
+  .bottom-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  @media (max-width: 900px) {
+    header, nav.subnav, .hero, .section-label, .tabs-bar, footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .intro-wrap, .structure-wrap, .exemple-wrap, .types-wrap { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .intro-wrap { grid-template-columns: 1fr; }
+    .structure-cols { grid-template-columns: 1fr; }
+    .checklist-grid { grid-template-columns: 1fr; }
+    .conseils-grid  { grid-template-columns: 1fr; }
+    .types-grid     { grid-template-columns: 1fr; }
+    .delais-row     { grid-template-columns: 1fr; }
+    .hero::before { display: none; }
+    .exemple-doc { padding: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <img class="logo-badge" src="MHB_logo.png" />
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+  </div>
+</header>
+
+<nav class="subnav">
+  <a href="index.html">Accueil</a>
+  <a href="ressources.html" class="active">Fiches d'aide</a>
+</nav>
+
+<main>
+
+  <section class="hero">
+    <p class="hero-label">Fiche pédagogique</p>
+    <h2>Le rapport d'arbitre<br><span class="cb"><span class="mini-carton"></span>Carton Bleu</span></h2>
+    <p class="hero-sub">Document administratif reflétant une situation de jeu jugée perfide ou dangereuse, ou des propos excessifs ayant eu lieu lors d'un match. Sa rédaction fait partie intégrante de la mission de l'arbitre.</p>
+  </section>
+
+  <div class="tabs-bar">
+    <button class="tab-btn active" onclick="switchTab('intro', this)">Introduction</button>
+    <button class="tab-btn" onclick="switchTab('redaction', this)">Rédaction</button>
+    <button class="tab-btn" onclick="switchTab('exemple', this)">Exemple complet</button>
+    <button class="tab-btn" onclick="switchTab('types', this)">Types de rapports</button>
+  </div>
+
+  <!-- ═════════════════════════════════
+       ONGLET 1 — INTRODUCTION
+  ═════════════════════════════════ -->
+  <div id="tab-intro" class="tab-panel active">
+    <p class="section-label">Objectifs et principes du rapport d'arbitre</p>
+
+    <div class="intro-wrap" style="padding:0 3rem 2.5rem; display:grid; grid-template-columns:1fr 1fr; gap:1px; background:#1a1a1a; border:1px solid #1a1a1a; margin:0 3rem 2rem;">
+
+      <div class="intro-card">
+        <div class="intro-card-title">
+          <div class="carton-cb"></div>
+          Rôle du rapport
+        </div>
+        <p>Le rapport d'arbitre a pour objectif de <strong>faire remonter aux instances des faits observés</strong> lors du match, sanctionnés d'un carton rouge et d'un carton bleu.</p>
+        <p>Rédiger un rapport lorsqu'une situation le mérite est une <strong>pleine mission de l'arbitre</strong>. Cela participe à son rôle et à ses responsabilités envers le jeu.</p>
+        <div class="rule-importante">
+          <strong>À retenir :</strong> le rapport n'est pas un outil de punition, de vengeance ou de nuisance. Son unique but est de relever <strong>objectivement des faits</strong> qui ne doivent pas avoir lieu sur un terrain de handball.
+        </div>
+      </div>
+
+      <div class="intro-card">
+        <div class="intro-card-title">
+          <div class="carton-cb"></div>
+          Protocole sur place
+        </div>
+        <p>La présentation du carton bleu <strong>doit être précédée d'une concertation entre les deux arbitres</strong>. Il ne s'agit pas d'une décision individuelle.</p>
+        <p>Après la rencontre, la <strong>signature de la FDME se fait obligatoirement</strong> avec les officiels responsables d'équipe, dans un endroit calme. Les officiels de table doivent comprendre votre décision pour la saisir correctement sur la FDME.</p>
+        <p>Vous devez rédiger votre rapport sur la FDME, afin que le <strong>« coupable présumé » puisse se défendre</strong> des faits qui lui sont reprochés.</p>
+        <div class="delai-badge">⏱ Délai : 72h maximum après la rencontre</div>
+      </div>
+
+    </div>
+
+    <p class="section-label" style="margin-top:0">Délais de transmission selon le jour du match</p>
+
+    <div style="padding:0 3rem 3rem">
+      <div class="delais-row">
+        <div class="delai-card">
+          <div class="delai-badge-big">SAM</div>
+          <div class="delai-text">
+            <h4>Match le samedi</h4>
+            <p>Rédaction et envoi du rapport <strong>le dimanche suivant</strong>. Ne pas attendre la fin du week-end pour commencer la rédaction.</p>
+          </div>
+        </div>
+        <div class="delai-card">
+          <div class="delai-badge-big">DIM</div>
+          <div class="delai-text">
+            <h4>Match le dimanche</h4>
+            <p>Rédaction <strong>le dimanche soir ou le lundi matin</strong> au plus tard. Le respect du délai de 72h est impératif.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="section-label" style="margin-top:0">Principe fondamental — Un rapport par fait</p>
+
+    <div style="padding:0 3rem 3rem">
+      <div class="principe-wrap">
+        <div class="icon">⚖️</div>
+        <p>Établir un rapport <em>spécifique</em> pour <strong>chaque licencié disqualifié</strong>, pour <strong>chaque fait</strong> et pour <strong>chaque incident</strong>. Chaque rapport est une pièce distincte d'un dossier juridique. Si l'un des points cité est irrecevable, il est probable que l'ensemble du rapport le soit aussi en cas d'appel. <strong>Ne jamais tout rassembler dans un seul rapport.</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════════════════════════
+       ONGLET 2 — RÉDACTION
+  ═════════════════════════════════ -->
+  <div id="tab-redaction" class="tab-panel">
+    <p class="section-label">Structure en trois parties — Introduction · Développement · Conclusion</p>
+
+    <div class="structure-wrap">
+      <div class="structure-cols">
+
+        <div class="struct-col intro-col">
+          <div class="struct-num">1</div>
+          <div class="struct-title">Introduction</div>
+          <div class="struct-items">
+            <div class="struct-item"><strong>Le temps de jeu</strong> au moment des faits (min/s)</div>
+            <div class="struct-item"><strong>Le score</strong> exact à cet instant</div>
+            <div class="struct-item"><strong>Nom du joueur</strong> concerné et de son club</div>
+            <div class="struct-item"><strong>Numéro de licence</strong> du joueur</div>
+            <div class="struct-item"><strong>Numéro et couleur</strong> du maillot (utile en cas de pièces vidéo)</div>
+            <div class="struct-item">Si une équipe joue en <strong>infériorité numérique</strong>, le préciser avec le temps restant d'exclusion</div>
+          </div>
+        </div>
+
+        <div class="struct-col dev-col">
+          <div class="struct-num">2</div>
+          <div class="struct-title">Développement</div>
+          <div class="struct-items">
+            <div class="struct-item"><strong>Phase de jeu</strong> et positionnement des joueurs</div>
+            <div class="struct-item">Mentionner l'<strong>arrêt du temps de jeu</strong> lors de la sanction</div>
+            <div class="struct-item"><strong>Position du fautif</strong> : de face, de côté, de l'arrière</div>
+            <div class="struct-item"><strong>Intensité</strong> : vitesse de l'attaquant, force du coup…</div>
+            <div class="struct-item"><strong>Partie du corps</strong> touchée et utilisée</div>
+            <div class="struct-item">Description de <strong>la chute</strong> : sur le côté, sur le dos, perte d'équilibre…</div>
+            <div class="struct-item"><strong>État physique</strong> du joueur après la faute</div>
+            <div class="struct-item">Intervention ou non de <strong>secours extérieurs</strong></div>
+            <div class="struct-item"><strong>Incidents consécutifs</strong> : bagarre, envahissement…</div>
+          </div>
+        </div>
+
+        <div class="struct-col concl-col">
+          <div class="struct-num">3</div>
+          <div class="struct-title">Conclusion</div>
+          <div class="struct-items">
+            <div class="struct-item"><strong>Décision de l'arbitre 1</strong> et/ou de l'arbitre 2</div>
+            <div class="struct-item"><strong>Reprise du jeu</strong> : par quel jet et résultat de son exécution</div>
+            <div class="struct-item"><strong>Score final</strong> de la rencontre</div>
+            <div class="struct-item">Terminer obligatoirement par : <strong>« Le carton bleu a été signifié avant la reprise du jeu »</strong></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CHECKLIST INTERACTIVE -->
+      <div class="checklist-section">
+        <div class="checklist-title">✓ Checklist — Éléments obligatoires à vérifier avant l'envoi</div>
+        <div class="checklist-grid" id="checklist">
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Noms des équipes</strong> — en commençant par l'équipe locale</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Temps de jeu exact</strong> au moment des faits</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Score exact</strong> au moment des faits</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Infériorité numérique</strong> et temps d'exclusion restant si applicable</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Nom, prénom, numéro, numéro de licence</strong> du/des joueur(s) concerné(s)</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Description objective des faits</strong> — sans jugement ni qualification</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Décision sportive et disciplinaire</strong> prise par les arbitres</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Score final</strong> de la rencontre mentionné en conclusion</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Formule finale</strong> : « Le carton bleu a été signifié avant la reprise du jeu »</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box"></div>
+            <div class="check-label"><strong>Rapport transmis dans les 72h</strong> suivant la rencontre</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONSEILS -->
+      <div class="section-label" style="padding-left:0; margin-bottom:1rem;">Conseils de rédaction</div>
+      <div class="conseils-grid">
+        <div class="conseil-card">
+          <div class="conseil-icon do">✓</div>
+          <div class="conseil-body">
+            <h4>Décrire les faits objectivement</h4>
+            <p>Le rapport doit être un <strong>descriptif précis et factuel</strong> de ce que vous avez vu en tant qu'arbitre. Les propos tenus doivent être écrits tels quels, même s'ils vous ont seulement été rapportés.</p>
+          </div>
+        </div>
+        <div class="conseil-card">
+          <div class="conseil-icon dont">✗</div>
+          <div class="conseil-body">
+            <h4>Ne pas juger ni qualifier</h4>
+            <p>Aucune forme de jugement dans le rapport. <strong>Pas de rappel aux numéros de règles ou articles du règlement.</strong> Le rapport décrit — les instances décident.</p>
+          </div>
+        </div>
+        <div class="conseil-card">
+          <div class="conseil-icon info">ℹ</div>
+          <div class="conseil-body">
+            <h4>Structure dissertation</h4>
+            <p>Le rapport doit comporter comme une dissertation : une <strong>introduction</strong>, un <strong>développement</strong> et une <strong>conclusion</strong>. Cette structure garantit la lisibilité et la recevabilité du document.</p>
+          </div>
+        </div>
+        <div class="conseil-card">
+          <div class="conseil-icon warn">⚠</div>
+          <div class="conseil-body">
+            <h4>Concertation obligatoire</h4>
+            <p>La décision de présenter le carton bleu <strong>doit être concertée entre les deux arbitres</strong> avant toute présentation. C'est une décision d'arbitrage, pas individuelle.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════════════════════════
+       ONGLET 3 — EXEMPLE COMPLET
+  ═════════════════════════════════ -->
+  <div id="tab-exemple" class="tab-panel">
+    <p class="section-label">Exemple de rapport de discipline — annoté</p>
+
+    <div class="exemple-wrap">
+      <div class="exemple-intro">
+        L'exemple ci-dessous illustre la structure attendue d'un rapport de discipline. Chaque section est annotée pour mettre en évidence les éléments obligatoires. Les parties colorées indiquent les informations clés à ne pas omettre.
+      </div>
+
+      <div class="exemple-doc">
+
+        <div class="exemple-section">
+          <div class="exemple-tag tag-intro">Introduction</div>
+          <p class="exemple-text">
+            Lors du match opposant <span class="highlight-vert">Hambourg</span> à <span class="highlight-vert">Berlin</span>, à la
+            <span class="highlight-jaune">59ème minute et 19 secondes</span>,
+            le score est de <span class="highlight-jaune">28 à 25 en faveur de Hambourg</span>.
+            À ce moment, <span class="highlight-bleu">Hambourg joue avec un joueur en moins pendant encore 37 secondes</span>.
+          </p>
+        </div>
+
+        <hr class="exemple-sep">
+
+        <div class="exemple-section">
+          <div class="exemple-tag tag-dev">Développement</div>
+          <p class="exemple-text">
+            Le joueur <span class="highlight-vert">n°5 de Hambourg</span>,
+            <span class="highlight-vert">« Nom, Prénom » (n° Licence ……….)</span>,
+            met un <span class="highlight-rouge">coup de tête</span> au joueur
+            <span class="highlight-vert">n°27 de Berlin</span>,
+            <span class="highlight-vert">« Nom, Prénom » (n° Licence ………)</span>,
+            qui <span class="highlight-rouge">ne se relève pas et reste à terre, immobile</span>.
+          </p>
+        </div>
+
+        <hr class="exemple-sep">
+
+        <div class="exemple-section">
+          <div class="exemple-tag tag-concl">Conclusion</div>
+          <p class="exemple-text">
+            Nous décidons de sanctionner le joueur fautif d'une
+            <span class="highlight-rouge">disqualification directe</span>
+            et décidons d'écrire un rapport pour donner suite à ces faits.
+            <span class="highlight-bleu">Le carton bleu a été présenté à la suite du carton rouge.</span>
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Légende -->
+      <div style="margin-top:1rem; display:flex; gap:1.5rem; flex-wrap:wrap; padding:1rem 0;">
+        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">
+          <span style="width:12px;height:12px;border-radius:2px;background:var(--vert);display:inline-block;flex-shrink:0"></span> Identité / Club
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">
+          <span style="width:12px;height:12px;border-radius:2px;background:var(--accent);display:inline-block;flex-shrink:0"></span> Temps & Score
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">
+          <span style="width:12px;height:12px;border-radius:2px;background:var(--rouge);display:inline-block;flex-shrink:0"></span> Faits & Conséquences
+        </div>
+        <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.65rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted)">
+          <span style="width:12px;height:12px;border-radius:2px;background:var(--bleu);display:inline-block;flex-shrink:0"></span> Décision & Carton Bleu
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═════════════════════════════════
+       ONGLET 4 — TYPES DE RAPPORTS
+  ═════════════════════════════════ -->
+  <div id="tab-types" class="tab-panel">
+    <p class="section-label">Trois types de rapports en handball</p>
+
+    <div class="types-wrap">
+
+      <div class="principe-wrap">
+        <div class="icon">📋</div>
+        <p>Sur la FDME (iHand), il existe <em>trois boutons distincts</em> pour créer un rapport. Chaque type correspond à une situation différente et doit être utilisé indépendamment. Un rapport par fait, par licencié, par incident.</p>
+      </div>
+
+      <div class="types-grid">
+
+        <div class="type-card discipline">
+          <div class="type-letter">D</div>
+          <div class="type-title">Rapport de Discipline</div>
+          <div class="type-desc">Rapport pour tout fait grave ayant entraîné une <strong>disqualification avec carton bleu</strong>. Document le plus courant, il suit la structure en trois parties (Introduction / Développement / Conclusion).</div>
+          <div class="type-items">
+            <div class="type-item">Faits dangereux ou perfides</div>
+            <div class="type-item">Propos excessifs, insultes</div>
+            <div class="type-item">Un rapport par licencié disqualifié</div>
+            <div class="type-item">Transmis dans les 72h à la commission compétente</div>
+          </div>
+        </div>
+
+        <div class="type-card reclamation">
+          <div class="type-letter">R</div>
+          <div class="type-title">Réclamation / Litige</div>
+          <div class="type-desc">Rapport rédigé lorsqu'un officiel responsable d'équipe dépose une <strong>réclamation formelle</strong> lors du match (faute technique d'arbitrage, qualification d'un joueur, état des installations…).</div>
+          <div class="type-items">
+            <div class="type-item">Moment exact du dépôt de la réclamation</div>
+            <div class="type-item">Score et situation de jeu à ce moment</div>
+            <div class="type-item">Noms des joueurs sanctionnés et exclusions en cours</div>
+            <div class="type-item">Rédigé sous la dictée de l'officiel plaignant, en présence de l'officiel adverse</div>
+          </div>
+        </div>
+
+        <div class="type-card colle">
+          <div class="type-letter">C</div>
+          <div class="type-title">Usage de la Colle</div>
+          <div class="type-desc">Rapport spécifique si l'une des équipes <strong>refuse de jouer avec la colle ou résine lavable</strong>, ou si le club recevant n'a pas informé l'équipe visiteuse des règles applicables.</div>
+          <div class="type-items">
+            <div class="type-item">Anomalie constatée ou signalée par un officiel</div>
+            <div class="type-item">Version des faits de chaque officiel responsable</div>
+            <div class="type-item">Transmis dans les 48h après le match (via iHand)</div>
+            <div class="type-item">Mention dans la case « observations — colle et résine » de la FDME</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2025-2026 Meylan Handball · Responsable Arbitrage</p>
+  <a href="ressources.html">← Fiches d'aide</a>
+</footer>
+
+<div class="bottom-stripe"></div>
+
+<script>
+  function switchTab(id, btn) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleCheck(item) {
+    const box = item.querySelector('.check-box');
+    box.classList.toggle('checked');
+  }
+</script>
+
+</body>
+</html>
