@@ -1867,8 +1867,8 @@ renderArbitrePills();
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
 
-// ─────────────────────────────────────────────────────
-// PDF EXPORT — FICHES BILANS INDIVIDUELS
+  // ─────────────────────────────────────────────────────
+// PDF EXPORT — STYLE SITE MEYLAN HB
 // ─────────────────────────────────────────────────────
 
 const NOTE_COLORS = {
@@ -1876,7 +1876,7 @@ const NOTE_COLORS = {
   'À optimiser':  { r:251, g:140, b:0   },
   'Correct':      { r:67,  g:160, b:71  },
   'Très correct': { r:74,  g:159, b:255 },
-  '':             { r:80,  g:80,  b:80  }
+  '':             { r:60,  g:60,  b:60  }
 };
 
 const NOTE_SHORT = {
@@ -1885,6 +1885,25 @@ const NOTE_SHORT = {
   'Correct':      'CORRECT',
   'Très correct': 'TRÈS COR.',
   '':             'N/R'
+};
+
+// Palette site
+const C = {
+  noir:    [13,  13,  13 ],
+  gris1:   [18,  18,  18 ],
+  gris2:   [26,  26,  26 ],
+  gris3:   [38,  38,  38 ],
+  border:  [30,  30,  30 ],
+  blanc:   [245, 242, 236],
+  muted:   [120, 120, 120],
+  muted2:  [80,  80,  80 ],
+  rouge:   [232, 0,   29 ],
+  accent:  [255, 209, 0  ],
+  bleu:    [74,  159, 255],
+  ins:     [229, 57,  53 ],
+  opt:     [251, 140, 0  ],
+  cor:     [67,  160, 71 ],
+  tres:    [74,  159, 255],
 };
 
 function getArbitres() {
@@ -1905,364 +1924,372 @@ function getSuivisForArbitre(nom) {
                .sort((a,b) => new Date(a.date) - new Date(b.date));
 }
 
-function wrapText(doc, text, x, y, maxWidth, lineHeight) {
-  const lines = doc.splitTextToSize(text, maxWidth);
-  lines.forEach(line => {
-    doc.text(line, x, y);
-    y += lineHeight;
-  });
-  return y;
-}
-
 function buildBilanPDF(nom) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
 
   const suivis = getSuivisForArbitre(nom);
-  const W = 210, H = 297;
-  const mL = 14, mR = 14, mT = 14;
+  const W = 210, H = 297, mL = 12, mR = 12;
   const cW = W - mL - mR;
 
-  // Couleurs
-  const ROUGE = [232, 0, 29];
-  const NOIR  = [13, 13, 13];
-  const GRIS  = [26, 26, 26];
-  const BLANC = [245, 242, 236];
-  const MUTED = [120, 120, 120];
-  const BLEU  = [74, 159, 255];
-  const JAUNE = [255, 209, 0];
+  // ── Helpers ──────────────────────────────────────
+
+  function fill(col)   { doc.setFillColor(...col); }
+  function stroke(col) { doc.setDrawColor(...col); }
+  function text(col)   { doc.setTextColor(...col); }
+
+  function rect(x, y, w, h, clr) {
+    fill(clr); doc.rect(x, y, w, h, 'F');
+  }
+
+  function line(x1, y1, x2, y2, clr, lw=0.15) {
+    stroke(clr); doc.setLineWidth(lw); doc.line(x1, y1, x2, y2);
+  }
+
+  function label(str, x, y, size, col, style='normal') {
+    doc.setFont('helvetica', style);
+    doc.setFontSize(size);
+    text(col);
+    doc.text(str, x, y);
+  }
+
+  // Stripe décorative haut/bas
+  function topStripe() {
+    rect(0, 0, W, 2.5, C.rouge);
+    // gradient simulé : bloc jaune central
+    rect(W/2 - 22, 0, 44, 2.5, C.accent);
+    rect(W/2 - 8, 0, 16, 2.5, C.rouge);
+  }
+
+  function bottomStripe() {
+    rect(0, H - 2.5, W, 2.5, C.rouge);
+    rect(W/2 - 22, H - 2.5, 44, 2.5, C.accent);
+    rect(W/2 - 8, H - 2.5, 16, 2.5, C.rouge);
+  }
+
+  // Numéro de page
+  let pageNum = 0;
+  function addPageNum() {
+    pageNum++;
+    label(`${pageNum}`, W - mR, H - 5, 6, C.muted2, 'normal');
+  }
 
   function newPage() {
+    addPageNum();
+    bottomStripe();
     doc.addPage();
-    // bande haut
-    doc.setFillColor(...ROUGE);
-    doc.rect(0, 0, W, 2, 'F');
-    doc.setFillColor(...JAUNE);
-    doc.rect(W/2 - 20, 0, 40, 2, 'F');
-    return mT + 8;
+    topStripe();
+    return 10;
   }
 
-  function stripe() {
-    doc.setFillColor(...ROUGE);
-    doc.rect(0, 0, W, 2, 'F');
-    doc.setFillColor(...JAUNE);
-    doc.rect(W/2 - 20, 0, 40, 2, 'F');
+  // Badge note coloré
+  function noteBadge(val, x, y, w=22, h=4) {
+    const nc = NOTE_COLORS[val] || NOTE_COLORS[''];
+    // fond très sombre teinté
+    doc.setFillColor(nc.r * 0.12 + 10, nc.g * 0.12 + 10, nc.b * 0.12 + 10);
+    doc.rect(x, y, w, h, 'F');
+    // bordure gauche colorée
+    doc.setFillColor(nc.r, nc.g, nc.b);
+    doc.rect(x, y, 1.2, h, 'F');
+    // texte
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(5);
+    doc.setTextColor(nc.r, nc.g, nc.b);
+    doc.text(NOTE_SHORT[val] || 'N/R', x + 2.2, y + h - 1);
   }
 
-  function stripeBottom(y) {
-    doc.setFillColor(...ROUGE);
-    doc.rect(0, H - 2, W, 2, 'F');
-    doc.setFillColor(...JAUNE);
-    doc.rect(W/2 - 20, H - 2, 40, 2, 'F');
+  // Section header (bande titre avec trait bleu gauche)
+  function sectionHeader(title, x, y, w, h=6) {
+    rect(x, y, w, h, C.gris1);
+    rect(x, y, 2, h, C.bleu);
+    label(title, x + 5, y + h - 1.8, 6.5, C.bleu, 'bold');
+    return y + h + 1;
   }
 
-  // ── PAGE 1 HEADER ──
-  stripe();
+  // ── PAGE 1 ────────────────────────────────────────
 
-  // Fond header
-  doc.setFillColor(...NOIR);
-  doc.rect(0, 2, W, 38, 'F');
+  topStripe();
 
-  // Bande latérale rouge
-  doc.setFillColor(...ROUGE);
-  doc.rect(0, 2, 4, 38, 'F');
+  // Fond header complet
+  rect(0, 2.5, W, 36, C.noir);
 
-  // Titre principal
+  // Barre rouge verticale gauche
+  rect(0, 2.5, 3.5, 36, C.rouge);
+
+  // Titre BILAN INDIVIDUEL
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(22);
-  doc.setTextColor(...BLANC);
-  doc.text('BILAN INDIVIDUEL', mL + 6, 18);
+  doc.setFontSize(20);
+  text(C.blanc);
+  doc.text('BILAN INDIVIDUEL', mL + 4, 16);
 
-  doc.setFontSize(10);
-  doc.setTextColor(...MUTED);
-  doc.text('MEYLAN HANDBALL  ·  ARBITRAGE  ·  SAISON 25-26', mL + 6, 25);
-
-  // Nom arbitre
-  doc.setFillColor(...ROUGE);
-  doc.rect(mL + 6, 28, cW - 6, 8, 'F');
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(14);
-  doc.setTextColor(255, 255, 255);
-  doc.text(nom.toUpperCase(), mL + 10, 34.5);
-
-  // Stats rapides droite
-  const nbSuivis = suivis.length;
-  const allNotes = suivis.flatMap(s => Object.values(s.evaluations).filter(v=>v));
-  const counts = { 'Insuffisant':0,'À optimiser':0,'Correct':0,'Très correct':0 };
-  allNotes.forEach(v => { if(counts[v]!==undefined) counts[v]++; });
-  const statsX = mL + cW - 45;
+  // Sous-titre
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7);
-  doc.setTextColor(...MUTED);
-  doc.text(`${nbSuivis} suivi${nbSuivis>1?'s':''}`, statsX, 18);
-  doc.text(`${allNotes.length} critères évalués`, statsX, 23);
-  doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, statsX, 28);
+  text(C.muted);
+  doc.text('MEYLAN HANDBALL  ·  ARBITRAGE  ·  SAISON 25-26', mL + 4, 22);
 
-  let y = 48;
-
-  // ── RÉCAP GLOBAL ──
-  doc.setFillColor(20, 20, 20);
-  doc.rect(mL, y, cW, 22, 'F');
-
-  // Titre section
+  // Bande nom arbitre
+  rect(mL + 4, 25, cW - 4, 9, C.rouge);
   doc.setFont('helvetica', 'bold');
-  doc.setFontSize(7);
-  doc.setTextColor(...MUTED);
-  doc.text('RÉCAPITULATIF SAISON', mL + 4, y + 6);
+  doc.setFontSize(13);
+  text(C.blanc);
+  doc.text(nom.toUpperCase(), mL + 8, 32);
 
-  // 4 compteurs de notes
+  // Stats droite dans le header
+  const nbSuivis = suivis.length;
+  const allNotes = suivis.flatMap(s => Object.values(s.evaluations).filter(v=>v));
+  const globalCounts = { 'Insuffisant':0,'À optimiser':0,'Correct':0,'Très correct':0 };
+  allNotes.forEach(v => { if(globalCounts[v]!==undefined) globalCounts[v]++; });
+
+  const sx = W - mR - 52;
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(6.5);
+  text(C.muted);
+  doc.text(`${nbSuivis} suivi${nbSuivis>1?'s':''}`, sx, 13);
+  doc.text(`${allNotes.length} critères évalués`, sx, 18.5);
+  doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')}`, sx, 24);
+
+  let y = 44;
+
+  // ── RÉCAP GLOBAL ──────────────────────────────────
+
+  y = sectionHeader('RÉCAPITULATIF SAISON', mL, y, cW);
+
+  // 4 blocs stats
   const noteKeys = ['Insuffisant','À optimiser','Correct','Très correct'];
-  const blockW = (cW - 8) / 4;
+  const bW = cW / 4;
   noteKeys.forEach((k, i) => {
-    const bx = mL + 4 + i * blockW;
-    const c = NOTE_COLORS[k];
-    doc.setFillColor(c.r, c.g, c.b);
-    doc.rect(bx, y + 9, blockW - 2, 1.5, 'F');
+    const bx = mL + i * bW;
+    const nc = NOTE_COLORS[k];
+    rect(bx, y, bW, 18, C.gris2);
+    // séparateur vertical
+    if(i > 0) rect(bx, y, 0.5, 18, C.border);
+    // trait coloré haut
+    rect(bx + 2, y + 1, bW - 4, 1.5, [nc.r, nc.g, nc.b]);
+    // nombre
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(16);
-    doc.setTextColor(c.r, c.g, c.b);
-    doc.text(String(counts[k]), bx, y + 19);
+    doc.setFontSize(22);
+    doc.setTextColor(nc.r, nc.g, nc.b);
+    doc.text(String(globalCounts[k]), bx + 4, y + 13);
+    // libellé
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(6);
-    doc.setTextColor(...MUTED);
-    doc.text(k.toUpperCase(), bx, y + 22.5);
+    doc.setFontSize(5.5);
+    text(C.muted);
+    doc.text(k.toUpperCase(), bx + 4, y + 17);
   });
 
-  y += 28;
+  y += 22;
 
-  // ── ANALYSE PAR CRITÈRE ──
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
-  doc.setTextColor(...BLEU);
-  doc.text('ANALYSE PAR CRITÈRE', mL, y + 4);
-  doc.setDrawColor(...BLEU);
-  doc.setLineWidth(0.3);
-  doc.line(mL, y + 6, mL + cW, y + 6);
-  y += 10;
+  // ── ANALYSE PAR CRITÈRE ───────────────────────────
 
-  const critW = cW / 2 - 2;
+  y = sectionHeader('ANALYSE PAR CRITÈRE', mL, y, cW);
+
+  const critW2 = (cW - 2) / 2;
+  const rowH = 7.5;
+
   CRITERES.forEach((crit, i) => {
     const col = i % 2;
-    const cx = col === 0 ? mL : mL + critW + 4;
+    if (col === 0 && i > 0) y += rowH;
+    if (y > H - 20) { y = newPage(); y = sectionHeader('ANALYSE PAR CRITÈRE (suite)', mL, y, cW); }
 
-    if (col === 0 && i > 0) y += 9;
-    if (y > H - 25) {
-      stripeBottom();
-      y = newPage();
-    }
+    const cx = col === 0 ? mL : mL + critW2 + 2;
 
-    // Compter les notes pour ce critère
+    // Fond alternant
+    const bg = Math.floor(i/2) % 2 === 0 ? C.gris2 : C.gris1;
+    rect(cx, y, critW2, rowH, bg);
+
+    // Trait gauche
+    rect(cx, y, 1.5, rowH, C.border);
+
+    // Nom critère
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(6.5);
+    text(C.muted);
+    const critShort = crit.length > 26 ? crit.substring(0,24)+'…' : crit;
+    doc.text(critShort, cx + 3.5, y + rowH - 2);
+
+    // Calcul note dominante + mini bars
     const critCounts = { 'Insuffisant':0,'À optimiser':0,'Correct':0,'Très correct':0 };
     suivis.forEach(s => {
       const v = s.evaluations[crit] || '';
       if(critCounts[v]!==undefined) critCounts[v]++;
     });
-
-    // Trouver la note dominante
     let maxN=0, dominant='';
-    Object.entries(critCounts).forEach(([k,v])=>{ if(v>maxN){ maxN=v; dominant=k; }});
-    const dc = dominant ? NOTE_COLORS[dominant] : {r:80,g:80,b:80};
+    Object.entries(critCounts).forEach(([k,v])=>{ if(v>maxN){maxN=v;dominant=k;} });
 
-    // Fond ligne
-    doc.setFillColor(18, 18, 18);
-    doc.rect(cx, y - 1, critW, 8, 'F');
-
-    // Barre colorée gauche
-    doc.setFillColor(dc.r, dc.g, dc.b);
-    doc.rect(cx, y - 1, 2, 8, 'F');
-
-    // Nom critère
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(7);
-    doc.setTextColor(190, 190, 190);
-    const critShort = crit.length > 22 ? crit.substring(0,20)+'…' : crit;
-    doc.text(critShort, cx + 4, y + 4);
-
-    // Mini progress bars des notes
-    const barX = cx + critW - 38;
-    const barY = y + 1.5;
-    const barH = 2;
-    const totalForCrit = Object.values(critCounts).reduce((a,b)=>a+b,0) || 1;
+    const barTotalW = 30;
+    const barX = cx + critW2 - barTotalW - 2;
+    const barY = y + 2;
+    const barH2 = 2;
+    const total = Object.values(critCounts).reduce((a,b)=>a+b,0) || 1;
     let bx2 = barX;
     noteKeys.forEach(k => {
-      const pct = critCounts[k] / totalForCrit;
-      const bw = pct * 36;
-      if(bw > 0) {
+      const pct = critCounts[k] / total;
+      const bw = pct * barTotalW;
+      if(bw > 0.1) {
         const nc = NOTE_COLORS[k];
         doc.setFillColor(nc.r, nc.g, nc.b);
-        doc.rect(bx2, barY, bw, barH, 'F');
+        doc.rect(bx2, barY, bw, barH2, 'F');
         bx2 += bw;
       }
     });
 
-    // Note dominante label
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(5.5);
-    doc.setTextColor(dc.r, dc.g, dc.b);
-    doc.text(NOTE_SHORT[dominant] || 'N/R', cx + critW - 38, y + 7.5);
+    // Badge note dominante
+    if(dominant) {
+      const nc = NOTE_COLORS[dominant];
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(5);
+      doc.setTextColor(nc.r, nc.g, nc.b);
+      doc.text(NOTE_SHORT[dominant], barX, y + rowH - 1.5);
+    }
   });
 
-  y += 16;
+  y += rowH + 4;
 
-  // ── DÉTAIL DES SUIVIS ──
-  if (y > H - 40) {
-    stripeBottom();
-    y = newPage();
-  }
+  // ── DÉTAIL DES SUIVIS ─────────────────────────────
 
-  doc.setFont('helvetica', 'bold');
-  doc.setFontSize(8);
-  doc.setTextColor(...BLEU);
-  doc.text('DÉTAIL DES SUIVIS', mL, y + 4);
-  doc.setDrawColor(...BLEU);
-  doc.setLineWidth(0.3);
-  doc.line(mL, y + 6, mL + cW, y + 6);
-  y += 12;
+  if (y > H - 50) { y = newPage(); }
+  y = sectionHeader('DÉTAIL DES SUIVIS', mL, y, cW);
 
   suivis.forEach((s, idx) => {
-    // Estimer la hauteur nécessaire
-    const nbLignesPoints = s.points ? Math.ceil(s.points.length / 85) + 1 : 0;
-    const hNeeded = 14 + CRITERES.length * 5 + nbLignesPoints * 4 + 10;
+    // Estimer hauteur
+    const nbPtsLignes = s.points ? Math.ceil(s.points.length / 90) : 0;
+    const hEst = 12 + Math.ceil(CRITERES.length/2) * 5 + (s.points ? 6 + nbPtsLignes*3.5 : 0) + 4;
+    if (y + hEst > H - 15) { y = newPage(); }
 
-    if (y + hNeeded > H - 20) {
-      stripeBottom();
-      y = newPage();
-    }
-
-    // En-tête du suivi
-    doc.setFillColor(...NOIR);
-    doc.rect(mL, y, cW, 10, 'F');
-    doc.setFillColor(...ROUGE);
-    doc.rect(mL, y, 3, 10, 'F');
+    // En-tête suivi
+    rect(mL, y, cW, 10, C.noir);
+    rect(mL, y, 2.5, 10, C.rouge);
 
     // Numéro
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(14);
-    doc.setTextColor(40, 40, 40);
-    doc.text(String(idx + 1).padStart(2, '0'), mL + 5, y + 8);
+    doc.setFontSize(16);
+    doc.setTextColor(...C.gris3);
+    doc.text(String(idx+1).padStart(2,'0'), mL + 4, y + 8);
 
     // Date
     const d = new Date(s.date);
-    const dateStr = d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+    const dateStr = d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
-    doc.setTextColor(...BLANC);
-    doc.text(dateStr.toUpperCase(), mL + 18, y + 5);
+    doc.setFontSize(7.5);
+    text(C.blanc);
+    doc.text(dateStr, mL + 17, y + 4.5);
 
     // Rencontre
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(6.5);
-    doc.setTextColor(...MUTED);
-    const renc = s.rencontre.length > 55 ? s.rencontre.substring(0,53)+'…' : s.rencontre;
-    doc.text(renc, mL + 18, y + 9);
+    text(C.muted);
+    const renc = s.rencontre.length > 50 ? s.rencontre.substring(0,48)+'…' : s.rencontre;
+    doc.text(renc, mL + 17, y + 8.5);
 
-    // Accompagnateur
+    // JA côté droit
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(6);
-    doc.setTextColor(...MUTED);
-    doc.text(`JA: ${s.accompagnateur}`, mL + cW - 40, y + 5);
-
-    // Binôme
+    text(C.muted2);
+    doc.text(`JA : ${s.accompagnateur}`, mL + cW - 50, y + 4.5);
     if(s.ja2) {
-      const partenaire = (s.ja1 === nom) ? s.ja2 : s.ja1;
-      doc.text(`Binôme: ${partenaire}`, mL + cW - 40, y + 9);
+      const partenaire = s.ja1 === nom ? s.ja2 : s.ja1;
+      doc.text(`Binôme : ${partenaire}`, mL + cW - 50, y + 8.5);
     }
 
-    y += 13;
+    y += 12;
 
-    // Évaluations en 2 colonnes
-    const evalColW = cW / 2 - 2;
+    // Grille évaluations 2 colonnes
+    const evalColW = (cW - 2) / 2;
     CRITERES.forEach((crit, ci) => {
       const col2 = ci % 2;
-      const ex = col2 === 0 ? mL : mL + evalColW + 4;
-      const ey = ci % 2 === 0 ? y + Math.floor(ci/2)*5 : y + Math.floor(ci/2)*5;
+      const ex = col2 === 0 ? mL : mL + evalColW + 2;
+      const ey = y + Math.floor(ci/2) * 5;
 
       const val = s.evaluations[crit] || '';
       const nc = NOTE_COLORS[val] || NOTE_COLORS[''];
+      const bg2 = Math.floor(ci/2) % 2 === 0 ? C.gris1 : C.gris2;
 
-      doc.setFillColor(16, 16, 16);
-      doc.rect(ex, ey - 0.5, evalColW, 4.5, 'F');
+      rect(ex, ey, evalColW, 4.8, bg2);
 
+      // Trait couleur note à gauche
+      doc.setFillColor(nc.r, nc.g, nc.b);
+      doc.rect(ex, ey, 1.5, 4.8, 'F');
+
+      // Critère
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(6.5);
-      doc.setTextColor(160, 160, 160);
-      const critCourt = crit.length > 24 ? crit.substring(0,22)+'…' : crit;
-      doc.text(critCourt, ex + 2, ey + 3);
+      doc.setFontSize(6);
+      text(C.muted);
+      const cs = crit.length > 26 ? crit.substring(0,24)+'…' : crit;
+      doc.text(cs, ex + 3, ey + 3.4);
 
       // Badge note
-      const badgeW = 22;
-      doc.setFillColor(nc.r * 0.15, nc.g * 0.15, nc.b * 0.15);
-      doc.rect(ex + evalColW - badgeW - 1, ey, badgeW, 3.5, 'F');
+      const badgeW = 20;
+      const bx3 = ex + evalColW - badgeW - 0.5;
+      doc.setFillColor(nc.r*0.1+12, nc.g*0.1+12, nc.b*0.1+12);
+      doc.rect(bx3, ey + 0.5, badgeW, 3.8, 'F');
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(5);
+      doc.setFontSize(4.8);
       doc.setTextColor(nc.r, nc.g, nc.b);
-      doc.text(NOTE_SHORT[val] || 'N/R', ex + evalColW - badgeW + 1, ey + 2.8);
+      doc.text(NOTE_SHORT[val]||'N/R', bx3 + 1.5, ey + 3.5);
     });
 
-    y += Math.ceil(CRITERES.length / 2) * 5 + 3;
+    y += Math.ceil(CRITERES.length/2) * 5 + 2;
 
     // Points à travailler
-    if (s.points) {
-      if (y > H - 25) { stripeBottom(); y = newPage(); }
-      doc.setFillColor(10, 10, 10);
-      doc.rect(mL, y, cW, 4, 'F');
+    if(s.points) {
+      if(y > H - 20) { y = newPage(); }
+      rect(mL, y, cW, 4.5, [8,8,8]);
+      rect(mL, y, 1.5, 4.5, C.accent);
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(6);
-      doc.setTextColor(...MUTED);
-      doc.text('POINTS À TRAVAILLER', mL + 2, y + 3);
-      y += 5;
+      doc.setFontSize(5.5);
+      text(C.accent);
+      doc.text('POINTS À TRAVAILLER', mL + 3, y + 3.2);
+      y += 5.5;
 
       doc.setFont('helvetica', 'italic');
       doc.setFontSize(6.5);
-      doc.setTextColor(150, 150, 150);
+      text(C.muted);
       const lines = doc.splitTextToSize(s.points, cW - 4);
-      lines.forEach(line => {
-        if (y > H - 18) { stripeBottom(); y = newPage(); }
-        doc.text(line, mL + 2, y + 3);
-        y += 4;
+      lines.forEach(ln => {
+        if(y > H - 15) { y = newPage(); }
+        doc.text(ln, mL + 2, y + 3);
+        y += 3.8;
       });
       y += 2;
     }
 
-    y += 6;
-    // Séparateur
-    doc.setDrawColor(25, 25, 25);
-    doc.setLineWidth(0.2);
-    doc.line(mL, y - 3, mL + cW, y - 3);
+    // Séparateur entre suivis
+    y += 3;
+    line(mL, y - 1.5, mL + cW, y - 1.5, C.border, 0.2);
   });
 
-  stripeBottom();
+  // Pied de page final
+  addPageNum();
+  bottomStripe();
 
   return doc;
 }
 
 function exportBilanArbitre(nom) {
   const doc = buildBilanPDF(nom);
-  const safeName = nom.replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const safeName = nom.replace(/\s+/g,'_').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   doc.save(`Bilan_${safeName}_MHB_25-26.pdf`);
 }
 
 function exportTousBilans() {
   const arbitres = getArbitres();
-  if (!arbitres.length) return;
-
+  if(!arbitres.length) return;
   const btn = document.querySelector('.export-btn.all');
   btn.disabled = true;
   btn.textContent = '⏳ Génération...';
-
-  // Téléchargement séquentiel avec délai pour ne pas bloquer le navigateur
   let i = 0;
   function next() {
-    if (i >= arbitres.length) {
+    if(i >= arbitres.length) {
       btn.disabled = false;
       btn.textContent = '⬇ Tous les bilans';
       return;
     }
     const nom = arbitres[i++];
     const doc = buildBilanPDF(nom);
-    const safeName = nom.replace(/\s+/g, '_').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const safeName = nom.replace(/\s+/g,'_').normalize('NFD').replace(/[\u0300-\u036f]/g,'');
     doc.save(`Bilan_${safeName}_MHB_25-26.pdf`);
-    setTimeout(next, 400);
+    setTimeout(next, 450);
   }
   setTimeout(next, 100);
 }
