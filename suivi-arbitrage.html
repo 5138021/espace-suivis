@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Fiche de Suivi — Arbitrage JAJ · Meylan HB</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════
+   VARIABLES & RESET
+═══════════════════════════════════════════════ */
+:root {
+  --rouge:     #E8001D;
+  --noir:      #0D0D0D;
+  --blanc:     #F5F2EC;
+  --gris:      #1A1A1A;
+  --gris-mid:  #2E2E2E;
+  --gris-light:#3A3A3A;
+  --accent:    #FFD100;
+  --muted:     #9A9A9A;
+  --bleu:      #4A9FFF;
+  --vert:      #43a047;
+  --orange:    #fb8c00;
+  --ins:       #e53935;
+  --opt:       #fb8c00;
+  --cor:       #43a047;
+  --tres:      #4A9FFF;
+  --touch-min: 52px;
+  --radius:    4px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--noir);
+  color: var(--blanc);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  padding-bottom: 6rem;
+}
+
+/* ── TOP STRIPE ── */
+.top-stripe {
+  height: 4px;
+  background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* ── HEADER ── */
+.header {
+  position: sticky;
+  top: 4px;
+  z-index: 90;
+  background: var(--noir);
+  border-bottom: 1px solid #222;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.header img { height: 34px; flex-shrink: 0; }
+
+.header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.15rem;
+  letter-spacing: 3px;
+  color: var(--blanc);
+  flex: 1;
+  line-height: 1;
+}
+
+.header-sub {
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.header-badge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--bleu);
+  background: rgba(74,159,255,0.1);
+  border: 1px solid rgba(74,159,255,0.25);
+  padding: 3px 8px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.header-step-indicator {
+  font-size: 0.62rem;
+  color: var(--muted);
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* ── PROGRESS ── */
+.progress-bar {
+  height: 2px;
+  background: #222;
+  position: sticky;
+  top: calc(4px + 55px);
+  z-index: 89;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--bleu), var(--accent));
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+/* ── FORM BODY ── */
+.form-body { padding: 1.2rem 1rem; }
+
+/* ── STEPS ── */
+.step { display: none; animation: fadeSlide 0.25s ease; }
+.step.active { display: block; }
+
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateX(14px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.step-header { margin-bottom: 1.5rem; }
+
+.step-number {
+  font-size: 0.58rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--bleu);
+  margin-bottom: 0.3rem;
+}
+
+.step-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 3px;
+  color: var(--blanc);
+  line-height: 1.05;
+}
+
+.step-title span { color: var(--bleu); }
+
+/* ── FIELDS ── */
+.field-group { margin-bottom: 1.2rem; }
+
+.field-label {
+  display: block;
+  font-size: 0.63rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.field-label .required { color: var(--accent); margin-left: 3px; }
+
+input[type="text"],
+input[type="date"],
+input[type="time"],
+textarea {
+  width: 100%;
+  min-height: var(--touch-min);
+  background: var(--gris);
+  border: 1px solid #333;
+  border-radius: var(--radius);
+  color: var(--blanc);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  padding: 0.8rem 1rem;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input:focus, textarea:focus {
+  border-color: var(--bleu);
+  background: #1e1e1e;
+}
+
+input::placeholder, textarea::placeholder { color: #444; }
+
+textarea { min-height: 110px; resize: vertical; line-height: 1.5; }
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: #1E1E1E;
+  margin: 1.4rem 0;
+  position: relative;
+}
+
+.divider-label {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background: var(--noir);
+  padding-right: 0.8rem;
+  font-size: 0.58rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #444;
+}
+
+/* ── INFO BOX ── */
+.info-box {
+  background: rgba(74,159,255,0.07);
+  border: 1px solid rgba(74,159,255,0.2);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  font-size: 0.74rem;
+  color: rgba(74,159,255,0.8);
+  line-height: 1.5;
+  margin-bottom: 1.4rem;
+}
+
+/* ── GRILLE D'ÉVALUATION ── */
+.eval-section-card {
+  border: 1px solid #222;
+  border-left: 3px solid var(--bleu);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1.2rem;
+}
+
+.eval-section-header {
+  background: #0a0a0a;
+  padding: 10px 16px;
+  border-bottom: 1px solid #1e1e1e;
+}
+
+.eval-section-header h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 2.5px;
+  color: var(--bleu);
+  text-transform: uppercase;
+}
+
+.eval-wrap { overflow-x: auto; }
+
+table.eval {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+  min-width: 440px;
+}
+
+table.eval thead tr { background: #080808; }
+
+table.eval thead th {
+  padding: 11px 8px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-align: center;
+  white-space: nowrap;
+  border-bottom: 1px solid #222;
+}
+
+table.eval thead th:first-child {
+  text-align: left;
+  padding-left: 16px;
+  width: 46%;
+  color: var(--muted);
+}
+
+table.eval thead th.h-ins  { color: var(--ins); }
+table.eval thead th.h-opt  { color: var(--opt); }
+table.eval thead th.h-cor  { color: var(--cor); }
+table.eval thead th.h-tres { color: var(--tres); }
+
+table.eval tbody tr {
+  border-bottom: 1px solid #181818;
+  transition: background 0.1s;
+}
+
+table.eval tbody tr:hover { background: #161616; }
+
+table.eval tbody td {
+  padding: 10px 8px;
+  vertical-align: middle;
+}
+
+table.eval tbody td:first-child {
+  padding-left: 16px;
+  font-weight: 400;
+  color: #c0c0c0;
+  line-height: 1.4;
+  font-size: 0.72rem;
+}
+
+table.eval tbody td:not(:first-child) { text-align: center; }
+
+.radio-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.radio-wrap input[type="radio"] { display: none; }
+
+.radio-wrap label {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 1.5px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin: 0;
+  font-size: 0;
+}
+
+.col-ins  .radio-wrap label:hover,
+.col-ins  input[type="radio"]:checked + label { border-color: var(--ins);  background: var(--ins); }
+.col-opt  .radio-wrap label:hover,
+.col-opt  input[type="radio"]:checked + label { border-color: var(--opt);  background: var(--opt); }
+.col-cor  .radio-wrap label:hover,
+.col-cor  input[type="radio"]:checked + label { border-color: var(--cor);  background: var(--cor); }
+.col-tres .radio-wrap label:hover,
+.col-tres input[type="radio"]:checked + label { border-color: var(--tres); background: var(--tres); }
+
+.eval-legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 10px 16px 12px;
+  justify-content: flex-end;
+  background: #080808;
+  border-top: 1px solid #1a1a1a;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.6rem;
+  color: #555;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ── RECAP CARDS ── */
+.recap-card {
+  background: var(--gris);
+  border: 1px solid #2A2A2A;
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 1.2rem;
+}
+
+.recap-card-header {
+  background: #222;
+  padding: 0.6rem 1rem;
+  font-size: 0.58rem;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid #2A2A2A;
+}
+
+.recap-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #222;
+  gap: 1rem;
+}
+
+.recap-row:last-child { border-bottom: none; }
+
+.recap-key { font-size: 0.7rem; color: var(--muted); flex-shrink: 0; }
+
+.recap-val {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--blanc);
+  text-align: right;
+}
+
+.recap-eval-grid {
+  padding: 1rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.recap-eval-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  border-bottom: 1px solid #222;
+  gap: 0.8rem;
+}
+
+.recap-eval-row:last-child { border-bottom: none; }
+
+.recap-eval-crit {
+  font-size: 0.72rem;
+  color: #c0c0c0;
+  flex: 1;
+}
+
+.recap-eval-note {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 100px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.note-ins  { background: rgba(229,57,53,0.15);  color: var(--ins);  border: 1px solid rgba(229,57,53,0.3); }
+.note-opt  { background: rgba(251,140,0,0.15);  color: var(--opt);  border: 1px solid rgba(251,140,0,0.3); }
+.note-cor  { background: rgba(67,160,71,0.15);  color: var(--cor);  border: 1px solid rgba(67,160,71,0.3); }
+.note-tres { background: rgba(74,159,255,0.15); color: var(--tres); border: 1px solid rgba(74,159,255,0.3); }
+.note-nr   { background: transparent; color: #444; border: 1px solid #2a2a2a; }
+
+.recap-comment {
+  padding: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.6;
+  font-style: italic;
+  border-top: 1px solid #222;
+}
+
+/* ── NAV BAR ── */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.8rem 1rem;
+  background: rgba(13,13,13,0.97);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid #222;
+  display: flex;
+  gap: 0.8rem;
+  z-index: 200;
+}
+
+.btn {
+  flex: 1;
+  min-height: 52px;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  touch-action: manipulation;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-prev {
+  background: var(--gris);
+  color: var(--muted);
+  border: 1px solid #333;
+  flex: 0 0 90px;
+}
+
+.btn-prev:hover { color: var(--blanc); border-color: #555; }
+
+.btn-next {
+  background: var(--bleu);
+  color: white;
+}
+
+.btn-next:hover { background: #3a8fe0; }
+
+.btn-submit {
+  background: var(--rouge);
+  color: white;
+}
+
+.btn-submit:hover { background: #c8001a; }
+.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  padding: 0.7rem 1.4rem;
+  border-radius: 100px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  z-index: 999;
+  white-space: nowrap;
+}
+
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { background: var(--vert); color: #0a1f12; }
+.toast.warn    { background: var(--orange); color: #1a0a00; }
+.toast.error   { background: var(--ins); color: white; }
+
+/* ── PRINT ── */
+@media print {
+  body { background: white; color: #111; padding-bottom: 0; font-size: 11pt; }
+  .top-stripe, .header, .progress-bar, .nav-bar, .toast { display: none !important; }
+  #app { display: none !important; }
+  #print-view { display: block !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+
+#print-view { display: none; }
+
+@media print {
+  .pv-stripe { height: 6px; background: #E8001D; margin-bottom: 20px; }
+  .pv-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 2px solid #111; }
+  .pv-title { font-family: 'Bebas Neue', sans-serif; font-size: 24pt; letter-spacing: 4px; color: #111; }
+  .pv-subtitle { font-size: 8pt; color: #888; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; }
+  .pv-meta { text-align: right; font-size: 9pt; color: #555; line-height: 1.7; }
+  .pv-section { margin-bottom: 16px; }
+  .pv-section-title { font-family: 'Bebas Neue', sans-serif; font-size: 11pt; letter-spacing: 3px; color: #E8001D; border-bottom: 1px solid #eee; padding-bottom: 4px; margin-bottom: 10px; }
+  .pv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .pv-field-label { font-size: 7pt; color: #888; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 2px; }
+  .pv-field-value { font-size: 10pt; color: #111; font-weight: 600; padding: 4px 0; border-bottom: 1px solid #ddd; }
+  .pv-eval-row { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; padding-bottom: 5px; border-bottom: 1px solid #eee; }
+  .pv-eval-crit { flex: 1; font-size: 9pt; color: #444; }
+  .pv-eval-note { font-weight: 700; font-size: 9pt; }
+  .pv-comment-box { border: 1px solid #ddd; border-radius: 4px; padding: 10px; min-height: 60px; font-size: 10pt; color: #333; line-height: 1.6; }
+  .pv-footer { margin-top: 24px; padding-top: 10px; border-top: 1px solid #ddd; display: flex; justify-content: space-between; font-size: 7.5pt; color: #aaa; letter-spacing: 1px; }
+  .pv-signature { margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .pv-sig-box { border-bottom: 1px solid #bbb; height: 40px; position: relative; }
+  .pv-sig-label { font-size: 7pt; color: #aaa; letter-spacing: 1.5px; text-transform: uppercase; position: absolute; bottom: -16px; }
+}
+
+/* ── PRINT BTN ── */
+.btn-print {
+  background: var(--gris);
+  color: var(--muted);
+  border: 1px solid #333;
+  flex: 0 0 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: var(--radius);
+  min-height: 52px;
+  touch-action: manipulation;
+}
+
+header {
+    background: #0a0a0a;
+    padding: 18px 28px;
+    border-bottom: 1px solid #1e1e1e;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  header img { height: 40px; }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 3px;
+    color: var(--blanc);
+    line-height: 1;
+  }
+
+  .header-text p {
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  nav {
+    margin-left: auto;
+    display: flex;
+    gap: 4px;
+  }
+
+  nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.72rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    border-radius: 3px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  nav a:hover { color: var(--blanc); border-bottom-color: var(--bleu); }
+
+  .hero {
+    padding: 36px 28px 28px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: 'ARBITRAGE';
+    position: absolute;
+    right: -8px;
+    bottom: -12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 8rem;
+    color: rgba(255,255,255,0.025);
+    pointer-events: none;
+    letter-spacing: 4px;
+    white-space: nowrap;
+  }
+
+  .hero-label {
+    font-size: 0.62rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bleu);
+    margin-bottom: 10px;
+  }
+
+  .hero h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: 4px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .hero h2 span { color: var(--bleu); }
+
+  .hero p {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+</style>
+</head>
+<body>
+
+<div id="app">
+
+<header>
+  <img src="MHB_logo.png">
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+  </div>
+</header>
+
+<div class="hero">
+  <p class="hero-label">📋 Formulaire de suivi</p>
+  <h2>Suivi d'arbitrage <span>25-26</span></h2>
+  <p>Renseigner l'évaluation pédagogique à l'issue d'une rencontre arbitrée.</p>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-fill" id="progress-fill"></div>
+</div>
+
+<div class="form-body">
+
+  <!-- ── STEP 1 · IDENTITÉ & CONTEXTE ── -->
+  <div class="step active" id="step-1">
+    <div class="step-header">
+      <div class="step-number">Étape 01 — Identité & Contexte</div>
+      <div class="step-title">Qui &<br><span>Quand ?</span></div>
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label">Juge-Arbitre 1 <span class="required">*</span></label>
+        <input type="text" id="f-ja1" placeholder="Prénom NOM" autocomplete="off">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Juge-Arbitre 2</label>
+        <input type="text" id="f-ja2" placeholder="Prénom NOM" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Juge Accompagnateur <span class="required">*</span></label>
+      <input type="text" id="f-accompagnateur" placeholder="Prénom NOM" autocomplete="off">
+    </div>
+
+    <div class="divider"><span class="divider-label">La rencontre</span></div>
+
+    <div class="field-group">
+      <label class="field-label">Rencontre <span class="required">*</span></label>
+      <input type="text" id="f-rencontre" placeholder="Ex : Meylan HB vs Club Adversaire — M13 Régional">
+    </div>
+
+    <div class="field-row">
+      <div class="field-group">
+        <label class="field-label">Date</label>
+        <input type="date" id="f-date">
+      </div>
+      <div class="field-group">
+        <label class="field-label">Heure</label>
+        <input type="time" id="f-heure">
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2 · GRILLE D'ÉVALUATION ── -->
+  <div class="step" id="step-2">
+    <div class="step-header">
+      <div class="step-number">Étape 02 — Grille d'évaluation</div>
+      <div class="step-title">Critères<br><span>techniques</span></div>
+    </div>
+
+    <div class="info-box">
+      Sélectionnez une appréciation pour chaque critère. Appuyez sur le rond correspondant à votre évaluation.
+    </div>
+
+    <div class="eval-section-card">
+      <div class="eval-section-header"><h3>Évaluation par critère</h3></div>
+      <div class="eval-wrap">
+        <table class="eval">
+          <thead>
+            <tr>
+              <th>Critère</th>
+              <th class="h-ins">Insuffisant</th>
+              <th class="h-opt">À optimiser</th>
+              <th class="h-cor">Correct</th>
+              <th class="h-tres">Très correct</th>
+            </tr>
+          </thead>
+          <tbody id="evalBody"></tbody>
+        </table>
+      </div>
+      <div class="eval-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--ins)"></div>Insuffisant</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--opt)"></div>À optimiser</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--cor)"></div>Correct</div>
+        <div class="legend-item"><div class="legend-dot" style="background:var(--tres)"></div>Très correct</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3 · POINTS À TRAVAILLER ── -->
+  <div class="step" id="step-3">
+    <div class="step-header">
+      <div class="step-number">Étape 03 — Bilan pédagogique</div>
+      <div class="step-title">Points &<br><span>objectifs</span></div>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Points à travailler / Commentaire général</label>
+      <textarea id="f-points" placeholder="Bilan de la prestation, axes d'amélioration, points positifs, recommandations pour la suite…" style="min-height:160px;"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label">Objectif — Prochaine prestation</label>
+      <textarea id="f-objectif" placeholder="Un objectif concret et mesurable à travailler lors de la prochaine rencontre…" style="min-height:90px;"></textarea>
+    </div>
+  </div>
+
+  <!-- ── STEP 4 · RÉCAP & ENVOI ── -->
+  <div class="step" id="step-4">
+    <div class="step-header">
+      <div class="step-number">Étape 04 — Récapitulatif</div>
+      <div class="step-title">Vérifier &<br><span>Envoyer</span></div>
+    </div>
+
+    <div class="info-box" style="margin-bottom:1rem;">
+      Vérifiez les informations avant l'envoi. Le suivi sera transmis par e-mail à la commission arbitrage.
+    </div>
+
+    <div id="recap-content"></div>
+  </div>
+
+</div><!-- /form-body -->
+
+<!-- ── NAV BAR ── -->
+<div class="nav-bar">
+  <button class="btn btn-prev" id="btn-prev" onclick="prevStep()" style="display:none;">← Retour</button>
+  <button class="btn btn-next" id="btn-next" onclick="nextStep()">Continuer →</button>
+  <button class="btn btn-print" id="btn-print" title="Imprimer / PDF" onclick="doPrint()" style="display:none;">🖨</button>
+</div>
+
+</div><!-- /app -->
+
+<!-- ── PRINT VIEW ── -->
+<div id="print-view"></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─────────────────────────────
+   CONFIG EMAILJS
+───────────────────────────── */
+emailjs.init("8mHDd4BaEwkycTRqI");
+
+const SERVICE_ID  = "service_o4midvq";
+const TEMPLATE_ID = "template_l5mmsg3";
+
+/* ─────────────────────────────
+   CRITÈRES
+───────────────────────────── */
+const CRITERES = [
+  "Comprend le jeu",
+  "Appréciation des duels",
+  "Sanctions sportives",
+  "Sanctions disciplinaires",
+  "Placement et déplacement",
+  "Gestes / sifflet",
+  "Personnalité",
+  "Marcher / dribble",
+  "Empiètement",
+  "Jeu passif",
+  "Autres règles",
+  "Impression générale",
+  "Communication entre arbitres"
+];
+
+const NOTE_COLS = [
+  { val: "Insuffisant",  cls: "col-ins",  hcls: "h-ins" },
+  { val: "À optimiser", cls: "col-opt",  hcls: "h-opt" },
+  { val: "Correct",      cls: "col-cor",  hcls: "h-cor" },
+  { val: "Très correct", cls: "col-tres", hcls: "h-tres" }
+];
+
+const NOTE_BADGE_CLS = {
+  "Insuffisant":  "note-ins",
+  "À optimiser": "note-opt",
+  "Correct":      "note-cor",
+  "Très correct": "note-tres"
+};
+
+/* ─────────────────────────────
+   STATE
+───────────────────────────── */
+const state = { currentStep: 1, totalSteps: 4 };
+
+/* ─────────────────────────────
+   INIT
+───────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  // Set today's date
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+
+  // Build eval table
+  const tbody = document.getElementById('evalBody');
+  CRITERES.forEach((crit, i) => {
+    const tr = document.createElement('tr');
+    let cells = `<td>${crit}</td>`;
+    NOTE_COLS.forEach(col => {
+      cells += `
+        <td class="${col.cls}">
+          <div class="radio-wrap">
+            <input type="radio" name="crit_${i}" id="crit_${i}_${col.val}" value="${col.val}">
+            <label for="crit_${i}_${col.val}"></label>
+          </div>
+        </td>`;
+    });
+    tr.innerHTML = cells;
+    tbody.appendChild(tr);
+  });
+
+  updateUI();
+});
+
+/* ─────────────────────────────
+   NAVIGATION
+───────────────────────────── */
+function nextStep() {
+  if (!validateStep(state.currentStep)) return;
+  if (state.currentStep < state.totalSteps) {
+    state.currentStep++;
+    if (state.currentStep === state.totalSteps) buildRecap();
+    updateUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function prevStep() {
+  if (state.currentStep > 1) {
+    state.currentStep--;
+    updateUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function updateUI() {
+  document.querySelectorAll('.step').forEach((el, i) => {
+    el.classList.toggle('active', i + 1 === state.currentStep);
+  });
+
+  document.getElementById('step-indicator').textContent =
+    `Étape ${state.currentStep} / ${state.totalSteps}`;
+
+  const pct = ((state.currentStep - 1) / (state.totalSteps - 1)) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+
+  const prevBtn  = document.getElementById('btn-prev');
+  const nextBtn  = document.getElementById('btn-next');
+  const printBtn = document.getElementById('btn-print');
+
+  prevBtn.style.display = state.currentStep > 1 ? 'block' : 'none';
+
+  if (state.currentStep === state.totalSteps) {
+    nextBtn.textContent = '✉ Envoyer le suivi';
+    nextBtn.className   = 'btn btn-submit';
+    nextBtn.onclick     = submitForm;
+    printBtn.style.display = 'flex';
+  } else {
+    nextBtn.textContent = 'Continuer →';
+    nextBtn.className   = 'btn btn-next';
+    nextBtn.onclick     = nextStep;
+    printBtn.style.display = 'none';
+  }
+}
+
+/* ─────────────────────────────
+   VALIDATION
+───────────────────────────── */
+function validateStep(step) {
+  if (step === 1) {
+    if (!document.getElementById('f-ja1').value.trim())
+      return showToast('⚠ Saisir le Juge-Arbitre 1', 'warn'), false;
+    if (!document.getElementById('f-accompagnateur').value.trim())
+      return showToast('⚠ Saisir le Juge Accompagnateur', 'warn'), false;
+    if (!document.getElementById('f-rencontre').value.trim())
+      return showToast('⚠ Saisir la rencontre', 'warn'), false;
+  }
+  return true;
+}
+
+/* ─────────────────────────────
+   RÉCAP
+───────────────────────────── */
+function getEvalData() {
+  return CRITERES.map((c, i) => {
+    const checked = document.querySelector(`input[name="crit_${i}"]:checked`);
+    return { critere: c, note: checked ? checked.value : null };
+  });
+}
+
+function buildRecap() {
+  const ja1    = document.getElementById('f-ja1').value;
+  const ja2    = document.getElementById('f-ja2').value;
+  const acc    = document.getElementById('f-accompagnateur').value;
+  const renc   = document.getElementById('f-rencontre').value;
+  const date   = document.getElementById('f-date').value;
+  const heure  = document.getElementById('f-heure').value;
+  const points = document.getElementById('f-points').value;
+  const obj    = document.getElementById('f-objectif').value;
+  const evals  = getEvalData();
+
+  const dateStr = date
+    ? new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday:'long', year:'numeric', month:'long', day:'numeric' })
+    : '—';
+
+  let html = `
+  <div class="recap-card">
+    <div class="recap-card-header">Identité & Contexte</div>
+    <div class="recap-row"><span class="recap-key">Juge-Arbitre 1</span><span class="recap-val">${ja1}</span></div>
+    ${ja2 ? `<div class="recap-row"><span class="recap-key">Juge-Arbitre 2</span><span class="recap-val">${ja2}</span></div>` : ''}
+    <div class="recap-row"><span class="recap-key">Accompagnateur</span><span class="recap-val">${acc}</span></div>
+    <div class="recap-row"><span class="recap-key">Rencontre</span><span class="recap-val">${renc}</span></div>
+    <div class="recap-row"><span class="recap-key">Date / Heure</span><span class="recap-val">${dateStr}${heure ? ' · ' + heure : ''}</span></div>
+  </div>`;
+
+  html += `<div class="recap-card">
+    <div class="recap-card-header">Grille d'évaluation</div>
+    <div class="recap-eval-grid">`;
+
+  evals.forEach(e => {
+    const cls   = e.note ? NOTE_BADGE_CLS[e.note] : 'note-nr';
+    const label = e.note || 'Non renseigné';
+    html += `<div class="recap-eval-row">
+      <span class="recap-eval-crit">${e.critere}</span>
+      <span class="recap-eval-note ${cls}">${label}</span>
+    </div>`;
+  });
+
+  html += `</div></div>`;
+
+  html += `<div class="recap-card">
+    <div class="recap-card-header">Commentaire général</div>
+    <div class="recap-comment">${points.replace(/\n/g,'<br>')}</div>
+  </div>`;
+
+  if (obj.trim()) {
+    html += `<div class="recap-card">
+      <div class="recap-card-header">Objectif — Prochaine prestation</div>
+      <div class="recap-comment">${obj.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }
+
+  document.getElementById('recap-content').innerHTML = html;
+}
+
+/* ─────────────────────────────
+   ENVOI EMAILJS
+───────────────────────────── */
+async function submitForm() {
+  const btn = document.getElementById('btn-next');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+
+  const evals = getEvalData();
+  const evaluations = evals
+    .map(e => `${e.critere} : ${e.note || 'Non renseigné'}`)
+    .join('\n\n');
+
+  try {
+    await emailjs.send(
+      SERVICE_ID,
+      TEMPLATE_ID,
+      {
+        ja1:            document.getElementById('f-ja1').value,
+        ja2:            document.getElementById('f-ja2').value,
+        accompagnateur: document.getElementById('f-accompagnateur').value,
+        rencontre:      document.getElementById('f-rencontre').value,
+        points:         document.getElementById('f-points').value,
+        evaluations:    evaluations
+      }
+    );
+
+    showToast('✓ Suivi envoyé avec succès !', 'success');
+
+    // Reset après 1.5s
+    setTimeout(() => {
+      document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('f-heure').value = '';
+      state.currentStep = 1;
+      updateUI();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1500);
+
+  } catch (err) {
+    console.error('[EmailJS]', err);
+    showToast('✗ Erreur lors de l\'envoi. Réessayez.', 'error');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '✉ Envoyer le suivi';
+  }
+}
+
+/* ─────────────────────────────
+   PRINT
+───────────────────────────── */
+function doPrint() {
+  const ja1   = document.getElementById('f-ja1').value;
+  const ja2   = document.getElementById('f-ja2').value;
+  const acc   = document.getElementById('f-accompagnateur').value;
+  const renc  = document.getElementById('f-rencontre').value;
+  const date  = document.getElementById('f-date').value;
+  const heure = document.getElementById('f-heure').value;
+  const pts   = document.getElementById('f-points').value;
+  const obj   = document.getElementById('f-objectif').value;
+  const evals = getEvalData();
+
+  const dateStr = date
+    ? new Date(date + 'T12:00:00').toLocaleDateString('fr-FR', { weekday:'long', year:'numeric', month:'long', day:'numeric' })
+    : '—';
+
+  const evalRows = evals.map(e => `
+    <div class="pv-eval-row">
+      <span class="pv-eval-crit">${e.critere}</span>
+      <span class="pv-eval-note">${e.note || '—'}</span>
+    </div>`).join('');
+
+  document.getElementById('print-view').innerHTML = `
+  <div class="pv-stripe"></div>
+  <div class="pv-header">
+    <div>
+      <div class="pv-title">Fiche de Suivi — JAJ</div>
+      <div class="pv-subtitle">Meylan Handball · Commission Arbitrage · Saison 2025-2026</div>
+    </div>
+    <div class="pv-meta">${dateStr}<br>${heure || ''}<br>Imprimé le ${new Date().toLocaleDateString('fr-FR')}</div>
+  </div>
+
+  <div class="pv-section">
+    <div class="pv-section-title">Identité & Contexte</div>
+    <div class="pv-grid">
+      <div><div class="pv-field-label">Juge-Arbitre 1</div><div class="pv-field-value">${ja1}</div></div>
+      <div><div class="pv-field-label">Juge-Arbitre 2</div><div class="pv-field-value">${ja2 || '—'}</div></div>
+      <div><div class="pv-field-label">Accompagnateur</div><div class="pv-field-value">${acc}</div></div>
+      <div><div class="pv-field-label">Rencontre</div><div class="pv-field-value">${renc}</div></div>
+    </div>
+  </div>
+
+  <div class="pv-section">
+    <div class="pv-section-title">Grille d'évaluation</div>
+    ${evalRows}
+  </div>
+
+  <div class="pv-section">
+    <div class="pv-section-title">Commentaire général</div>
+    <div class="pv-comment-box">${pts.replace(/\n/g,'<br>') || ''}</div>
+  </div>
+
+  ${obj ? `<div class="pv-section">
+    <div class="pv-section-title">Objectif — Prochaine prestation</div>
+    <div class="pv-comment-box">${obj.replace(/\n/g,'<br>')}</div>
+  </div>` : ''}
+
+  <div class="pv-signature">
+    <div><div class="pv-sig-box"></div><div class="pv-sig-label">Signature de l'arbitre</div></div>
+    <div><div class="pv-sig-box"></div><div class="pv-sig-label">Signature du juge accompagnateur</div></div>
+  </div>
+
+  <div class="pv-footer">
+    <span>© 2025-2026 Meylan Handball · Commission Arbitrage</span>
+    <span>JAJ — Fiche de suivi pédagogique</span>
+  </div>`;
+
+  window.print();
+}
+
+/* ─────────────────────────────
+   TOAST
+───────────────────────────── */
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast ${type}`;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+
+</body>
+</html>
