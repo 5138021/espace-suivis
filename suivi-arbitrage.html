@@ -606,25 +606,30 @@ header {
     margin-top: 4px;
   }
 
-  nav {
-    margin-left: auto;
+  /* NAV SECONDAIRE */
+  .subnav {
+    padding: 0 3rem;
+    border-bottom: 1px solid #222;
     display: flex;
-    gap: 4px;
+    gap: 0;
   }
 
-  nav a {
-    color: var(--muted);
-    text-decoration: none;
+  .subnav a {
+    padding: 0.9rem 1.4rem;
     font-size: 0.72rem;
-    letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 6px 12px;
-    border-radius: 3px;
+    letter-spacing: 2px;
+    color: var(--texte-doux);
+    text-decoration: none;
     border-bottom: 2px solid transparent;
     transition: color 0.2s, border-color 0.2s;
   }
 
-  nav a:hover { color: var(--blanc); border-bottom-color: var(--bleu); }
+  .subnav a.active,
+  .subnav a:hover {
+    color: var(--blanc);
+    border-bottom-color: var(--bleu);
+  }
 
   .hero {
     padding: 36px 28px 28px;
@@ -684,6 +689,12 @@ header {
     <p id="step-indicator" style="font-size:0.6rem; color:#9A9A9A; letter-spacing:1px;"></p>
   </div>
 </header>
+
+<nav class="subnav">
+  <a href="index.html">Accueil</a>
+  <a href="ressources.html">Fiches d'aide</a>
+  <a href="commission.html">Commission</a>
+</nav>
 
 <div class="hero">
   <p class="hero-label">📋 Formulaire de suivi</p>
