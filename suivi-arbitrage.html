@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -105,7 +106,7 @@ body {
 .progress-bar {
   height: 2px;
   background: #222;
-  position: sticky;
+  position: static;
   top: calc(4px + 55px);
   z-index: 89;
 }
@@ -680,6 +681,7 @@ header {
   <div class="header-text">
     <h1>Suivi Pédagogique</h1>
     <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+    <p id="step-indicator" style="font-size:0.6rem; color:#9A9A9A; letter-spacing:1px;"></p>
   </div>
 </header>
 
@@ -1049,7 +1051,10 @@ async function submitForm() {
         ja2:            document.getElementById('f-ja2').value,
         accompagnateur: document.getElementById('f-accompagnateur').value,
         rencontre:      document.getElementById('f-rencontre').value,
-        points:         document.getElementById('f-points').value,
+		date:           document.getElementById('f-date').value,
+   		heure:          document.getElementById('f-heure').value,
+    	points:         document.getElementById('f-points').value,
+    	objectif:       document.getElementById('f-objectif').value,
         evaluations:    evaluations
       }
     );
