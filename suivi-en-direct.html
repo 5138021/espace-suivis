@@ -1,0 +1,1647 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feuille de match — Arbitrage JAJ · Meylan HB</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bleu: #0B2D6E;
+  --bleu-mid: #1A4BA0;
+  --bleu-light: #E8EEF8;
+  --rouge: #C0392B;
+  --rouge-light: #FAEAE8;
+  --jaune: #E67E22;
+  --jaune-light: #FEF3E8;
+  --vert: #1A7A4A;
+  --vert-light: #E6F5EC;
+  --gris: #F2F3F5;
+  --gris-mid: #C8CDD8;
+  --gris-dark: #6B7280;
+  --noir: #0F1420;
+  --blanc: #FFFFFF;
+  --border: #D1D8E8;
+  --shadow: 0 1px 3px rgba(11,45,110,0.10);
+  --font-head: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --rouge: #E8001D;
+  --noir: #0D0D0D;
+  --blanc: #F5F2EC;  
+  --gris: #1A1A1A; 
+  --gris-mid: #2E2E2E;
+  --accent: #FFD100;
+  --texte-doux: #9A9A9A;
+  --bleu: #4A9FFF;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: var(--font-body);
+  background: #EDF0F7;
+  color: var(--noir);
+  min-height: 100vh;
+  padding-bottom: 80px;
+}
+
+/* ── HEADER ── */
+.app-header {
+  background: var(--bleu);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(11,45,110,0.3);
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px 8px;
+}
+.header-brand {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.header-title {
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.01em;
+}
+.header-steps {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: rgba(255,255,255,0.1);
+  border-radius: 6px;
+  padding: 3px;
+}
+.step-btn {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.step-btn.active {
+  background: #fff;
+  color: var(--bleu);
+  font-weight: 700;
+}
+.step-btn:not(.active):hover { color: rgba(255,255,255,0.85); }
+
+/* ── SCORE BAR ── */
+.score-bar {
+  background: var(--bleu-mid);
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.score-team {
+  flex: 1;
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+.score-team.right { text-align: right; }
+.score-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 8px;
+  padding: 4px 10px;
+}
+.score-num {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 500;
+  color: #fff;
+  min-width: 26px;
+  text-align: center;
+}
+.score-sep { font-size: 16px; color: rgba(255,255,255,0.5); }
+.score-btn {
+  background: rgba(255,255,255,0.2);
+  border: none;
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.1s;
+}
+.score-btn:hover { background: rgba(255,255,255,0.35); }
+.score-btn:active { transform: scale(0.92); }
+.chrono-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.chrono {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+  letter-spacing: 0.04em;
+}
+.periode-badge {
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.2);
+  padding: 1px 8px;
+  border-radius: 20px;
+}
+.chrono-controls {
+  display: flex;
+  gap: 4px;
+  margin-top: 2px;
+}
+.chrono-ctrl {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.chrono-ctrl:hover { background: rgba(255,255,255,0.25); }
+
+/* ── PAGES ── */
+.page { display: none; padding: 12px 12px 0; }
+.page.active { display: block; }
+
+/* ── CARDS ── */
+.card {
+  background: var(--blanc);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  background: var(--gris);
+}
+.card-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  background: var(--bleu-light);
+  color: var(--bleu);
+}
+.card-title {
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bleu);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  flex: 1;
+}
+.card-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gris-dark);
+  background: var(--gris);
+  border: 1px solid var(--border);
+  padding: 1px 7px;
+  border-radius: 20px;
+}
+
+/* ── PREP PAGE ── */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 12px 14px;
+}
+.form-grid.one { grid-template-columns: 1fr; }
+.form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
+.field-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--gris-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+.field-input {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--noir);
+  background: var(--blanc);
+  outline: none;
+  transition: border 0.15s;
+}
+.field-input:focus { border-color: var(--bleu-mid); }
+.field-select {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 7px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--noir);
+  background: var(--blanc);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+.field-select:focus { border-color: var(--bleu-mid); }
+.arbitres-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 10px 14px;
+}
+.arbitre-block {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.arbitre-block-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--bleu);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 7px;
+}
+
+/* ── SAISIE RAPIDE ── */
+.quick-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 7px;
+  padding: 10px 12px;
+}
+.qbtn {
+  border: none;
+  border-radius: 9px;
+  padding: 10px 6px;
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}
+.qbtn:active { transform: scale(0.95); }
+.qbtn .qicon { font-size: 20px; }
+.qbtn.sanction-yellow { background: var(--jaune-light); color: var(--jaune); border: 1.5px solid #F5CFA0; }
+.qbtn.sanction-red { background: var(--rouge-light); color: var(--rouge); border: 1.5px solid #F5B8B3; }
+.qbtn.sanction-excl { background: #FFF5E0; color: #B8860B; border: 1.5px solid #FFD980; }
+.qbtn.sanction-disq { background: #E6EEF8; color: #0B2D6E; border: 1.5px solid #AABFEA; }
+.qbtn.ev-trc { background: #FEF3E8; color: #B8540A; border: 1.5px solid #F5CFA0; }
+.qbtn.ev-erreur { background: var(--rouge-light); color: var(--rouge); border: 1.5px solid #F5B8B3; }
+.qbtn.ev-position { background: var(--bleu-light); color: var(--bleu); border: 1.5px solid #AABFEA; }
+.qbtn.ev-comms { background: var(--vert-light); color: var(--vert); border: 1.5px solid #9FD4B8; }
+.qbtn.ev-positif { background: #E6F5EC; color: #1A7A4A; border: 1.5px solid #9FD4B8; }
+.qbtn.ev-gestion { background: #EEEDFE; color: #534AB7; border: 1.5px solid #BBBAF0; }
+.qbtn.ev-neutre { background: var(--gris); color: var(--gris-dark); border: 1.5px solid var(--gris-mid); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(11,45,110,0.55);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--blanc);
+  border-radius: 18px 18px 0 0;
+  width: 100%;
+  max-width: 520px;
+  padding: 18px 16px 30px;
+  animation: slideUp 0.22s ease-out;
+}
+@keyframes slideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.modal-handle {
+  width: 36px;
+  height: 4px;
+  background: var(--gris-mid);
+  border-radius: 2px;
+  margin: 0 auto 14px;
+}
+.modal-title {
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--bleu);
+  margin-bottom: 12px;
+  text-align: center;
+}
+.modal-type-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 20px;
+  margin-bottom: 12px;
+}
+.modal-fields { display: flex; flex-direction: column; gap: 8px; }
+.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.modal-textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--noir);
+  resize: none;
+  outline: none;
+  min-height: 70px;
+}
+.modal-textarea:focus { border-color: var(--bleu-mid); }
+.modal-actions { display: flex; gap: 8px; margin-top: 14px; }
+.btn-cancel {
+  flex: 1;
+  padding: 11px;
+  border-radius: 9px;
+  border: 1.5px solid var(--border);
+  background: var(--blanc);
+  color: var(--gris-dark);
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.btn-save {
+  flex: 2;
+  padding: 11px;
+  border-radius: 9px;
+  border: none;
+  background: var(--bleu);
+  color: #fff;
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.btn-save:hover { background: var(--bleu-mid); }
+
+/* ── TIMELINE ── */
+.timeline-list { padding: 6px 0; }
+.timeline-empty {
+  text-align: center;
+  padding: 22px;
+  color: var(--gris-mid);
+  font-size: 13px;
+}
+.t-event {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--gris);
+  transition: background 0.1s;
+}
+.t-event:last-child { border-bottom: none; }
+.t-event:hover { background: var(--gris); }
+.t-time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gris-dark);
+  min-width: 38px;
+  padding-top: 2px;
+}
+.t-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+}
+.t-body { flex: 1; }
+.t-type {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--noir);
+  line-height: 1.3;
+}
+.t-desc {
+  font-size: 11px;
+  color: var(--gris-dark);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.t-tags { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; }
+.t-tag {
+  font-size: 10px;
+  padding: 1px 7px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.tag-sanction { background: #FEF3E8; color: #B8540A; }
+.tag-erreur { background: var(--rouge-light); color: var(--rouge); }
+.tag-position { background: var(--bleu-light); color: var(--bleu); }
+.tag-comms { background: var(--vert-light); color: var(--vert); }
+.tag-positif { background: #E6F5EC; color: #1A7A4A; }
+.tag-gestion { background: #EEEDFE; color: #534AB7; }
+.tag-neutre { background: var(--gris); color: var(--gris-dark); }
+.t-delete {
+  background: none;
+  border: none;
+  color: var(--gris-mid);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+  transition: color 0.1s;
+}
+.t-delete:hover { color: var(--rouge); }
+
+/* ── NOTATION RAPIDE ARBITRES ── */
+.notation-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 10px 12px;
+}
+.nota-block {
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  padding: 10px;
+}
+.nota-name {
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bleu);
+  margin-bottom: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nota-criterion { margin-bottom: 7px; }
+.nota-crit-label {
+  font-size: 10px;
+  color: var(--gris-dark);
+  margin-bottom: 3px;
+}
+.nota-stars { display: flex; gap: 3px; }
+.star {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  border: 1.5px solid var(--border);
+  background: var(--gris);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  transition: all 0.1s;
+  color: var(--gris-mid);
+}
+.star.on { background: var(--bleu); border-color: var(--bleu); color: #fff; }
+.star:hover { border-color: var(--bleu-mid); }
+
+/* ── NOTES ── */
+.notes-area { padding: 10px 14px; }
+.notes-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--bleu);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 5px;
+}
+.notes-textarea {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 9px 11px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--noir);
+  resize: none;
+  outline: none;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.notes-textarea:focus { border-color: var(--bleu-mid); }
+
+/* ── RECAP PAGE ── */
+.recap-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  padding: 12px 12px;
+}
+.stat-box {
+  background: var(--blanc);
+  border-radius: 9px;
+  box-shadow: var(--shadow);
+  padding: 10px 6px;
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--bleu);
+}
+.stat-label {
+  font-size: 10px;
+  color: var(--gris-dark);
+  margin-top: 2px;
+  line-height: 1.3;
+}
+.stat-box.rouge .stat-num { color: var(--rouge); }
+.stat-box.vert .stat-num { color: var(--vert); }
+.stat-box.jaune .stat-num { color: var(--jaune); }
+
+.recap-section { padding: 10px 14px; }
+.recap-section-title {
+  font-family: var(--font-head);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--bleu);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+.notation-recap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.nota-recap-block {
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 9px;
+}
+.nota-recap-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--noir);
+  margin-bottom: 6px;
+}
+.nota-recap-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+.nota-recap-crit { font-size: 11px; color: var(--gris-dark); }
+.nota-recap-dots { display: flex; gap: 2px; }
+.rdot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+}
+.rdot.on { background: var(--bleu); }
+
+/* ── BILAN GLOBAL ── */
+.bilan-grid { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 0 14px 12px; }
+.bilan-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+}
+.bilan-icon { font-size: 18px; }
+.bilan-label { font-size: 12px; color: var(--gris-dark); flex: 1; }
+.bilan-select {
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1.5px solid var(--border);
+  background: var(--blanc);
+  color: var(--noir);
+  font-family: var(--font-body);
+  outline: none;
+}
+
+/* ── ACTIONS BAS ── */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--blanc);
+  border-top: 1px solid var(--border);
+  padding: 10px 12px;
+  display: flex;
+  gap: 8px;
+  z-index: 100;
+  box-shadow: 0 -2px 12px rgba(11,45,110,0.1);
+}
+.bar-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 9px;
+  border: none;
+  font-family: var(--font-head);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: all 0.1s;
+}
+.bar-btn:active { transform: scale(0.97); }
+.bar-btn.secondary { background: var(--gris); color: var(--bleu); border: 1.5px solid var(--border); }
+.bar-btn.primary { background: var(--bleu); color: #fff; }
+.bar-btn.success { background: var(--vert); color: #fff; }
+.bar-btn.danger { background: var(--rouge); color: #fff; }
+
+/* ── PRINT ── */
+@media print {
+  .app-header, .bottom-bar, .quick-btns, .modal-overlay { display: none !important; }
+  body { background: #fff; }
+  .page { display: block !important; padding: 0; }
+  .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
+}
+
+/* ── Dots couleur event ── */
+.dot-yellow { background: var(--jaune); }
+.dot-red { background: var(--rouge); }
+.dot-blue { background: var(--bleu-mid); }
+.dot-green { background: var(--vert); }
+.dot-purple { background: #534AB7; }
+.dot-orange { background: #D4770A; }
+.dot-gray { background: var(--gris-dark); }
+
+  .logo-badge {
+    width: 75px;
+    height: 75px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: white;
+    flex-shrink: 0;
+    letter-spacing: 1px;
+  }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--blanc);
+    line-height: 1;
+  }
+
+  .header-text p {
+    font-size: 0.72rem;
+    color: var(--texte-doux);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .header-contact {
+    margin-left: auto;
+    font-size: 0.78rem;
+    color: var(--texte-doux);
+    text-align: right;
+    line-height: 1.7;
+  }
+
+  .header-contact strong {
+    color: var(--accent);
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  /* NAV SECONDAIRE */
+  .subnav {
+    padding: 0 3rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+    gap: 0;
+  }
+
+  .subnav a {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--texte-doux);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .subnav a.active,
+  .subnav a:hover {
+    color: var(--blanc);
+    border-bottom-color: var(--bleu);
+  }
+
+  /* BANDE DÉCORATIVE HAUT */
+  .top-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+  
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  
+  header {
+    padding: 2.5rem 3rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid #222;
+    position: relative;
+  }
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <img class="logo-badge" src="MHB_logo.png"/>
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+    <p>Suivi d'arbitre en direct pendant un match</p>
+  </div>
+</header>
+
+  <nav class="subnav">
+    <a href="index.html" class="active">Accueil</a>
+    <a href="ressources.html">Fiches d'aide</a>
+    <a href="commission.html">Commission</a>
+  </nav>
+<header class="app-header">
+  <div style="padding: 0 12px 10px; display:flex; align-items:center; justify-content:space-between;">
+    <div class="header-steps">
+      <button class="step-btn active" onclick="showPage('prep', this)">Préparation</button>
+      <button class="step-btn" onclick="showPage('match', this)">Match</button>
+      <button class="step-btn" onclick="showPage('recap', this)">Bilan</button>
+    </div>
+    <span id="live-date" style="font-size:11px; color:rgba(255,255,255,0.5); font-family: var(--font-mono);"></span>
+  </div>
+</header>
+
+<!-- ══ SCORE BAR ══ -->
+<div class="score-bar">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+    <div class="score-team" id="team-a-name" style="font-size:11px; max-width:80px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Équipe A</div>
+    <div style="font-size:9px; color:rgba(255,255,255,0.5);">Domicile</div>
+    <div style="display:flex; gap:4px;">
+      <button class="score-btn" onclick="changeScore('a', -1)" style="width:28px; height:28px; font-size:16px;">−</button>
+      <span class="score-num" id="score-a" style="font-size:26px; min-width:30px; text-align:center;">0</span>
+      <button class="score-btn" onclick="changeScore('a', 1)" style="width:28px; height:28px; font-size:16px;">+</button>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; align-items:center; gap:3px; margin: 0 6px;">
+    <span style="font-size:20px; color:rgba(255,255,255,0.4);">–</span>
+    <div class="chrono" id="chrono-display" style="font-size:17px;">00:00</div>
+    <div class="periode-badge" id="periode-label">1ère mi-temps</div>
+    <div class="chrono-controls">
+      <button class="chrono-ctrl" id="chrono-start-btn" onclick="toggleChrono()">▶</button>
+      <button class="chrono-ctrl" onclick="resetChrono()">⟳</button>
+      <button class="chrono-ctrl" onclick="switchPeriode()">½</button>
+    </div>
+  </div>
+
+  <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+    <div class="score-team right" id="team-b-name" style="font-size:11px; max-width:80px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Équipe B</div>
+    <div style="font-size:9px; color:rgba(255,255,255,0.5);">Extérieur</div>
+    <div style="display:flex; gap:4px;">
+      <button class="score-btn" onclick="changeScore('b', -1)" style="width:28px; height:28px; font-size:16px;">−</button>
+      <span class="score-num" id="score-b" style="font-size:26px; min-width:30px; text-align:center;">0</span>
+      <button class="score-btn" onclick="changeScore('b', 1)" style="width:28px; height:28px; font-size:16px;">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 1 — PRÉPARATION
+══════════════════════════════════ -->
+<div class="page active" id="page-prep">
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📋</div>
+      <span class="card-title">Informations du match</span>
+    </div>
+    <div class="form-grid">
+      <div>
+        <div class="field-label">Date</div>
+        <input type="date" class="field-input" id="f-date">
+      </div>
+      <div>
+        <div class="field-label">Lieu / Gymnase</div>
+        <input type="text" class="field-input" id="f-lieu" placeholder="Gymnase…">
+      </div>
+      <div>
+        <div class="field-label">Équipe A (domicile)</div>
+        <input type="text" class="field-input" id="f-equipe-a" placeholder="Équipe domicile" oninput="updateTeamNames()">
+      </div>
+      <div>
+        <div class="field-label">Équipe B (extérieur)</div>
+        <input type="text" class="field-input" id="f-equipe-b" placeholder="Équipe extérieur" oninput="updateTeamNames()">
+      </div>
+      <div>
+        <div class="field-label">Catégorie</div>
+        <select class="field-select" id="f-categorie">
+          <option value="">— choisir —</option>
+          <option>-9 ans mixte</option>
+          <option>-11 ans mixte</option>
+          <option>-13 ans garçons</option>
+          <option>-13 ans filles</option>
+          <option>-15 ans garçons</option>
+          <option>-15 ans filles</option>
+          <option>-17 ans garçons</option>
+          <option>-17 ans filles</option>
+          <option>Séniors masculins</option>
+          <option>Séniors féminines</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">Durée mi-temps (min)</div>
+        <select class="field-select" id="f-duree-mitemps" onchange="applyChronoConfig()">
+          <option value="12">3 × 12 min — -11 ans</option>
+          <option value="20">2 × 20 min — -13 ans</option>
+          <option value="25" selected>2 × 25 min — -15 ans</option>
+          <option value="30">2 × 30 min — -18 ans</option>
+          <option value="custom">Personnalisé…</option>
+        </select>
+      </div>
+      <div id="f-duree-custom-wrap" style="display:none;">
+        <div class="field-label">Durée personnalisée (min)</div>
+        <input type="number" class="field-input" id="f-duree-custom" min="1" max="60" value="25" placeholder="Minutes" onchange="applyChronoConfig()">
+      </div>
+      <div>
+        <div class="field-label">Compétition</div>
+        <select class="field-select" id="f-compet">
+          <option value="">— choisir —</option>
+          <option>Championnat régional</option>
+          <option>Coupe Jacques Battu</option>
+          <option>Tournoi interne</option>
+          <option>Match amical</option>
+          <option>Autre</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🧑‍⚖️</div>
+      <span class="card-title">Arbitres observés</span>
+    </div>
+    <div class="arbitres-row">
+      <div class="arbitre-block">
+        <div class="arbitre-block-title">Arbitre 1</div>
+        <div class="field-label">Nom</div>
+        <input type="text" class="field-input" id="f-arb1-nom" placeholder="Prénom NOM" style="margin-bottom:6px;">
+        <div class="field-label">Niveau</div>
+        <select class="field-select" id="f-arb1-niveau">
+          <option value="">—</option>
+          <option>JAJ Club</option>
+          <option>JAJ T3</option>
+          <option>JAJ T1-T2</option>
+        </select>
+      </div>
+      <div class="arbitre-block">
+        <div class="arbitre-block-title">Arbitre 2</div>
+        <div class="field-label">Nom</div>
+        <input type="text" class="field-input" id="f-arb2-nom" placeholder="Prénom NOM" style="margin-bottom:6px;">
+        <div class="field-label">Niveau</div>
+        <select class="field-select" id="f-arb2-niveau">
+          <option value="">—</option>
+          <option>JAJ Club</option>
+          <option>JAJ T3</option>
+          <option>JAJ T1-T2</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid" style="padding-top:0;">
+      <div>
+        <div class="field-label">Formateur / Observateur</div>
+        <select class="field-select" id="f-formateur">
+          <option value="">— choisir —</option>
+          <option>Xavier FINI</option>
+          <option>Patrick CHENEVIERE</option>
+          <option>Simon DESAILLOUD</option>
+          <option>Elsa GAIDET</option>
+          <option>Jules MARTEL</option>
+          <option>Antoine MELIAND</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">Arbitre principalement suivi</div>
+        <select class="field-select" id="f-suivi">
+          <option value="les deux">Les deux</option>
+          <option value="arb1">Arbitre 1</option>
+          <option value="arb2">Arbitre 2</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📝</div>
+      <span class="card-title">Objectifs du suivi</span>
+    </div>
+    <div class="notes-area">
+      <div class="notes-label">Points à observer en priorité</div>
+      <textarea class="notes-textarea" id="f-objectifs" rows="3" placeholder="Ex : positionnement côté attaque, gestion des sanctions, communication binôme…"></textarea>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 2 — MATCH
+══════════════════════════════════ -->
+<div class="page" id="page-match">
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">⚡</div>
+      <span class="card-title">Saisie rapide</span>
+    </div>
+    <div class="quick-btns">
+      <button class="qbtn sanction-yellow" onclick="openModal('Avertissement', 'tag-sanction')"><span class="qicon">🟨</span>Avertisse-ment</button>
+      <button class="qbtn sanction-excl" onclick="openModal('Exclusion 2 min', 'tag-sanction')"><span class="qicon">⏱️</span>Exclusion 2'</button>
+      <button class="qbtn sanction-red" onclick="openModal('Carton rouge', 'tag-sanction')"><span class="qicon">🟥</span>Carton rouge</button>
+      <button class="qbtn sanction-disq" onclick="openModal('Carton bleu', 'tag-sanction')"><span class="qicon">🟦</span>Carton bleu</button>
+      <button class="qbtn ev-erreur" onclick="openModal('Erreur / décision manquée', 'tag-erreur')"><span class="qicon">❌</span>Erreur déc.</button>
+      <button class="qbtn ev-positif" onclick="openModal('Point positif', 'tag-positif')"><span class="qicon">✅</span>Point +</button>
+      <button class="qbtn ev-position" onclick="openModal('Positionnement', 'tag-position')"><span class="qicon">📍</span>Position</button>
+      <button class="qbtn ev-comms" onclick="openModal('Communication binôme', 'tag-comms')"><span class="qicon">🤝</span>Communic.</button>
+      <button class="qbtn ev-gestion" onclick="openModal('Gestion du jeu', 'tag-gestion')"><span class="qicon">🎯</span>Gestion jeu</button>
+      <button class="qbtn ev-trc" onclick="openModal('TRC — Temps de Régulation Comportemental', 'tag-neutre')"><span class="qicon">🛑</span>TRC</button>
+      <button class="qbtn ev-neutre" onclick="openModal('Temps mort équipe', 'tag-neutre')"><span class="qicon">⏸️</span>Temps mort</button>
+      <button class="qbtn ev-neutre" onclick="openModal('Note libre', 'tag-neutre')"><span class="qicon">🗒️</span>Note libre</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📋</div>
+      <span class="card-title">Événements du match</span>
+      <span class="card-count" id="event-count">0</span>
+    </div>
+    <div class="timeline-list" id="timeline">
+      <div class="timeline-empty" id="timeline-empty">Aucun événement — utilise les boutons ci-dessus</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🤝</div>
+      <span class="card-title">Notation communication</span>
+    </div>
+    <div class="notation-grid" id="notation-grid">
+      <!-- généré JS -->
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">💬</div>
+      <span class="card-title">Notes mi-temps</span>
+    </div>
+    <div class="notes-area">
+      <textarea class="notes-textarea" id="notes-mitemps" rows="3" placeholder="Points évoqués à la mi-temps avec les arbitres…"></textarea>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 3 — BILAN
+══════════════════════════════════ -->
+<div class="page" id="page-recap">
+
+  <div class="recap-stats">
+    <div class="stat-box jaune">
+      <div class="stat-num" id="stat-sanctions">0</div>
+      <div class="stat-label">Sanctions données</div>
+    </div>
+    <div class="stat-box rouge">
+      <div class="stat-num" id="stat-erreurs">0</div>
+      <div class="stat-label">Erreurs / décisions manquées</div>
+    </div>
+    <div class="stat-box vert">
+      <div class="stat-num" id="stat-positifs">0</div>
+      <div class="stat-label">Points positifs</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-num" id="stat-total">0</div>
+      <div class="stat-label">Événements total</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📊</div>
+      <span class="card-title">Notation finale — communication</span>
+    </div>
+    <div class="notation-recap" id="notation-recap" style="padding:12px;">
+      <!-- généré JS -->
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🏆</div>
+      <span class="card-title">Bilan global du match</span>
+    </div>
+    <div class="bilan-grid" style="padding-top:10px;">
+      <div class="bilan-row">
+        <span class="bilan-icon">⚖️</span>
+        <span class="bilan-label">Qualité arbitrale générale</span>
+        <select class="bilan-select" id="bilan-qualite">
+          <option value="">—</option>
+          <option>Très bien</option>
+          <option>Bien</option>
+          <option>En progression</option>
+          <option>À retravailler</option>
+          <option>Insuffisant</option>
+        </select>
+      </div>
+      <div class="bilan-row">
+        <span class="bilan-icon">🧭</span>
+        <span class="bilan-label">Gestion du match</span>
+        <select class="bilan-select">
+          <option value="">—</option>
+          <option>Très bien</option>
+          <option>Bien</option>
+          <option>En progression</option>
+          <option>À retravailler</option>
+        </select>
+      </div>
+      <div class="bilan-row">
+        <span class="bilan-icon">📍</span>
+        <span class="bilan-label">Positionnements</span>
+        <select class="bilan-select">
+          <option value="">—</option>
+          <option>Très bien</option>
+          <option>Bien</option>
+          <option>En progression</option>
+          <option>À retravailler</option>
+        </select>
+      </div>
+      <div class="bilan-row">
+        <span class="bilan-icon">🤝</span>
+        <span class="bilan-label">Travail en binôme</span>
+        <select class="bilan-select">
+          <option value="">—</option>
+          <option>Très bien</option>
+          <option>Bien</option>
+          <option>En progression</option>
+          <option>À retravailler</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📝</div>
+      <span class="card-title">Bilan écrit et axes de progression</span>
+    </div>
+    <div class="notes-area">
+      <div class="notes-label">Points forts observés</div>
+      <textarea class="notes-textarea" id="bilan-positif" rows="3" placeholder="Ce qui a bien fonctionné, les décisions réussies…"></textarea>
+      <div class="notes-label">Axes de progression prioritaires</div>
+      <textarea class="notes-textarea" id="bilan-axes" rows="3" placeholder="Ce qu'on retravaille ensemble pour le prochain match…"></textarea>
+      <div class="notes-label">Message à l'arbitre</div>
+      <textarea class="notes-textarea" id="bilan-message" rows="2" placeholder="Encouragements, consignes pour la suite…"></textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">📋</div>
+      <span class="card-title">Timeline complète du match</span>
+    </div>
+    <div class="timeline-list" id="timeline-recap"></div>
+  </div>
+
+</div>
+
+<!-- ══ MODAL SAISIE ÉVÉNEMENT ══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBg(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Ajouter un événement</div>
+    <div style="text-align:center; margin-bottom:10px;">
+      <span class="modal-type-badge" id="modal-type-badge">Type</span>
+    </div>
+    <div class="modal-fields">
+      <div class="modal-row">
+        <div>
+          <div class="field-label">Arbitre concerné</div>
+          <select class="field-select" id="modal-arbitre" style="width:100%;">
+            <option value="les deux">Les deux</option>
+            <option value="arb1" id="modal-arb1-opt">Arbitre 1</option>
+            <option value="arb2" id="modal-arb2-opt">Arbitre 2</option>
+          </select>
+        </div>
+        <div>
+          <div class="field-label">Minute</div>
+          <input type="text" class="field-input" id="modal-minute" placeholder="auto" readonly style="background:var(--gris); color:var(--gris-dark);">
+        </div>
+      </div>
+      <div>
+        <div class="field-label">N° joueur (si sanction)</div>
+        <input type="text" class="field-input" id="modal-joueur" placeholder="Ex : n°7 — Équipe A">
+      </div>
+      <div>
+        <div class="field-label">Description / Observation</div>
+        <textarea class="modal-textarea" id="modal-desc" placeholder="Décris rapidement ce que tu observes…" rows="3"></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn-save" onclick="saveEvent()">✓ Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BARRE BAS ══ -->
+<div class="bottom-bar">
+  <button class="bar-btn secondary" onclick="window.print()">🖨️ Imprimer</button>
+  <button class="bar-btn primary" onclick="exportJSON()">💾 Sauvegarder</button>
+  <button class="bar-btn success" onclick="showPage('recap', document.querySelectorAll('.step-btn')[2])">📊 Bilan</button>
+</div>
+
+<script>
+/* ══ STATE ══ */
+const state = {
+  events: [],
+  scores: { a: 0, b: 0 },
+  chrono: { seconds: 0, maxSeconds: 25 * 60, running: false, periode: 1, interval: null, countDown: false },
+  ratings: {
+    arb1: { verbaux: 0, gestuels: 0, decision: 0, deplacement: 0, concentration: 0 },
+    arb2: { verbaux: 0, gestuels: 0, decision: 0, deplacement: 0, concentration: 0 }
+  },
+  modal: { type: '', tagClass: '' }
+};
+
+const CRITERIA = [
+  { key: 'verbaux', label: 'Appels verbaux' },
+  { key: 'gestuels', label: 'Signaux gestuels' },
+  { key: 'decision', label: 'Prise de décision' },
+  { key: 'deplacement', label: 'Déplacements' },
+  { key: 'concentration', label: 'Concentration' }
+];
+
+const DOT_COLORS = {
+  'tag-sanction': 'dot-orange',
+  'tag-erreur': 'dot-red',
+  'tag-position': 'dot-blue',
+  'tag-comms': 'dot-green',
+  'tag-positif': 'dot-green',
+  'tag-gestion': 'dot-purple',
+  'tag-neutre': 'dot-gray'
+};
+
+/* ══ INIT ══ */
+document.addEventListener('DOMContentLoaded', () => {
+  const d = new Date();
+  document.getElementById('f-date').value = d.toISOString().split('T')[0];
+  document.getElementById('live-date').textContent = d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
+  buildNotationGrid();
+  updateStats();
+});
+
+/* ══ PAGES ══ */
+function showPage(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'recap') updateRecap();
+}
+
+/* ══ SCORE ══ */
+function changeScore(team, delta) {
+  state.scores[team] = Math.max(0, state.scores[team] + delta);
+  document.getElementById('score-' + team).textContent = state.scores[team];
+}
+
+function updateTeamNames() {
+  const a = document.getElementById('f-equipe-a').value || 'Équipe A';
+  const b = document.getElementById('f-equipe-b').value || 'Équipe B';
+  document.getElementById('team-a-name').textContent = a;
+  document.getElementById('team-b-name').textContent = b;
+}
+
+/* ══ CHRONO CONFIG ══ */
+function applyChronoConfig() {
+  const sel = document.getElementById('f-duree-mitemps');
+  const customWrap = document.getElementById('f-duree-custom-wrap');
+  let minutes;
+  if (sel.value === 'custom') {
+    customWrap.style.display = 'block';
+    minutes = parseInt(document.getElementById('f-duree-custom').value) || 25;
+  } else {
+    customWrap.style.display = 'none';
+    minutes = parseInt(sel.value) || 25;
+  }
+  state.chrono.maxSeconds = minutes * 60;
+  if (!state.chrono.running) {
+    state.chrono.seconds = 0;
+    updateChronoDisplay();
+  }
+}
+
+/* ══ CHRONO ══ */
+function toggleChrono() {
+  if (state.chrono.running) {
+    clearInterval(state.chrono.interval);
+    state.chrono.running = false;
+    document.getElementById('chrono-start-btn').textContent = '▶';
+  } else {
+    state.chrono.interval = setInterval(() => {
+      state.chrono.seconds++;
+      updateChronoDisplay();
+    }, 1000);
+    state.chrono.running = true;
+    document.getElementById('chrono-start-btn').textContent = '⏸';
+  }
+}
+function resetChrono() {
+  clearInterval(state.chrono.interval);
+  state.chrono.running = false;
+  state.chrono.seconds = 0;
+  document.getElementById('chrono-start-btn').textContent = '▶';
+  updateChronoDisplay();
+}
+function switchPeriode() {
+  clearInterval(state.chrono.interval);
+  state.chrono.running = false;
+  state.chrono.seconds = 0;
+  const duree = document.getElementById('f-duree-mitemps').value;
+  const maxPeriodes = duree === '12' ? 3 : 2;
+  state.chrono.periode = state.chrono.periode >= maxPeriodes ? 1 : state.chrono.periode + 1;
+  document.getElementById('chrono-start-btn').textContent = '▶';
+  const labels = ['1ère période', '2ème période', '3ème période'];
+  document.getElementById('periode-label').textContent = labels[state.chrono.periode - 1] || (state.chrono.periode + 'ème période');
+  updateChronoDisplay();
+}
+function updateChronoDisplay() {
+  const elapsed = state.chrono.seconds;
+  const max = state.chrono.maxSeconds;
+  const remaining = Math.max(0, max - elapsed);
+  const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+  const s = (remaining % 60).toString().padStart(2, '0');
+  const el = document.getElementById('chrono-display');
+  el.textContent = m + ':' + s;
+  el.style.color = remaining <= 60 ? '#FFD980' : '#fff';
+  if (remaining === 0 && state.chrono.running) {
+    clearInterval(state.chrono.interval);
+    state.chrono.running = false;
+    document.getElementById('chrono-start-btn').textContent = '▶';
+    document.getElementById('periode-label').textContent = state.chrono.periode === 1 ? 'Mi-temps !' : 'Fin du match !';
+  }
+}
+function getCurrentTime() {
+  const elapsed = state.chrono.seconds;
+  const m = Math.floor(elapsed / 60).toString().padStart(2, '0');
+  const s = (elapsed % 60).toString().padStart(2, '0');
+  return m + ':' + s + ' (P' + state.chrono.periode + ')';
+}
+
+/* ══ MODAL ══ */
+const tagLabels = {
+  'tag-sanction': 'Sanction',
+  'tag-erreur': 'Erreur',
+  'tag-position': 'Positionnement',
+  'tag-comms': 'Communication',
+  'tag-positif': 'Point positif',
+  'tag-gestion': 'Gestion du jeu',
+  'tag-neutre': 'Note'
+};
+const tagBgColors = {
+  'tag-sanction': '#FEF3E8',
+  'tag-erreur': '#FAEAE8',
+  'tag-position': '#E8EEF8',
+  'tag-comms': '#E6F5EC',
+  'tag-positif': '#E6F5EC',
+  'tag-gestion': '#EEEDFE',
+  'tag-neutre': '#F2F3F5'
+};
+const tagTextColors = {
+  'tag-sanction': '#B8540A',
+  'tag-erreur': '#C0392B',
+  'tag-position': '#0B2D6E',
+  'tag-comms': '#1A7A4A',
+  'tag-positif': '#1A7A4A',
+  'tag-gestion': '#534AB7',
+  'tag-neutre': '#6B7280'
+};
+
+function openModal(type, tagClass) {
+  state.modal = { type, tagClass };
+  document.getElementById('modal-title').textContent = type;
+  const badge = document.getElementById('modal-type-badge');
+  badge.textContent = tagLabels[tagClass] || 'Note';
+  badge.style.background = tagBgColors[tagClass] || '#F2F3F5';
+  badge.style.color = tagTextColors[tagClass] || '#6B7280';
+  document.getElementById('modal-minute').value = getCurrentTime() + ' — P' + state.chrono.periode;
+  const arb1 = document.getElementById('f-arb1-nom').value || 'Arbitre 1';
+  const arb2 = document.getElementById('f-arb2-nom').value || 'Arbitre 2';
+  document.getElementById('modal-arb1-opt').textContent = arb1;
+  document.getElementById('modal-arb2-opt').textContent = arb2;
+  document.getElementById('modal-desc').value = '';
+  document.getElementById('modal-joueur').value = '';
+  document.getElementById('modal-overlay').classList.add('open');
+  setTimeout(() => document.getElementById('modal-desc').focus(), 300);
+}
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+function closeModalOnBg(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+function saveEvent() {
+  const desc = document.getElementById('modal-desc').value.trim();
+  const joueur = document.getElementById('modal-joueur').value.trim();
+  const arbitre = document.getElementById('modal-arbitre').value;
+  const time = document.getElementById('modal-minute').value;
+  const ev = {
+    id: Date.now(),
+    type: state.modal.type,
+    tagClass: state.modal.tagClass,
+    time,
+    desc,
+    joueur,
+    arbitre
+  };
+  state.events.unshift(ev);
+  closeModal();
+  renderTimeline();
+  updateStats();
+}
+
+/* ══ TIMELINE ══ */
+function renderTimeline() {
+  const container = document.getElementById('timeline');
+  const empty = document.getElementById('timeline-empty');
+  if (state.events.length === 0) {
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  container.innerHTML = '<div class="timeline-empty" id="timeline-empty" style="display:none;"></div>';
+  state.events.forEach(ev => {
+    const el = document.createElement('div');
+    el.className = 't-event';
+    const arb1 = document.getElementById('f-arb1-nom').value || 'Arb 1';
+    const arb2 = document.getElementById('f-arb2-nom').value || 'Arb 2';
+    const arbLabel = ev.arbitre === 'arb1' ? arb1 : ev.arbitre === 'arb2' ? arb2 : 'Binôme';
+    el.innerHTML = `
+      <span class="t-time">${ev.time}</span>
+      <span class="t-dot ${DOT_COLORS[ev.tagClass] || 'dot-gray'}"></span>
+      <div class="t-body">
+        <div class="t-type">${ev.type}${ev.joueur ? ' — <span style="color:var(--gris-dark);font-weight:400;">' + ev.joueur + '</span>' : ''}</div>
+        ${ev.desc ? `<div class="t-desc">${ev.desc}</div>` : ''}
+        <div class="t-tags">
+          <span class="t-tag ${ev.tagClass}">${tagLabels[ev.tagClass] || 'Note'}</span>
+          <span class="t-tag tag-neutre">${arbLabel}</span>
+        </div>
+      </div>
+      <button class="t-delete" onclick="deleteEvent(${ev.id})" title="Supprimer">×</button>
+    `;
+    container.appendChild(el);
+  });
+}
+function deleteEvent(id) {
+  state.events = state.events.filter(e => e.id !== id);
+  renderTimeline();
+  updateStats();
+}
+
+/* ══ NOTATION GRID ══ */
+function buildNotationGrid() {
+  const grid = document.getElementById('notation-grid');
+  if (!grid) return;
+  ['arb1', 'arb2'].forEach(arb => {
+    const block = document.createElement('div');
+    block.className = 'nota-block';
+    const nameEl = document.createElement('div');
+    nameEl.className = 'nota-name';
+    nameEl.id = 'nota-name-' + arb;
+    nameEl.textContent = arb === 'arb1' ? 'Arbitre 1' : 'Arbitre 2';
+    block.appendChild(nameEl);
+    CRITERIA.forEach(crit => {
+      const row = document.createElement('div');
+      row.className = 'nota-criterion';
+      row.innerHTML = `<div class="nota-crit-label">${crit.label}</div>`;
+      const stars = document.createElement('div');
+      stars.className = 'nota-stars';
+      for (let i = 1; i <= 5; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        s.textContent = i;
+        s.dataset.arb = arb;
+        s.dataset.crit = crit.key;
+        s.dataset.val = i;
+        s.onclick = function() { setRating(arb, crit.key, i); };
+        stars.appendChild(s);
+      }
+      row.appendChild(stars);
+      block.appendChild(row);
+    });
+    grid.appendChild(block);
+  });
+  syncNotaNames();
+}
+function syncNotaNames() {
+  const a1 = document.getElementById('f-arb1-nom');
+  const a2 = document.getElementById('f-arb2-nom');
+  if (!a1) return;
+  const n1 = document.getElementById('nota-name-arb1');
+  const n2 = document.getElementById('nota-name-arb2');
+  if (n1 && a1.value) n1.textContent = a1.value;
+  if (n2 && a2 && a2.value) n2.textContent = a2.value;
+  a1.addEventListener('input', () => { if (n1) n1.textContent = a1.value || 'Arbitre 1'; });
+  if (a2) a2.addEventListener('input', () => { if (n2) n2.textContent = a2.value || 'Arbitre 2'; });
+}
+function setRating(arb, crit, val) {
+  state.ratings[arb][crit] = val;
+  document.querySelectorAll(`.star[data-arb="${arb}"][data-crit="${crit}"]`).forEach(s => {
+    s.classList.toggle('on', parseInt(s.dataset.val) <= val);
+  });
+}
+
+/* ══ STATS ══ */
+function updateStats() {
+  const sanctions = state.events.filter(e => e.tagClass === 'tag-sanction').length;
+  const erreurs = state.events.filter(e => e.tagClass === 'tag-erreur').length;
+  const positifs = state.events.filter(e => e.tagClass === 'tag-positif').length;
+  document.getElementById('stat-sanctions').textContent = sanctions;
+  document.getElementById('stat-erreurs').textContent = erreurs;
+  document.getElementById('stat-positifs').textContent = positifs;
+  document.getElementById('stat-total').textContent = state.events.length;
+  document.getElementById('event-count').textContent = state.events.length;
+}
+
+/* ══ RECAP ══ */
+function updateRecap() {
+  updateStats();
+  const recapTimeline = document.getElementById('timeline-recap');
+  if (state.events.length === 0) {
+    recapTimeline.innerHTML = '<div class="timeline-empty">Aucun événement enregistré</div>';
+  } else {
+    recapTimeline.innerHTML = '';
+    [...state.events].reverse().forEach(ev => {
+      const el = document.createElement('div');
+      el.className = 't-event';
+      const arb1 = document.getElementById('f-arb1-nom').value || 'Arb 1';
+      const arb2 = document.getElementById('f-arb2-nom').value || 'Arb 2';
+      const arbLabel = ev.arbitre === 'arb1' ? arb1 : ev.arbitre === 'arb2' ? arb2 : 'Binôme';
+      el.innerHTML = `
+        <span class="t-time">${ev.time}</span>
+        <span class="t-dot ${DOT_COLORS[ev.tagClass] || 'dot-gray'}"></span>
+        <div class="t-body">
+          <div class="t-type">${ev.type}${ev.joueur ? ' — <span style="color:var(--gris-dark);">' + ev.joueur + '</span>' : ''}</div>
+          ${ev.desc ? `<div class="t-desc">${ev.desc}</div>` : ''}
+          <div class="t-tags">
+            <span class="t-tag ${ev.tagClass}">${tagLabels[ev.tagClass]||'Note'}</span>
+            <span class="t-tag tag-neutre">${arbLabel}</span>
+          </div>
+        </div>
+      `;
+      recapTimeline.appendChild(el);
+    });
+  }
+  const recapNota = document.getElementById('notation-recap');
+  recapNota.innerHTML = '';
+  ['arb1', 'arb2'].forEach(arb => {
+    const nameInput = document.getElementById('f-arb' + (arb === 'arb1' ? '1' : '2') + '-nom');
+    const name = nameInput ? (nameInput.value || (arb === 'arb1' ? 'Arbitre 1' : 'Arbitre 2')) : arb;
+    const block = document.createElement('div');
+    block.className = 'nota-recap-block';
+    block.innerHTML = `<div class="nota-recap-name">${name}</div>`;
+    CRITERIA.forEach(crit => {
+      const val = state.ratings[arb][crit.key];
+      const row = document.createElement('div');
+      row.className = 'nota-recap-row';
+      let dots = '<div class="nota-recap-dots">';
+      for (let i = 1; i <= 5; i++) dots += `<div class="rdot${i <= val ? ' on' : ''}"></div>`;
+      dots += '</div>';
+      row.innerHTML = `<span class="nota-recap-crit">${crit.label}</span>${dots}`;
+      block.appendChild(row);
+    });
+    recapNota.appendChild(block);
+  });
+}
+
+/* ══ EXPORT ══ */
+function exportJSON() {
+  const data = {
+    match: {
+      date: document.getElementById('f-date').value,
+      lieu: document.getElementById('f-lieu').value,
+      equipeA: document.getElementById('f-equipe-a').value,
+      equipeB: document.getElementById('f-equipe-b').value,
+      categorie: document.getElementById('f-categorie').value,
+      competition: document.getElementById('f-compet').value,
+      scoreA: state.scores.a,
+      scoreB: state.scores.b
+    },
+    arbitres: {
+      arb1: { nom: document.getElementById('f-arb1-nom').value, niveau: document.getElementById('f-arb1-niveau').value },
+      arb2: { nom: document.getElementById('f-arb2-nom').value, niveau: document.getElementById('f-arb2-niveau').value },
+      formateur: document.getElementById('f-formateur').value,
+      suivi: document.getElementById('f-suivi').value
+    },
+    objectifs: document.getElementById('f-objectifs').value,
+    events: state.events,
+    ratings: state.ratings,
+    notes: {
+      mitemps: document.getElementById('notes-mitemps').value,
+      positif: document.getElementById('bilan-positif').value,
+      axes: document.getElementById('bilan-axes').value,
+      message: document.getElementById('bilan-message').value
+    }
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  const arb1 = data.arbitres.arb1.nom.replace(/\s/g, '_') || 'arbitre';
+  const dateStr = data.match.date.replace(/-/g, '') || 'date';
+  a.download = `suivi_${arb1}_${dateStr}.json`;
+  a.click();
+}
+</script>
+</body>
+</html>
