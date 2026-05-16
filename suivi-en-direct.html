@@ -860,15 +860,6 @@ body {
     <a href="ressources.html">Fiches d'aide</a>
     <a href="commission.html">Commission</a>
   </nav>
-<div class="app-header">
-  <div style="padding: 0 12px 10px; display:flex; align-items:center; justify-content:space-between;">
-    <div class="header-steps">
-      <a class="step-btn active" onclick="showPage('prep', this)">Préparation</a>
-      <a class="step-btn" onclick="showPage('match', this)">Match</a>
-      <a class="step-btn" onclick="showPage('recap', this)">Bilan</a>
-    </div>
-  </div>
-</div>
 
 <!-- ══ SCORE BAR ══ -->
 <div class="score-bar">
@@ -1033,6 +1024,10 @@ body {
     </div>
   </div>
 
+  <div class="nav-bar">
+    <a class="btn btn-next" id="btn-next" onclick="showPage('match', this)">Passer en mode match →</a>
+  </div>
+
 </div>
 
 <!-- ══════════════════════════════════
@@ -1087,6 +1082,10 @@ body {
     </div>
   </div>
 
+  <div class="nav-bar">
+    <a class="btn btn-next" id="btn-next" onclick="showPage('recap', this)">Aller au bilan →</a>
+  </div>
+
 </div>
 
 <!-- ══════════════════════════════════
@@ -1122,7 +1121,7 @@ body {
   </div>
 
   <div class="nav-bar">
-    <button class="btn btn-next" id="btn-next" href="suivi-arbitrage.html">Continuer →</button>
+    <a class="btn btn-next" id="btn-next" href="suivi-arbitrage.html">Remplir le suivi →</a>
   </div>
 
 </div>
