@@ -823,7 +823,6 @@ body {
 
   /* ── NAV BAR ── */
 .nav-bar {
-  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
@@ -851,13 +850,13 @@ body {
 .btn:active { transform: scale(0.97); }
 
 .btn-prev {
-  background: var(--gris);
+  background: var(--blanc);
   color: var(--muted);
   border: 1px solid #333;
   flex: 0 0 90px;
 }
 
-.btn-prev:hover { color: var(--blanc); border-color: #555; }
+.btn-prev:hover { color: var(--blanc); border-color: #555; background: var(--gris);}
 
 .btn-next {
   background: var(--bleu);
@@ -1013,39 +1012,6 @@ body {
           <option>JAJ T1-T2</option>
         </select>
       </div>
-    </div>
-    <div class="form-grid" style="padding-top:0;">
-      <div>
-        <div class="field-label">Formateur / Observateur</div>
-        <select class="field-select" id="f-formateur">
-          <option value="">— choisir —</option>
-          <option>Xavier FINI</option>
-          <option>Patrick CHENEVIERE</option>
-          <option>Simon DESAILLOUD</option>
-          <option>Elsa GAIDET</option>
-          <option>Jules MARTEL</option>
-          <option>Antoine MELIAND</option>
-        </select>
-      </div>
-      <div>
-        <div class="field-label">Arbitre principalement suivi</div>
-        <select class="field-select" id="f-suivi">
-          <option value="les deux">Les deux</option>
-          <option value="arb1">Arbitre 1</option>
-          <option value="arb2">Arbitre 2</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon">📝</div>
-      <span class="card-title">Objectifs du suivi</span>
-    </div>
-    <div class="notes-area">
-      <div class="notes-label">Points à observer en priorité</div>
-      <textarea class="notes-textarea" id="f-objectifs" rows="3" placeholder="Ex : positionnement côté attaque, gestion des sanctions, communication binôme…"></textarea>
     </div>
   </div>
 
