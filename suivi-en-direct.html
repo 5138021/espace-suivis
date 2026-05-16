@@ -50,7 +50,7 @@ body {
 
 /* ── HEADER ── */
 .app-header {
-  background: var(--bleu);
+  background: var(--noir);
   padding: 0;
   position: sticky;
   top: 0;
@@ -80,32 +80,34 @@ body {
   letter-spacing: 0.01em;
 }
 .header-steps {
+  padding: 0 2rem;
   display: flex;
-  align-items: center;
   gap: 0;
-  background: rgba(255,255,255,0.1);
-  border-radius: 6px;
-  padding: 3px;
+  margin-top: 0.5rem;
+  border-bottom: 1px solid #222;
+  margin-bottom: 0.3rem;
 }
 .step-btn {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.55);
-  padding: 5px 12px;
-  border-radius: 4px;
-  border: none;
+  padding: 1rem 1.6rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--texte-doux);
   background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
   cursor: pointer;
-  transition: all 0.15s;
+  transition: color 0.2s, border-color 0.2s;
   white-space: nowrap;
 }
 .step-btn.active {
-  background: #fff;
-  color: var(--bleu);
-  font-weight: 700;
+  color: var(--blanc);
+  border-bottom-color: var(--accent);
 }
-.step-btn:not(.active):hover { color: rgba(255,255,255,0.85); }
+.step-btn:not(.active):hover { 
+  color: var(--blanc); 
+}
 
 /* ── SCORE BAR ── */
 .score-bar {
@@ -841,7 +843,6 @@ body {
       <button class="step-btn" onclick="showPage('match', this)">Match</button>
       <button class="step-btn" onclick="showPage('recap', this)">Bilan</button>
     </div>
-    <span id="live-date" style="font-size:11px; color:rgba(255,255,255,0.5); font-family: var(--font-mono);"></span>
   </div>
 </header>
 
@@ -890,14 +891,6 @@ body {
       <span class="card-title">Informations du match</span>
     </div>
     <div class="form-grid">
-      <div>
-        <div class="field-label">Date</div>
-        <input type="date" class="field-input" id="f-date">
-      </div>
-      <div>
-        <div class="field-label">Lieu / Gymnase</div>
-        <input type="text" class="field-input" id="f-lieu" placeholder="Gymnase…">
-      </div>
       <div>
         <div class="field-label">Équipe A (domicile)</div>
         <input type="text" class="field-input" id="f-equipe-a" placeholder="Équipe domicile" oninput="updateTeamNames()">
