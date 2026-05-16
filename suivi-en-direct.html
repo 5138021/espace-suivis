@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -840,9 +839,9 @@ body {
 <header class="app-header">
   <div style="padding: 0 12px 10px; display:flex; align-items:center; justify-content:space-between;">
     <div class="header-steps">
-      <button class="step-btn active" onclick="showPage('prep', this)">Préparation</button>
-      <button class="step-btn" onclick="showPage('match', this)">Match</button>
-      <button class="step-btn" onclick="showPage('recap', this)">Bilan</button>
+      <a class="step-btn active" onclick="showPage('prep', this)">Préparation</a>
+      <a class="step-btn" onclick="showPage('match', this)">Match</a>
+      <a class="step-btn" onclick="showPage('recap', this)">Bilan</a>
     </div>
   </div>
 </header>
@@ -905,15 +904,14 @@ body {
         <select class="field-select" id="f-categorie">
           <option value="">— choisir —</option>
           <option>-9 ans mixte</option>
-          <option>-11 ans mixte</option>
+          <option>-11 ans garçons</option>
+          <option>-11 ans filles</option>
           <option>-13 ans garçons</option>
           <option>-13 ans filles</option>
           <option>-15 ans garçons</option>
           <option>-15 ans filles</option>
-          <option>-17 ans garçons</option>
-          <option>-17 ans filles</option>
-          <option>Séniors masculins</option>
-          <option>Séniors féminines</option>
+          <option>-18 ans garçons</option>
+          <option>-18 ans filles</option>
         </select>
       </div>
       <div>
@@ -1027,9 +1025,9 @@ body {
       <button class="qbtn sanction-excl" onclick="openModal('Exclusion 2 min', 'tag-sanction')"><span class="qicon">⏱️</span>Exclusion 2'</button>
       <button class="qbtn sanction-red" onclick="openModal('Carton rouge', 'tag-sanction')"><span class="qicon">🟥</span>Carton rouge</button>
       <button class="qbtn sanction-disq" onclick="openModal('Carton bleu', 'tag-sanction')"><span class="qicon">🟦</span>Carton bleu</button>
-      <button class="qbtn ev-erreur" onclick="openModal('Jet franc', 'tag-erreur')"><span class="qicon">👋</span>Jet franc</button>
-      <button class="qbtn ev-erreur" onclick="openModal('7m — Penalty', 'tag-sanction')"><span class="qicon">🎯</span>7m</button>
-      <button class="qbtn ev-erreur" onclick="openModal('Remise en jeu incorrecte', 'tag-erreur')"><span class="qicon">🔄</span>Remise en jeu</button>
+      <button class="qbtn ev-erreur" onclick="openModal('Jet franc', 'tag-neutre')"><span class="qicon">👋</span>Jet franc</button>
+      <button class="qbtn ev-erreur" onclick="openModal('7m — Penalty', 'tag-neutre')"><span class="qicon">🎯</span>7m</button>
+      <button class="qbtn ev-erreur" onclick="openModal('Remise en jeu incorrecte', 'tag-neutre')"><span class="qicon">🔄</span>Remise en jeu</button>
       <button class="qbtn ev-erreur" onclick="openModal('Hésitation — décision tardive', 'tag-erreur')"><span class="qicon">⏳</span>Hésitation</button>
       <button class="qbtn ev-erreur" onclick="openModal('Gestuelle incorrecte', 'tag-erreur')"><span class="qicon">🙅</span>Gestuelle</button>
       <button class="qbtn ev-erreur" onclick="openModal('Erreur / décision manquée', 'tag-erreur')"><span class="qicon">❌</span>Erreur déc.</button>
@@ -1051,16 +1049,6 @@ body {
     </div>
     <div class="timeline-list" id="timeline">
       <div class="timeline-empty" id="timeline-empty">Aucun événement — utilise les boutons ci-dessus</div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon">🤝</div>
-      <span class="card-title">Notation communication</span>
-    </div>
-    <div class="notation-grid" id="notation-grid">
-      <!-- généré JS -->
     </div>
   </div>
 
