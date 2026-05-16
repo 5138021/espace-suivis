@@ -794,6 +794,52 @@ body {
     border-bottom: 1px solid #222;
     position: relative;
   }
+
+  /* ── NAV BAR ── */
+.nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0.8rem 1rem;
+  background: rgba(13,13,13,0.97);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid #222;
+  display: flex;
+  gap: 0.8rem;
+  z-index: 200;
+}
+
+.btn {
+  flex: 1;
+  min-height: 52px;
+  border: none;
+  border-radius: var(--radius);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: all 0.15s;
+  touch-action: manipulation;
+}
+
+.btn:active { transform: scale(0.97); }
+
+.btn-prev {
+  background: var(--gris);
+  color: var(--muted);
+  border: 1px solid #333;
+  flex: 0 0 90px;
+}
+
+.btn-prev:hover { color: var(--blanc); border-color: #555; }
+
+.btn-next {
+  background: var(--bleu);
+  color: white;
+}
+
+.btn-next:hover { background: #3a8fe0; }
 </style>
 </head>
 <body>
@@ -1069,79 +1115,14 @@ body {
 
   <div class="card">
     <div class="card-header">
-      <div class="card-icon">🏆</div>
-      <span class="card-title">Bilan global du match</span>
-    </div>
-    <div class="bilan-grid" style="padding-top:10px;">
-      <div class="bilan-row">
-        <span class="bilan-icon">⚖️</span>
-        <span class="bilan-label">Qualité arbitrale générale</span>
-        <select class="bilan-select" id="bilan-qualite">
-          <option value="">—</option>
-          <option>Très bien</option>
-          <option>Bien</option>
-          <option>En progression</option>
-          <option>À retravailler</option>
-          <option>Insuffisant</option>
-        </select>
-      </div>
-      <div class="bilan-row">
-        <span class="bilan-icon">🧭</span>
-        <span class="bilan-label">Gestion du match</span>
-        <select class="bilan-select">
-          <option value="">—</option>
-          <option>Très bien</option>
-          <option>Bien</option>
-          <option>En progression</option>
-          <option>À retravailler</option>
-        </select>
-      </div>
-      <div class="bilan-row">
-        <span class="bilan-icon">📍</span>
-        <span class="bilan-label">Positionnements</span>
-        <select class="bilan-select">
-          <option value="">—</option>
-          <option>Très bien</option>
-          <option>Bien</option>
-          <option>En progression</option>
-          <option>À retravailler</option>
-        </select>
-      </div>
-      <div class="bilan-row">
-        <span class="bilan-icon">🤝</span>
-        <span class="bilan-label">Travail en binôme</span>
-        <select class="bilan-select">
-          <option value="">—</option>
-          <option>Très bien</option>
-          <option>Bien</option>
-          <option>En progression</option>
-          <option>À retravailler</option>
-        </select>
-      </div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
-      <div class="card-icon">📝</div>
-      <span class="card-title">Bilan écrit et axes de progression</span>
-    </div>
-    <div class="notes-area">
-      <div class="notes-label">Points forts observés</div>
-      <textarea class="notes-textarea" id="bilan-positif" rows="3" placeholder="Ce qui a bien fonctionné, les décisions réussies…"></textarea>
-      <div class="notes-label">Axes de progression prioritaires</div>
-      <textarea class="notes-textarea" id="bilan-axes" rows="3" placeholder="Ce qu'on retravaille ensemble pour le prochain match…"></textarea>
-      <div class="notes-label">Message à l'arbitre</div>
-      <textarea class="notes-textarea" id="bilan-message" rows="2" placeholder="Encouragements, consignes pour la suite…"></textarea>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-header">
       <div class="card-icon">📋</div>
       <span class="card-title">Timeline complète du match</span>
     </div>
     <div class="timeline-list" id="timeline-recap"></div>
+  </div>
+
+  <div class="nav-bar">
+    <button class="btn btn-next" id="btn-next" href="suivi-arbitrage.html">Continuer →</button>
   </div>
 
 </div>
