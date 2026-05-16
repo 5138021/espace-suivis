@@ -1154,6 +1154,15 @@ body {
         <input type="text" class="field-input" id="modal-joueur" placeholder="Ex : n°7 — Équipe A">
       </div>
       <div>
+        <div class="field-label">Avis sur la décision</div>
+        <div class="avis-group" id="avis-group">
+          <button type="button" class="avis-btn avis-note selected"    data-avis="note"    onclick="selectAvis(this)">🗒️ Note</button>
+          <button type="button" class="avis-btn avis-ok"               data-avis="ok"      onclick="selectAvis(this)">✅ D'accord</button>
+          <button type="button" class="avis-btn avis-ko"               data-avis="ko"      onclick="selectAvis(this)">❌ Pas d'accord</button>
+          <button type="button" class="avis-btn avis-check"            data-avis="check"   onclick="selectAvis(this)">🔍 À vérifier</button>
+        </div>
+      </div>
+      <div>
         <div class="field-label">Description / Observation</div>
         <textarea class="modal-textarea" id="modal-desc" placeholder="Décris rapidement ce que tu observes…" rows="3"></textarea>
       </div>
@@ -1333,7 +1342,7 @@ const tagTextColors = {
 };
 
 function openModal(type, tagClass) {
-  state.modal = { type, tagClass };
+  state.modal = { type, tagClass, avis: 'note' };
   document.getElementById('modal-title').textContent = type;
   const badge = document.getElementById('modal-type-badge');
   badge.textContent = tagLabels[tagClass] || 'Note';
@@ -1346,8 +1355,17 @@ function openModal(type, tagClass) {
   document.getElementById('modal-arb2-opt').textContent = arb2;
   document.getElementById('modal-desc').value = '';
   document.getElementById('modal-joueur').value = '';
+  // reset avis
+  document.querySelectorAll('.avis-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelector('.avis-btn[data-avis="note"]').classList.add('selected');
+  state.modal.avis = 'note';
   document.getElementById('modal-overlay').classList.add('open');
   setTimeout(() => document.getElementById('modal-desc').focus(), 300);
+}
+function selectAvis(btn) {
+  document.querySelectorAll('.avis-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  state.modal.avis = btn.dataset.avis;
 }
 function closeModal() {
   document.getElementById('modal-overlay').classList.remove('open');
@@ -1364,6 +1382,7 @@ function saveEvent() {
     id: Date.now(),
     type: state.modal.type,
     tagClass: state.modal.tagClass,
+    avis: state.modal.avis,
     time,
     desc,
     joueur,
@@ -1376,6 +1395,9 @@ function saveEvent() {
 }
 
 /* ══ TIMELINE ══ */
+const avisLabels = { note: null, ok: '✅ D\'accord', ko: '❌ Pas d\'accord', check: '🔍 À vérifier' };
+const avisBg    = { note: null, ok: '#E6F5EC', ko: '#FAEAE8', check: '#FEF3E8' };
+const avisColor = { note: null, ok: '#1A7A4A', ko: '#C0392B', check: '#B8540A' };
 function renderTimeline() {
   const container = document.getElementById('timeline');
   const empty = document.getElementById('timeline-empty');
@@ -1391,6 +1413,8 @@ function renderTimeline() {
     const arb1 = document.getElementById('f-arb1-nom').value || 'Arb 1';
     const arb2 = document.getElementById('f-arb2-nom').value || 'Arb 2';
     const arbLabel = ev.arbitre === 'arb1' ? arb1 : ev.arbitre === 'arb2' ? arb2 : 'Binôme';
+    const avisLabel = avisLabels[ev.avis];
+    const avisBadge = avisLabel ? `<span class="t-tag" style="background:${avisBg[ev.avis]};color:${avisColor[ev.avis]};">${avisLabel}</span>` : '';
     el.innerHTML = `
       <span class="t-time">${ev.time}</span>
       <span class="t-dot ${DOT_COLORS[ev.tagClass] || 'dot-gray'}"></span>
@@ -1400,6 +1424,7 @@ function renderTimeline() {
         <div class="t-tags">
           <span class="t-tag ${ev.tagClass}">${tagLabels[ev.tagClass] || 'Note'}</span>
           <span class="t-tag tag-neutre">${arbLabel}</span>
+          ${avisBadge}
         </div>
       </div>
       <button class="t-delete" onclick="deleteEvent(${ev.id})" title="Supprimer">×</button>
@@ -1492,6 +1517,8 @@ function updateRecap() {
       const arb1 = document.getElementById('f-arb1-nom').value || 'Arb 1';
       const arb2 = document.getElementById('f-arb2-nom').value || 'Arb 2';
       const arbLabel = ev.arbitre === 'arb1' ? arb1 : ev.arbitre === 'arb2' ? arb2 : 'Binôme';
+      const avisLabelR = avisLabels[ev.avis];
+      const avisBadgeR = avisLabelR ? `<span class="t-tag" style="background:${avisBg[ev.avis]};color:${avisColor[ev.avis]};">${avisLabelR}</span>` : '';
       el.innerHTML = `
         <span class="t-time">${ev.time}</span>
         <span class="t-dot ${DOT_COLORS[ev.tagClass] || 'dot-gray'}"></span>
@@ -1501,6 +1528,7 @@ function updateRecap() {
           <div class="t-tags">
             <span class="t-tag ${ev.tagClass}">${tagLabels[ev.tagClass]||'Note'}</span>
             <span class="t-tag tag-neutre">${arbLabel}</span>
+            ${avisBadgeR}
           </div>
         </div>
       `;
