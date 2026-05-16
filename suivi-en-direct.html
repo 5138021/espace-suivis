@@ -326,6 +326,32 @@ body {
 .qbtn.ev-gestion { background: #EEEDFE; color: #534AB7; border: 1.5px solid #BBBAF0; }
 .qbtn.ev-neutre { background: var(--gris); color: var(--gris-dark); border: 1.5px solid var(--gris-mid); }
 
+/* ── AVIS BUTTONS ── */
+.avis-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.avis-btn {
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.12s;
+  line-height: 1.3;
+}
+.avis-btn.avis-note     { background: #F2F3F5; color: #6B7280; border-color: #C8CDD8; }
+.avis-btn.avis-ok       { background: #E6F5EC; color: #1A7A4A; border-color: #9FD4B8; }
+.avis-btn.avis-ko       { background: #FAEAE8; color: #C0392B; border-color: #F5B8B3; }
+.avis-btn.avis-check    { background: #FEF3E8; color: #B8540A; border-color: #F5CFA0; }
+.avis-btn.selected      { box-shadow: 0 0 0 2px currentColor; font-weight: 700; }
+.avis-btn:active        { transform: scale(0.97); }
+  
 /* ── MODAL ── */
 .modal-overlay {
   display: none;
