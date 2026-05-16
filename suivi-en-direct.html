@@ -58,27 +58,6 @@ body {
   box-shadow: 0 2px 12px rgba(11,45,110,0.3);
 }
 
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px 8px;
-}
-.header-brand {
-  font-family: var(--font-head);
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.6);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-.header-title {
-  font-family: var(--font-head);
-  font-size: 15px;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 0.01em;
-}
 .header-steps {
   padding: 0 0.5rem;
   display: flex;
@@ -827,6 +806,7 @@ body {
   <div class="header-text">
     <h1>Suivi Pédagogique</h1>
     <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+    <p>Suivi d'arbitre en direct pendant un match</p>
   </div>
 </header>
 
@@ -835,7 +815,7 @@ body {
     <a href="ressources.html">Fiches d'aide</a>
     <a href="commission.html">Commission</a>
   </nav>
-<header class="app-header">
+<div class="app-header">
   <div style="padding: 0 12px 10px; display:flex; align-items:center; justify-content:space-between;">
     <div class="header-steps">
       <a class="step-btn active" onclick="showPage('prep', this)">Préparation</a>
@@ -843,7 +823,7 @@ body {
       <a class="step-btn" onclick="showPage('recap', this)">Bilan</a>
     </div>
   </div>
-</header>
+</div>
 
 <!-- ══ SCORE BAR ══ -->
 <div class="score-bar">
@@ -903,14 +883,15 @@ body {
         <select class="field-select" id="f-categorie">
           <option value="">— choisir —</option>
           <option>-9 ans mixte</option>
-          <option>-11 ans garçons</option>
-          <option>-11 ans filles</option>
+          <option>-11 ans mixte</option>
           <option>-13 ans garçons</option>
           <option>-13 ans filles</option>
           <option>-15 ans garçons</option>
           <option>-15 ans filles</option>
-          <option>-18 ans garçons</option>
-          <option>-18 ans filles</option>
+          <option>-17 ans garçons</option>
+          <option>-17 ans filles</option>
+          <option>Séniors masculins</option>
+          <option>Séniors féminines</option>
         </select>
       </div>
       <div>
@@ -1024,9 +1005,9 @@ body {
       <button class="qbtn sanction-excl" onclick="openModal('Exclusion 2 min', 'tag-sanction')"><span class="qicon">⏱️</span>Exclusion 2'</button>
       <button class="qbtn sanction-red" onclick="openModal('Carton rouge', 'tag-sanction')"><span class="qicon">🟥</span>Carton rouge</button>
       <button class="qbtn sanction-disq" onclick="openModal('Carton bleu', 'tag-sanction')"><span class="qicon">🟦</span>Carton bleu</button>
-      <button class="qbtn ev-erreur" onclick="openModal('Jet franc', 'tag-neutre')"><span class="qicon">👋</span>Jet franc</button>
-      <button class="qbtn ev-erreur" onclick="openModal('7m — Penalty', 'tag-neutre')"><span class="qicon">🎯</span>7m</button>
-      <button class="qbtn ev-erreur" onclick="openModal('Remise en jeu incorrecte', 'tag-neutre')"><span class="qicon">🔄</span>Remise en jeu</button>
+      <button class="qbtn ev-erreur" onclick="openModal('Jet franc', 'tag-erreur')"><span class="qicon">👋</span>Jet franc</button>
+      <button class="qbtn ev-erreur" onclick="openModal('7m — Penalty', 'tag-sanction')"><span class="qicon">🎯</span>7m</button>
+      <button class="qbtn ev-erreur" onclick="openModal('Remise en jeu incorrecte', 'tag-erreur')"><span class="qicon">🔄</span>Remise en jeu</button>
       <button class="qbtn ev-erreur" onclick="openModal('Hésitation — décision tardive', 'tag-erreur')"><span class="qicon">⏳</span>Hésitation</button>
       <button class="qbtn ev-erreur" onclick="openModal('Gestuelle incorrecte', 'tag-erreur')"><span class="qicon">🙅</span>Gestuelle</button>
       <button class="qbtn ev-erreur" onclick="openModal('Erreur / décision manquée', 'tag-erreur')"><span class="qicon">❌</span>Erreur déc.</button>
@@ -1048,6 +1029,16 @@ body {
     </div>
     <div class="timeline-list" id="timeline">
       <div class="timeline-empty" id="timeline-empty">Aucun événement — utilise les boutons ci-dessus</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🤝</div>
+      <span class="card-title">Notation communication</span>
+    </div>
+    <div class="notation-grid" id="notation-grid">
+      <!-- généré JS -->
     </div>
   </div>
 
@@ -1213,6 +1204,13 @@ body {
       <button class="btn-save" onclick="saveEvent()">✓ Enregistrer</button>
     </div>
   </div>
+</div>
+
+<!-- ══ BARRE BAS ══ -->
+<div class="bottom-bar">
+  <button class="bar-btn secondary" onclick="window.print()">🖨️ Imprimer</button>
+  <button class="bar-btn primary" onclick="exportJSON()">💾 Sauvegarder</button>
+  <button class="bar-btn success" onclick="showPage('recap', document.querySelectorAll('.step-btn')[2])">📊 Bilan</button>
 </div>
 
 <script>
