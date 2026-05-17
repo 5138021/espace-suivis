@@ -4,866 +4,697 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Feuille de match — Arbitrage JAJ · Meylan HB</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bleu: #0B2D6E;
-  --bleu-mid: #1A4BA0;
-  --bleu-light: #E8EEF8;
-  --rouge: #C0392B;
-  --rouge-light: #FAEAE8;
-  --jaune: #E67E22;
-  --jaune-light: #FEF3E8;
-  --vert: #1A7A4A;
-  --vert-light: #E6F5EC;
-  --gris: #F2F3F5;
-  --gris-mid: #C8CDD8;
-  --gris-dark: #6B7280;
-  --noir: #0F1420;
-  --blanc: #FFFFFF;
-  --border: #D1D8E8;
-  --shadow: 0 1px 3px rgba(11,45,110,0.10);
-  --font-head: 'Syne', sans-serif;
-  --font-body: 'DM Sans', sans-serif;
-  --font-mono: 'DM Mono', monospace;
-  --rouge: #E8001D;
-  --noir: #0D0D0D;
-  --blanc: #F5F2EC;  
-  --gris: #1A1A1A; 
-  --gris-mid: #2E2E2E;
-  --accent: #FFD100;
-  --texte-doux: #9A9A9A;
-  --bleu: #4A9FFF;
+  --rouge:   #E8001D;
+  --noir:    #0D0D0D;
+  --blanc:   #F5F2EC;
+  --gris:    #1A1A1A;
+  --gris-mid:#2E2E2E;
+  --accent:  #FFD100;
+  --muted:   #9A9A9A;
+  --bleu:    #4A9FFF;
+  --border:  #1E1E1E;
+  --ins:     #e53935;
+  --opt:     #fb8c00;
+  --cor:     #43a047;
+  --tres:    #4A9FFF;
 }
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 body {
-  font-family: var(--font-body);
-  background: #EDF0F7;
-  color: var(--noir);
+  background: var(--noir);
+  color: var(--blanc);
+  font-family: 'DM Sans', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
+  padding-bottom: 80px;
+}
+
+/* ── STRIPE ── */
+.top-stripe {
+  height: 4px;
+  background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
 }
 
 /* ── HEADER ── */
-.app-header {
-  background: var(--noir);
-  padding: 0;
+header {
+  padding: 1.5rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  border-bottom: 1px solid #222;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 12px rgba(11,45,110,0.3);
+  background: var(--noir);
+}
+header img { height: 48px; width: auto; }
+.header-text h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 3px;
+  color: var(--blanc);
+  line-height: 1;
+}
+.header-text p {
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-top: 3px;
 }
 
-.header-steps {
-  padding: 0 0.5rem;
-  display: flex;
-  gap: 0;
-  margin-top: 0.5rem;
+/* ── SUBNAV ── */
+.subnav {
+  padding: 0 1.2rem;
   border-bottom: 1px solid #222;
-  margin-bottom: 0.3rem;
+  display: flex;
+  background: var(--noir);
+  overflow-x: auto;
 }
-.step-btn {
-  padding: 1rem 1.6rem;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.60rem;
+.subnav a {
+  padding: 0.8rem 1rem;
+  font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: var(--texte-doux);
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: color .2s, border-color .2s;
+  white-space: nowrap;
+}
+.subnav a:hover { color: var(--blanc); }
+.subnav a.active { color: var(--blanc); border-bottom-color: var(--bleu); }
+
+/* ── STEP TABS ── */
+.step-tabs {
+  display: flex;
+  background: var(--gris);
+  border-bottom: 1px solid #222;
+  overflow-x: auto;
+}
+.step-tab {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
+  padding: 0.85rem 1.4rem;
   cursor: pointer;
-  transition: color 0.2s, border-color 0.2s;
   white-space: nowrap;
+  transition: color .2s, border-color .2s;
 }
-.step-btn.active {
-  color: var(--blanc);
-  border-bottom-color: var(--accent);
-}
-.step-btn:not(.active):hover { 
-  color: var(--blanc); 
-}
+.step-tab:hover { color: var(--blanc); }
+.step-tab.active { color: var(--blanc); border-bottom-color: var(--accent); font-weight: 600; }
 
 /* ── SCORE BAR ── */
 .score-bar {
-  background: var(--bleu-mid);
-  padding: 8px 16px;
+  background: var(--gris);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 6px;
+  gap: 8px;
+  position: relative;
 }
-.score-team {
-  flex: 1;
-  font-family: var(--font-head);
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
+.score-bar::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
 }
-.score-team.right { text-align: right; }
-.score-display {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(0,0,0,0.25);
-  border-radius: 8px;
-  padding: 4px 10px;
-}
-.score-num {
-  font-family: var(--font-mono);
-  font-size: 22px;
-  font-weight: 500;
-  color: #fff;
-  min-width: 26px;
-  text-align: center;
-}
-.score-sep { font-size: 16px; color: rgba(255,255,255,0.5); }
-.score-btn {
-  background: rgba(255,255,255,0.2);
-  border: none;
-  color: #fff;
-  width: 22px;
-  height: 22px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.1s;
-}
-.score-btn:hover { background: rgba(255,255,255,0.35); }
-.score-btn:active { transform: scale(0.92); }
-.chrono-area {
+.score-team-block {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3px;
 }
-.chrono {
-  font-family: var(--font-mono);
-  font-size: 20px;
-  font-weight: 500;
-  color: #fff;
-  letter-spacing: 0.04em;
+.score-team-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  color: var(--blanc);
+  max-width: 85px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.periode-badge {
-  font-size: 10px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.7);
-  background: rgba(0,0,0,0.2);
-  padding: 1px 8px;
-  border-radius: 20px;
+.score-role {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
 }
-.chrono-controls {
-  display: flex;
-  gap: 4px;
-  margin-top: 2px;
+.score-controls { display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+.score-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 1px;
+  color: var(--blanc);
+  min-width: 36px;
+  text-align: center;
+  line-height: 1;
 }
-.chrono-ctrl {
-  font-size: 10px;
-  padding: 2px 8px;
-  border-radius: 4px;
-  border: 1px solid rgba(255,255,255,0.3);
-  background: rgba(255,255,255,0.1);
-  color: #fff;
+.score-btn {
+  background: var(--gris-mid);
+  border: 1px solid #333;
+  color: var(--blanc);
+  width: 28px; height: 28px;
+  border-radius: 2px;
   cursor: pointer;
-  transition: background 0.1s;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .1s;
+  font-family: 'DM Sans', sans-serif;
 }
-.chrono-ctrl:hover { background: rgba(255,255,255,0.25); }
+.score-btn:hover { background: #3a3a3a; }
+.score-btn:active { transform: scale(0.92); }
+
+.chrono-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin: 0 4px;
+}
+.score-sep {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  color: #333;
+}
+.chrono-time {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  line-height: 1;
+}
+.chrono-periode {
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: var(--gris-mid);
+  padding: 1px 7px;
+  border-radius: 2px;
+}
+.chrono-btns { display: flex; gap: 4px; margin-top: 3px; }
+.chrono-ctrl {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 2px 8px;
+  border-radius: 2px;
+  border: 1px solid #333;
+  background: var(--gris-mid);
+  color: var(--blanc);
+  cursor: pointer;
+  transition: background .1s;
+}
+.chrono-ctrl:hover { background: #3a3a3a; }
 
 /* ── PAGES ── */
-.page { display: none; padding: 12px 12px 0; }
+.page { display: none; padding: 0 0 12px; }
 .page.active { display: block; }
 
-/* ── CARDS ── */
+/* ── SECTION LABEL ── */
+.section-label {
+  padding: 1rem 1.2rem 0.6rem;
+  font-size: 0.62rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid #222;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.section-label span { color: var(--accent); white-space: nowrap; }
+.section-label::after { content:''; flex:1; height:1px; background:#222; }
+
+/* ── CARD ── */
 .card {
-  background: var(--blanc);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  margin-bottom: 10px;
+  background: var(--gris);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 0;
   overflow: hidden;
 }
-.card-header {
+.card + .card { border-top: 1px solid var(--border); }
+.card-head {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 9px 14px;
+  padding: 8px 14px;
   border-bottom: 1px solid var(--border);
-  background: var(--gris);
+  background: #111;
 }
-.card-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  background: var(--bleu-light);
-  color: var(--bleu);
-}
-.card-title {
-  font-family: var(--font-head);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--bleu);
+.card-head-icon { font-size: 13px; }
+.card-head-title {
+  font-size: 0.62rem;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 2px;
+  color: var(--muted);
   flex: 1;
 }
-.card-count {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--gris-dark);
-  background: var(--gris);
-  border: 1px solid var(--border);
-  padding: 1px 7px;
-  border-radius: 20px;
+.card-head-count {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  color: var(--bleu);
+  background: rgba(74,159,255,0.08);
+  border: 1px solid rgba(74,159,255,0.2);
+  padding: 1px 8px;
+  border-radius: 2px;
 }
 
-/* ── PREP PAGE ── */
+/* ── FORM ── */
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
   padding: 12px 14px;
 }
-.form-grid.one { grid-template-columns: 1fr; }
-.form-grid.three { grid-template-columns: 1fr 1fr 1fr; }
 .field-label {
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--gris-dark);
+  font-size: 0.58rem;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: var(--muted);
   margin-bottom: 4px;
 }
-.field-input {
+.field-input, .field-select, .field-textarea {
   width: 100%;
   padding: 7px 10px;
-  border: 1.5px solid var(--border);
-  border-radius: 7px;
-  font-family: var(--font-body);
+  background: var(--gris-mid);
+  border: 1px solid #333;
+  border-radius: 2px;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
-  color: var(--noir);
-  background: var(--blanc);
+  color: var(--blanc);
   outline: none;
-  transition: border 0.15s;
-}
-.field-input:focus { border-color: var(--bleu-mid); }
-.field-select {
-  width: 100%;
-  padding: 7px 10px;
-  border: 1.5px solid var(--border);
-  border-radius: 7px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--noir);
-  background: var(--blanc);
-  outline: none;
+  transition: border-color .15s;
   appearance: none;
-  cursor: pointer;
 }
-.field-select:focus { border-color: var(--bleu-mid); }
-.arbitres-row {
+.field-input:focus, .field-select:focus, .field-textarea:focus { border-color: var(--bleu); }
+.field-textarea { resize: none; line-height: 1.5; }
+.field-input::placeholder, .field-textarea::placeholder { color: #444; }
+
+.arb-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  padding: 10px 14px;
+  padding: 0 14px 12px;
 }
-.arbitre-block {
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
+.arb-block {
+  border: 1px solid #333;
+  border-radius: 2px;
   padding: 10px;
+  background: var(--gris-mid);
 }
-.arbitre-block-title {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--bleu);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 7px;
+.arb-block-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.8rem;
+  letter-spacing: 2px;
+  color: var(--rouge);
+  margin-bottom: 8px;
 }
 
-/* ── SAISIE RAPIDE ── */
+/* ── QUICK BUTTONS ── */
 .quick-btns {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 7px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
   padding: 10px 12px;
 }
 .qbtn {
-  border: none;
-  border-radius: 9px;
-  padding: 10px 6px;
-  font-family: var(--font-head);
-  font-size: 11px;
-  font-weight: 700;
+  border-radius: 2px;
+  padding: 9px 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  transition: transform 0.1s, box-shadow 0.1s;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  gap: 4px;
+  border: 1px solid transparent;
+  transition: transform .1s, filter .1s;
+  text-transform: uppercase;
 }
-.qbtn:active { transform: scale(0.95); }
-.qbtn .qicon { font-size: 20px; }
-.qbtn.sanction-yellow { background: var(--jaune-light); color: var(--jaune); border: 1.5px solid #F5CFA0; }
-.qbtn.sanction-red { background: var(--rouge-light); color: var(--rouge); border: 1.5px solid #F5B8B3; }
-.qbtn.sanction-excl { background: #FFF5E0; color: #B8860B; border: 1.5px solid #FFD980; }
-.qbtn.sanction-disq { background: #E6EEF8; color: #0B2D6E; border: 1.5px solid #AABFEA; }
-.qbtn.ev-trc { background: #FEF3E8; color: #B8540A; border: 1.5px solid #F5CFA0; }
-.qbtn.ev-erreur { background: var(--rouge-light); color: var(--rouge); border: 1.5px solid #F5B8B3; }
-.qbtn.ev-position { background: var(--bleu-light); color: var(--bleu); border: 1.5px solid #AABFEA; }
-.qbtn.ev-comms { background: var(--vert-light); color: var(--vert); border: 1.5px solid #9FD4B8; }
-.qbtn.ev-positif { background: #E6F5EC; color: #1A7A4A; border: 1.5px solid #9FD4B8; }
-.qbtn.ev-gestion { background: #EEEDFE; color: #534AB7; border: 1.5px solid #BBBAF0; }
-.qbtn.ev-neutre { background: var(--gris); color: var(--gris-dark); border: 1.5px solid var(--gris-mid); }
+.qbtn:active { transform: scale(0.94); filter: brightness(1.2); }
+.qbtn .qi { font-size: 17px; }
+
+.q-jaune   { background: rgba(255,209,0,0.08);   color: var(--accent); border-color: rgba(255,209,0,0.2); }
+.q-excl    { background: rgba(251,140,0,0.08);   color: #fb8c00;       border-color: rgba(251,140,0,0.2); }
+.q-rouge   { background: rgba(232,0,29,0.08);    color: var(--rouge);  border-color: rgba(232,0,29,0.2); }
+.q-bleu    { background: rgba(74,159,255,0.08);  color: var(--bleu);   border-color: rgba(74,159,255,0.2); }
+.q-blanc   { background: rgba(245,242,236,0.05); color: #aaa;          border-color: rgba(255,255,255,0.12); }
+.q-neutre  { background: var(--gris-mid);        color: var(--muted);  border-color: #333; }
+.q-erreur  { background: rgba(232,0,29,0.06);    color: #ff6b6b;       border-color: rgba(232,0,29,0.15); }
+.q-positif { background: rgba(67,160,71,0.08);   color: #43a047;       border-color: rgba(67,160,71,0.2); }
+.q-trc     { background: rgba(251,140,0,0.06);   color: #fb8c00;       border-color: rgba(251,140,0,0.15); }
 
 /* ── AVIS BUTTONS ── */
 .avis-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-bottom: 4px;
+  gap: 5px;
 }
 .avis-btn {
-  padding: 8px 6px;
-  border-radius: 8px;
-  border: 1.5px solid transparent;
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 500;
-  cursor: pointer;
-  text-align: center;
-  transition: all 0.12s;
-  line-height: 1.3;
-}
-.avis-btn.avis-note     { background: #F2F3F5; color: #6B7280; border-color: #C8CDD8; }
-.avis-btn.avis-ok       { background: #E6F5EC; color: #1A7A4A; border-color: #9FD4B8; }
-.avis-btn.avis-ko       { background: #FAEAE8; color: #C0392B; border-color: #F5B8B3; }
-.avis-btn.avis-check    { background: #FEF3E8; color: #B8540A; border-color: #F5CFA0; }
-.avis-btn.selected      { box-shadow: 0 0 0 2px currentColor; font-weight: 700; }
-.avis-btn:active        { transform: scale(0.97); }
-  
-/* ── MODAL ── */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(11,45,110,0.55);
-  z-index: 200;
-  align-items: flex-end;
-  justify-content: center;
-  padding: 0;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--blanc);
-  border-radius: 18px 18px 0 0;
-  width: 100%;
-  max-width: 520px;
-  padding: 18px 16px 30px;
-  animation: slideUp 0.22s ease-out;
-}
-@keyframes slideUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-.modal-handle {
-  width: 36px;
-  height: 4px;
-  background: var(--gris-mid);
+  padding: 7px 5px;
   border-radius: 2px;
-  margin: 0 auto 14px;
-}
-.modal-title {
-  font-family: var(--font-head);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--bleu);
-  margin-bottom: 12px;
-  text-align: center;
-}
-.modal-type-badge {
-  display: inline-block;
-  font-size: 12px;
+  border: 1px solid #333;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
   font-weight: 600;
-  padding: 3px 12px;
-  border-radius: 20px;
-  margin-bottom: 12px;
-}
-.modal-fields { display: flex; flex-direction: column; gap: 8px; }
-.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.modal-textarea {
-  width: 100%;
-  padding: 8px 10px;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--noir);
-  resize: none;
-  outline: none;
-  min-height: 70px;
-}
-.modal-textarea:focus { border-color: var(--bleu-mid); }
-.modal-actions { display: flex; gap: 8px; margin-top: 14px; }
-.btn-cancel {
-  flex: 1;
-  padding: 11px;
-  border-radius: 9px;
-  border: 1.5px solid var(--border);
-  background: var(--blanc);
-  color: var(--gris-dark);
-  font-family: var(--font-head);
-  font-size: 13px;
-  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
   cursor: pointer;
+  text-align: center;
+  transition: all .12s;
+  background: var(--gris-mid);
+  color: var(--muted);
 }
-.btn-save {
-  flex: 2;
-  padding: 11px;
-  border-radius: 9px;
-  border: none;
-  background: var(--bleu);
-  color: #fff;
-  font-family: var(--font-head);
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.1s;
-}
-.btn-save:hover { background: var(--bleu-mid); }
+.avis-btn:active { transform: scale(0.96); }
+.avis-note  { }
+.avis-ok    { background: rgba(67,160,71,0.08);  color: #43a047; border-color: rgba(67,160,71,0.25); }
+.avis-ko    { background: rgba(232,0,29,0.08);   color: var(--rouge); border-color: rgba(232,0,29,0.25); }
+.avis-check { background: rgba(251,140,0,0.08);  color: #fb8c00; border-color: rgba(251,140,0,0.25); }
+.avis-btn.selected { box-shadow: 0 0 0 1.5px currentColor; font-weight: 700; }
 
 /* ── TIMELINE ── */
-.timeline-list { padding: 6px 0; }
+.timeline-list { padding: 4px 0; }
 .timeline-empty {
   text-align: center;
   padding: 22px;
-  color: var(--gris-mid);
-  font-size: 13px;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #333;
 }
 .t-event {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  padding: 9px 14px;
-  border-bottom: 1px solid var(--gris);
-  transition: background 0.1s;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  transition: background .1s;
+  cursor: default;
 }
 .t-event:last-child { border-bottom: none; }
-.t-event:hover { background: var(--gris); }
+.t-event:hover { background: #111; }
 .t-time {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--gris-dark);
-  min-width: 38px;
-  padding-top: 2px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  min-width: 52px;
+  padding-top: 1px;
 }
 .t-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px; height: 8px;
   border-radius: 50%;
-  margin-top: 4px;
+  margin-top: 5px;
   flex-shrink: 0;
 }
 .t-body { flex: 1; }
 .t-type {
   font-size: 13px;
-  font-weight: 500;
-  color: var(--noir);
+  font-weight: 600;
+  color: var(--blanc);
   line-height: 1.3;
 }
 .t-desc {
   font-size: 11px;
-  color: var(--gris-dark);
+  color: var(--muted);
   margin-top: 2px;
-  line-height: 1.4;
+  line-height: 1.5;
+  font-weight: 300;
 }
-.t-tags { margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; }
+.t-tags { margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px; }
 .t-tag {
-  font-size: 10px;
-  padding: 1px 7px;
-  border-radius: 20px;
-  font-weight: 500;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: 2px;
 }
-.tag-sanction { background: #FEF3E8; color: #B8540A; }
-.tag-erreur { background: var(--rouge-light); color: var(--rouge); }
-.tag-position { background: var(--bleu-light); color: var(--bleu); }
-.tag-comms { background: var(--vert-light); color: var(--vert); }
-.tag-positif { background: #E6F5EC; color: #1A7A4A; }
-.tag-gestion { background: #EEEDFE; color: #534AB7; }
-.tag-neutre { background: var(--gris); color: var(--gris-dark); }
+.tag-sanction   { background: rgba(232,0,29,0.1);   color: #ff4455; border: 1px solid rgba(232,0,29,0.2); }
+.tag-erreur     { background: rgba(255,107,107,0.1); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.2); }
+.tag-positif    { background: rgba(67,160,71,0.1);   color: #43a047; border: 1px solid rgba(67,160,71,0.2); }
+.tag-neutre     { background: var(--gris-mid); color: var(--muted); border: 1px solid #333; }
+.tag-commotion  { background: rgba(245,242,236,0.05); color: #aaa; border: 1px solid #3a3a3a; }
 .t-delete {
   background: none;
   border: none;
-  color: var(--gris-mid);
+  color: #333;
   font-size: 16px;
   cursor: pointer;
   padding: 0 2px;
-  line-height: 1;
-  transition: color 0.1s;
+  transition: color .1s;
 }
 .t-delete:hover { color: var(--rouge); }
 
-/* ── NOTATION RAPIDE ARBITRES ── */
-.notation-grid {
+/* Dots */
+.dot-red    { background: var(--rouge); }
+.dot-orange { background: #fb8c00; }
+.dot-green  { background: #43a047; }
+.dot-blue   { background: var(--bleu); }
+.dot-gray   { background: #444; }
+.dot-white  { background: #777; border: 1px solid #555; }
+.dot-yellow { background: var(--accent); }
+
+/* ── NOTATION ── */
+.nota-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
-  padding: 10px 12px;
+  padding: 12px 14px;
 }
 .nota-block {
-  border: 1.5px solid var(--border);
-  border-radius: 9px;
+  background: var(--gris-mid);
+  border: 1px solid #333;
+  border-radius: 2px;
   padding: 10px;
 }
 .nota-name {
-  font-family: var(--font-head);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--bleu);
-  margin-bottom: 8px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  color: var(--rouge);
+  margin-bottom: 9px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.nota-criterion { margin-bottom: 7px; }
+.nota-crit { margin-bottom: 7px; }
 .nota-crit-label {
-  font-size: 10px;
-  color: var(--gris-dark);
+  font-size: 0.58rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
   margin-bottom: 3px;
 }
 .nota-stars { display: flex; gap: 3px; }
 .star {
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  border: 1.5px solid var(--border);
+  width: 22px; height: 22px;
+  border-radius: 2px;
+  border: 1px solid #333;
   background: var(--gris);
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  transition: all 0.1s;
-  color: var(--gris-mid);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: #444;
+  transition: all .1s;
 }
-.star.on { background: var(--bleu); border-color: var(--bleu); color: #fff; }
-.star:hover { border-color: var(--bleu-mid); }
+.star.on { background: var(--rouge); border-color: var(--rouge); color: var(--blanc); }
+.star:hover { border-color: var(--rouge); color: var(--muted); }
 
 /* ── NOTES ── */
 .notes-area { padding: 10px 14px; }
-.notes-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--bleu);
+.notes-lbl {
+  font-size: 0.58rem;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: var(--accent);
   margin-bottom: 5px;
 }
-.notes-textarea {
-  width: 100%;
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 9px 11px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: var(--noir);
-  resize: none;
-  outline: none;
-  line-height: 1.5;
-  margin-bottom: 10px;
-}
-.notes-textarea:focus { border-color: var(--bleu-mid); }
 
-/* ── RECAP PAGE ── */
+/* ── RECAP STATS ── */
 .recap-stats {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 7px;
-  padding: 12px 12px;
+  display: flex;
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
 }
 .stat-box {
-  background: var(--blanc);
-  border-radius: 9px;
-  box-shadow: var(--shadow);
-  padding: 10px 6px;
-  text-align: center;
+  flex: 1;
+  background: var(--gris);
+  padding: 1rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: relative;
+  overflow: hidden;
 }
+.stat-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.s-red::before    { background: var(--rouge); }
+.s-green::before  { background: #43a047; }
+.s-gold::before   { background: var(--accent); }
+.s-blue::before   { background: var(--bleu); }
 .stat-num {
-  font-family: var(--font-mono);
-  font-size: 26px;
-  font-weight: 500;
-  color: var(--bleu);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: var(--blanc);
+  line-height: 1;
 }
-.stat-label {
-  font-size: 10px;
-  color: var(--gris-dark);
-  margin-top: 2px;
-  line-height: 1.3;
-}
-.stat-box.rouge .stat-num { color: var(--rouge); }
-.stat-box.vert .stat-num { color: var(--vert); }
-.stat-box.jaune .stat-num { color: var(--jaune); }
-
-.recap-section { padding: 10px 14px; }
-.recap-section-title {
-  font-family: var(--font-head);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--bleu);
+.s-red   .stat-num { color: var(--rouge); }
+.s-green .stat-num { color: #43a047; }
+.s-gold  .stat-num { color: var(--accent); }
+.s-blue  .stat-num { color: var(--bleu); }
+.stat-lbl {
+  font-size: 0.55rem;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--gris);
+  border-top: 3px solid var(--rouge);
+  border-left: 1px solid #333;
+  border-right: 1px solid #333;
+  border-radius: 4px 4px 0 0;
+  width: 100%;
+  max-width: 520px;
+  padding: 16px 14px 28px;
+  animation: slideUp .2s ease-out;
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity:0; }
+  to   { transform: translateY(0);    opacity:1; }
+}
+.modal-handle {
+  width: 32px; height: 3px;
+  background: #333;
+  border-radius: 2px;
+  margin: 0 auto 12px;
+}
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  color: var(--blanc);
+  text-align: center;
   margin-bottom: 8px;
 }
-.notation-recap {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+.modal-badge {
+  display: block;
+  width: fit-content;
+  margin: 0 auto 12px;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border-radius: 2px;
 }
-.nota-recap-block {
-  border: 1.5px solid var(--border);
-  border-radius: 8px;
-  padding: 9px;
+.modal-fields { display: flex; flex-direction: column; gap: 8px; }
+.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.modal-actions { display: flex; gap: 8px; margin-top: 14px; }
+.btn-cancel {
+  flex: 1; padding: 10px;
+  border-radius: 2px;
+  border: 1px solid #333;
+  background: var(--gris-mid);
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color .1s;
 }
-.nota-recap-name {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--noir);
-  margin-bottom: 6px;
+.btn-cancel:hover { color: var(--blanc); }
+.btn-save {
+  flex: 2; padding: 10px;
+  border-radius: 2px;
+  border: none;
+  background: var(--rouge);
+  color: var(--blanc);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background .1s;
 }
-.nota-recap-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
-}
-.nota-recap-crit { font-size: 11px; color: var(--gris-dark); }
-.nota-recap-dots { display: flex; gap: 2px; }
-.rdot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--border);
-}
-.rdot.on { background: var(--bleu); }
+.btn-save:hover { background: #c40019; }
 
-/* ── BILAN GLOBAL ── */
-.bilan-grid { display: grid; grid-template-columns: 1fr; gap: 8px; padding: 0 14px 12px; }
-.bilan-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1.5px solid var(--border);
-}
-.bilan-icon { font-size: 18px; }
-.bilan-label { font-size: 12px; color: var(--gris-dark); flex: 1; }
-.bilan-select {
-  font-size: 12px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1.5px solid var(--border);
-  background: var(--blanc);
-  color: var(--noir);
-  font-family: var(--font-body);
-  outline: none;
-}
-
-/* ── ACTIONS BAS ── */
-.bottom-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: var(--blanc);
-  border-top: 1px solid var(--border);
+/* ── NAV BAR ── */
+.nav-bar {
   padding: 10px 12px;
   display: flex;
   gap: 8px;
-  z-index: 100;
-  box-shadow: 0 -2px 12px rgba(11,45,110,0.1);
+  background: var(--gris);
+  border-top: 1px solid var(--border);
 }
-.bar-btn {
-  flex: 1;
-  padding: 10px;
-  border-radius: 9px;
-  border: none;
-  font-family: var(--font-head);
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  transition: all 0.1s;
-}
-.bar-btn:active { transform: scale(0.97); }
-.bar-btn.secondary { background: var(--gris); color: var(--bleu); border: 1.5px solid var(--border); }
-.bar-btn.primary { background: var(--bleu); color: #fff; }
-.bar-btn.success { background: var(--vert); color: #fff; }
-.bar-btn.danger { background: var(--rouge); color: #fff; }
-
-/* ── PRINT ── */
-@media print {
-  .app-header, .bottom-bar, .quick-btns, .modal-overlay { display: none !important; }
-  body { background: #fff; }
-  .page { display: block !important; padding: 0; }
-  .card { box-shadow: none; border: 1px solid #ccc; page-break-inside: avoid; }
-}
-
-/* ── Dots couleur event ── */
-.dot-yellow { background: var(--jaune); }
-.dot-red { background: var(--rouge); }
-.dot-blue { background: var(--bleu-mid); }
-.dot-green { background: var(--vert); }
-.dot-purple { background: #534AB7; }
-.dot-orange { background: #D4770A; }
-.dot-gray { background: var(--gris-dark); }
-
-  .logo-badge {
-    width: 75px;
-    height: 75px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
-    color: white;
-    flex-shrink: 0;
-    letter-spacing: 1px;
-  }
-
-  .header-text h1 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    letter-spacing: 3px;
-    color: var(--blanc);
-    line-height: 1;
-  }
-
-  .header-text p {
-    font-size: 0.72rem;
-    color: var(--texte-doux);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-
-  .header-contact {
-    margin-left: auto;
-    font-size: 0.78rem;
-    color: var(--texte-doux);
-    text-align: right;
-    line-height: 1.7;
-  }
-
-  .header-contact strong {
-    color: var(--accent);
-    display: block;
-    font-size: 0.7rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-  }
-
-  /* NAV SECONDAIRE */
-  .subnav {
-    background: var(--noir);
-    padding: 0 3rem;
-    border-bottom: 1px solid #222;
-    display: flex;
-    gap: 0;
-  }
-
-  .subnav a {
-    padding: 0.9rem 1.4rem;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--texte-doux);
-    text-decoration: none;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
-  }
-
-  .subnav a.active,
-  .subnav a:hover {
-    color: var(--blanc);
-    border-bottom-color: var(--bleu);
-  }
-
-  /* BANDE DÉCORATIVE HAUT */
-  .top-stripe {
-    height: 4px;
-    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
-  }
-  
-  
-  header {
-    background: var(--noir);
-    padding: 2.5rem 3rem 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    border-bottom: 1px solid #222;
-    position: relative;
-  }
-
-  /* ── NAV BAR ── */
-.nav-bar {
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0.8rem 1rem;
-  backdrop-filter: blur(12px);
-  border-top: 1px solid #222;
-  display: flex;
-  gap: 0.8rem;
-  z-index: 200;
-}
-
 .btn {
-  flex: 1;
-  min-height: 52px;
+  flex: 1; min-height: 46px;
   border: none;
-  border-radius: var(--radius);
+  border-radius: 2px;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1rem;
   letter-spacing: 2px;
   cursor: pointer;
-  transition: all 0.15s;
-  touch-action: manipulation;
+  transition: all .15s;
 }
-
 .btn:active { transform: scale(0.97); }
-
+.btn-next { background: var(--rouge); color: var(--blanc); }
+.btn-next:hover { background: #c40019; }
 .btn-prev {
-  background: var(--blanc);
+  background: var(--gris-mid);
   color: var(--muted);
   border: 1px solid #333;
   flex: 0 0 90px;
 }
+.btn-prev:hover { color: var(--blanc); border-color: var(--muted); }
 
-.btn-prev:hover { color: var(--blanc); border-color: #555; background: var(--gris);}
-
-.btn-next {
-  background: var(--bleu);
-  color: white;
+/* ── PRINT ── */
+@media print {
+  header, .subnav, .step-tabs, .score-bar, .quick-btns, .modal-overlay, .nav-bar { display: none !important; }
+  body { background: #fff; color: #000; }
+  .page { display: block !important; }
+  .card { border: 1px solid #ccc; background: #fff; }
 }
-
-.btn-next:hover { background: #3a8fe0; }
 </style>
 </head>
 <body>
@@ -872,70 +703,67 @@ body {
 
 <!-- ══ HEADER ══ -->
 <header>
-  <img class="logo-badge" src="MHB_logo.png"/>
+  <img src="MHB_logo.png" alt="Meylan HB">
   <div class="header-text">
-    <h1>Suivi Pédagogique</h1>
-    <p>Meylan Handball · Arbitrage · Saison 25-26</p>
+    <h1>Suivi pédagogique</h1>
+    <p>Arbitrage JAJ · Meylan Handball · Saison 25-26</p>
   </div>
 </header>
 
-  <nav class="subnav">
-    <a href="index.html" class="active">Accueil</a>
-    <a href="ressources.html">Fiches d'aide</a>
-    <a href="commission.html">Commission</a>
-  </nav>
+<nav class="subnav">
+  <a href="index.html">Accueil</a>
+  <a href="ressources.html">Fiches d'aide</a>
+  <a href="commission.html">Commission</a>
+</nav>
 
 <!-- ══ SCORE BAR ══ -->
 <div class="score-bar">
-  <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
-    <div class="score-team" id="team-a-name" style="font-size:11px; max-width:80px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Équipe A</div>
-    <div style="font-size:9px; color:rgba(255,255,255,0.5);">Domicile</div>
-    <div style="display:flex; gap:4px;">
-      <button class="score-btn" onclick="changeScore('a', -1)" style="width:28px; height:28px; font-size:16px;">−</button>
-      <span class="score-num" id="score-a" style="font-size:26px; min-width:30px; text-align:center;">0</span>
-      <button class="score-btn" onclick="changeScore('a', 1)" style="width:28px; height:28px; font-size:16px;">+</button>
+  <div class="score-team-block">
+    <div class="score-team-name" id="team-a-name">Équipe A</div>
+    <div class="score-role">Domicile</div>
+    <div class="score-controls">
+      <button class="score-btn" onclick="changeScore('a',-1)">−</button>
+      <span class="score-num" id="score-a">0</span>
+      <button class="score-btn" onclick="changeScore('a',1)">+</button>
     </div>
   </div>
 
-  <div style="display:flex; flex-direction:column; align-items:center; gap:3px; margin: 0 6px;">
-    <span style="font-size:20px; color:rgba(255,255,255,0.4);">–</span>
-    <div class="chrono" id="chrono-display" style="font-size:17px;">00:00</div>
-    <div class="periode-badge" id="periode-label">1ère mi-temps</div>
-    <div class="chrono-controls">
+  <div class="chrono-center">
+    <span class="score-sep">—</span>
+    <div class="chrono-time" id="chrono-display">00:00</div>
+    <div class="chrono-periode" id="periode-label">1ère période</div>
+    <div class="chrono-btns">
       <button class="chrono-ctrl" id="chrono-start-btn" onclick="toggleChrono()">▶</button>
       <button class="chrono-ctrl" onclick="resetChrono()">⟳</button>
       <button class="chrono-ctrl" onclick="switchPeriode()">½</button>
     </div>
   </div>
 
-  <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
-    <div class="score-team right" id="team-b-name" style="font-size:11px; max-width:80px; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Équipe B</div>
-    <div style="font-size:9px; color:rgba(255,255,255,0.5);">Extérieur</div>
-    <div style="display:flex; gap:4px;">
-      <button class="score-btn" onclick="changeScore('b', -1)" style="width:28px; height:28px; font-size:16px;">−</button>
-      <span class="score-num" id="score-b" style="font-size:26px; min-width:30px; text-align:center;">0</span>
-      <button class="score-btn" onclick="changeScore('b', 1)" style="width:28px; height:28px; font-size:16px;">+</button>
+  <div class="score-team-block">
+    <div class="score-team-name" id="team-b-name">Équipe B</div>
+    <div class="score-role">Extérieur</div>
+    <div class="score-controls">
+      <button class="score-btn" onclick="changeScore('b',-1)">−</button>
+      <span class="score-num" id="score-b">0</span>
+      <button class="score-btn" onclick="changeScore('b',1)">+</button>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════
      PAGE 1 — PRÉPARATION
-══════════════════════════════════ -->
+══════════════════════ -->
 <div class="page active" id="page-prep">
 
+  <div class="section-label"><span>Informations du match</span></div>
   <div class="card">
-    <div class="card-header">
-      <div class="card-icon">📋</div>
-      <span class="card-title">Informations du match</span>
-    </div>
     <div class="form-grid">
       <div>
-        <div class="field-label">Équipe A (domicile)</div>
+        <div class="field-label">Équipe A — Domicile</div>
         <input type="text" class="field-input" id="f-equipe-a" placeholder="Équipe domicile" oninput="updateTeamNames()">
       </div>
       <div>
-        <div class="field-label">Équipe B (extérieur)</div>
+        <div class="field-label">Équipe B — Extérieur</div>
         <input type="text" class="field-input" id="f-equipe-b" placeholder="Équipe extérieur" oninput="updateTeamNames()">
       </div>
       <div>
@@ -943,19 +771,18 @@ body {
         <select class="field-select" id="f-categorie">
           <option value="">— choisir —</option>
           <option>-9 ans mixte</option>
-          <option>-11 ans mixte</option>
+          <option>-11 ans garçons</option>
+          <option>-11 ans filles</option>
           <option>-13 ans garçons</option>
           <option>-13 ans filles</option>
           <option>-15 ans garçons</option>
           <option>-15 ans filles</option>
-          <option>-17 ans garçons</option>
-          <option>-17 ans filles</option>
-          <option>Séniors masculins</option>
-          <option>Séniors féminines</option>
+          <option>-18 ans garçons</option>
+          <option>-18 ans filles</option>
         </select>
       </div>
       <div>
-        <div class="field-label">Durée mi-temps (min)</div>
+        <div class="field-label">Durée période</div>
         <select class="field-select" id="f-duree-mitemps" onchange="applyChronoConfig()">
           <option value="12">3 × 12 min — -11 ans</option>
           <option value="20">2 × 20 min — -13 ans</option>
@@ -966,7 +793,7 @@ body {
       </div>
       <div id="f-duree-custom-wrap" style="display:none;">
         <div class="field-label">Durée personnalisée (min)</div>
-        <input type="number" class="field-input" id="f-duree-custom" min="1" max="60" value="25" placeholder="Minutes" onchange="applyChronoConfig()">
+        <input type="number" class="field-input" id="f-duree-custom" min="1" max="60" value="25" onchange="applyChronoConfig()">
       </div>
       <div>
         <div class="field-label">Compétition</div>
@@ -982,157 +809,149 @@ body {
     </div>
   </div>
 
+  <div class="section-label"><span>Arbitres observés</span></div>
   <div class="card">
-    <div class="card-header">
-      <div class="card-icon">🧑‍⚖️</div>
-      <span class="card-title">Arbitres observés</span>
-    </div>
-    <div class="arbitres-row">
-      <div class="arbitre-block">
-        <div class="arbitre-block-title">Arbitre 1</div>
+    <div class="arb-grid">
+      <div class="arb-block">
+        <div class="arb-block-title">Arbitre 1</div>
         <div class="field-label">Nom</div>
-        <input type="text" class="field-input" id="f-arb1-nom" placeholder="Prénom NOM" style="margin-bottom:6px;">
+        <input type="text" class="field-input" id="f-arb1-nom" placeholder="Prénom NOM" style="margin-bottom:7px;">
         <div class="field-label">Niveau</div>
         <select class="field-select" id="f-arb1-niveau">
           <option value="">—</option>
-          <option>JAJ Club</option>
-          <option>JAJ T3</option>
-          <option>JAJ T1-T2</option>
+          <option>JAJ Club</option><option>JAJ T3</option><option>JAJ T1-T2</option>
         </select>
       </div>
-      <div class="arbitre-block">
-        <div class="arbitre-block-title">Arbitre 2</div>
+      <div class="arb-block">
+        <div class="arb-block-title">Arbitre 2</div>
         <div class="field-label">Nom</div>
-        <input type="text" class="field-input" id="f-arb2-nom" placeholder="Prénom NOM" style="margin-bottom:6px;">
+        <input type="text" class="field-input" id="f-arb2-nom" placeholder="Prénom NOM" style="margin-bottom:7px;">
         <div class="field-label">Niveau</div>
         <select class="field-select" id="f-arb2-niveau">
           <option value="">—</option>
-          <option>JAJ Club</option>
-          <option>JAJ T3</option>
-          <option>JAJ T1-T2</option>
+          <option>JAJ Club</option><option>JAJ T3</option><option>JAJ T1-T2</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid" style="padding-top:0;">
+      <div>
+        <div class="field-label">Formateur / Observateur</div>
+        <select class="field-select" id="f-formateur">
+          <option value="">— choisir —</option>
+          <option>Xavier FINI</option><option>Patrick CHENEVIERE</option>
+          <option>Simon DESAILLOUD</option><option>Elsa GAIDET</option>
+          <option>Jules MARTEL</option><option>Antoine MELIAND</option>
         </select>
       </div>
     </div>
   </div>
 
   <div class="nav-bar">
-    <button class="btn btn-next" id="btn-next" onclick="showPage('match', this)">Passer en mode match →</button>
+    <button class="btn btn-next" onclick="showPage('match',this)">Passer en mode match →</button>
   </div>
-
 </div>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════
      PAGE 2 — MATCH
-══════════════════════════════════ -->
+══════════════════════ -->
 <div class="page" id="page-match">
 
+  <div class="section-label"><span>Saisie rapide</span></div>
   <div class="card">
-    <div class="card-header">
-      <div class="card-icon">⚡</div>
-      <span class="card-title">Saisie rapide</span>
-    </div>
     <div class="quick-btns">
-      <button class="qbtn sanction-yellow" onclick="openModal('Avertissement', 'tag-sanction')"><span class="qicon">🟨</span>Avertissement</button>
-      <button class="qbtn sanction-excl" onclick="openModal('Exclusion 2 min', 'tag-sanction')"><span class="qicon">⏱️</span>Exclusion 2'</button>
-      <button class="qbtn sanction-red" onclick="openModal('Carton rouge', 'tag-sanction')"><span class="qicon">🟥</span>Carton rouge</button>
-      <button class="qbtn sanction-disq" onclick="openModal('Carton bleu', 'tag-sanction')"><span class="qicon">🟦</span>Carton bleu</button>
-      <button class="qbtn commotion" onclick="openModal('Carton blanc - Protocole commotion', 'tag-commotion')"><span class="qicon">⬜​</span>Carton blanc</button>
-      <button class="qbtn ev-neutre" onclick="openModal('Jet franc', 'tag-neutre')"><span class="qicon">👋</span>Jet franc</button>
-      <button class="qbtn ev-neutre" onclick="openModal('7m', 'tag-neutre')"><span class="qicon">🎯</span>7m</button>
-      <button class="qbtn ev-neutre" onclick="openModal('Remise en jeu', 'tag-neutre')"><span class="qicon">🔄</span>Remise en jeu</button>
-      <button class="qbtn ev-neutre" onclick="openModal('Hésitation — décision tardive', 'tag-neutre')"><span class="qicon">⏳</span>Hésitation</button>
-      <button class="qbtn ev-neutre" onclick="openModal('Gestuelle', 'tag-neutre')"><span class="qicon">🙅</span>Gestuelle</button>
-      <button class="qbtn ev-neutre" onclick="openModal('Positionnement', 'tag-neutre')"><span class="qicon">📍</span>Position</button>
-      <button class="qbtn ev-neutre" onclick="openModal('Communication binôme', 'tag-neutre')"><span class="qicon">🤝</span>Communic.</button>
-      <button class="qbtn ev-neutre" onclick="openModal('Gestion du jeu', 'tag-neutre')"><span class="qicon">⚖️</span>Gestion jeu</button>
-      <button class="qbtn ev-erreur" onclick="openModal('Erreur / décision manquée', 'tag-erreur')"><span class="qicon">❌</span>Erreur déc.</button>
-      <button class="qbtn ev-positif" onclick="openModal('Point positif', 'tag-positif')"><span class="qicon">✅</span>Point +</button>
-      <button class="qbtn ev-trc" onclick="openModal('TRC — Temps de Régulation Comportemental', 'tag-neutre')"><span class="qicon">🛑</span>TRC</button>
-      <button class="qbtn ev-neutre" onclick="openModal('Temps mort équipe', 'tag-neutre')"><span class="qicon">⏸️</span>Temps mort</button>
-      <button class="qbtn ev-neutre" onclick="openModal('Note libre', 'tag-neutre')"><span class="qicon">🗒️</span>Note libre</button>
+      <button class="qbtn q-jaune"   onclick="openModal('Avertissement','tag-sanction')"><span class="qi">🟨</span>Avertissement</button>
+      <button class="qbtn q-excl"    onclick="openModal('Exclusion 2 min','tag-sanction')"><span class="qi">⏱️</span>Exclusion 2'</button>
+      <button class="qbtn q-rouge"   onclick="openModal('Carton rouge','tag-sanction')"><span class="qi">🟥</span>Carton rouge</button>
+      <button class="qbtn q-bleu"    onclick="openModal('Carton bleu','tag-sanction')"><span class="qi">🟦</span>Carton bleu</button>
+      <button class="qbtn q-blanc"   onclick="openModal('Carton blanc — Protocole commotion','tag-commotion')"><span class="qi">⬜</span>Carton blanc</button>
+      <button class="qbtn q-neutre"  onclick="openModal('Jet franc','tag-neutre')"><span class="qi">👋</span>Jet franc</button>
+      <button class="qbtn q-neutre"  onclick="openModal('7m — Penalty','tag-neutre')"><span class="qi">🎯</span>7m</button>
+      <button class="qbtn q-neutre"  onclick="openModal('Remise en jeu','tag-neutre')"><span class="qi">🔄</span>Remise en jeu</button>
+      <button class="qbtn q-erreur"  onclick="openModal('Hésitation — décision tardive','tag-erreur')"><span class="qi">⏳</span>Hésitation</button>
+      <button class="qbtn q-erreur"  onclick="openModal('Gestuelle incorrecte','tag-erreur')"><span class="qi">🙅</span>Gestuelle</button>
+      <button class="qbtn q-neutre"  onclick="openModal('Positionnement','tag-neutre')"><span class="qi">📍</span>Position</button>
+      <button class="qbtn q-neutre"  onclick="openModal('Communication binôme','tag-neutre')"><span class="qi">🤝</span>Communic.</button>
+      <button class="qbtn q-neutre"  onclick="openModal('Gestion du jeu','tag-neutre')"><span class="qi">⚖️</span>Gestion jeu</button>
+      <button class="qbtn q-erreur"  onclick="openModal('Erreur / décision manquée','tag-erreur')"><span class="qi">❌</span>Erreur déc.</button>
+      <button class="qbtn q-positif" onclick="openModal('Point positif','tag-positif')"><span class="qi">✅</span>Point +</button>
+      <button class="qbtn q-trc"     onclick="openModal('TRC — Temps de Régulation Comportemental','tag-neutre')"><span class="qi">🛑</span>TRC</button>
+      <button class="qbtn q-neutre"  onclick="openModal('Temps mort équipe','tag-neutre')"><span class="qi">⏸️</span>Temps mort</button>
+      <button class="qbtn q-neutre"  onclick="openModal('Note libre','tag-neutre')"><span class="qi">🗒️</span>Note libre</button>
     </div>
   </div>
 
+  <div class="section-label"><span>Événements du match</span></div>
   <div class="card">
-    <div class="card-header">
-      <div class="card-icon">📋</div>
-      <span class="card-title">Événements du match</span>
-      <span class="card-count" id="event-count">0</span>
+    <div class="card-head">
+      <span class="card-head-icon">📋</span>
+      <span class="card-head-title">Timeline</span>
+      <span class="card-head-count" id="event-count">0</span>
     </div>
     <div class="timeline-list" id="timeline">
       <div class="timeline-empty" id="timeline-empty">Aucun événement — utilise les boutons ci-dessus</div>
     </div>
   </div>
 
+  <div class="section-label"><span>Notes mi-temps</span></div>
   <div class="card">
-    <div class="card-header">
-      <div class="card-icon">💬</div>
-      <span class="card-title">Notes mi-temps</span>
-    </div>
     <div class="notes-area">
-      <textarea class="notes-textarea" id="notes-mitemps" rows="3" placeholder="Points évoqués à la mi-temps avec les arbitres…"></textarea>
+      <textarea class="field-textarea" id="notes-mitemps" rows="3"
+        placeholder="Points évoqués à la mi-temps avec les arbitres…"></textarea>
     </div>
   </div>
 
   <div class="nav-bar">
-    <button class="btn btn-prev" id="btn-prev" onclick="showPage('prep', this)">← Retour</button>
-    <button class="btn btn-next" id="btn-next" onclick="showPage('recap', this)">Aller au bilan →</button>
+    <button class="btn btn-prev" onclick="showPage('prep',this)">← Retour</button>
+    <button class="btn btn-next" onclick="showPage('recap',this)">Aller au bilan →</button>
   </div>
-
 </div>
 
-<!-- ══════════════════════════════════
+<!-- ══════════════════════
      PAGE 3 — BILAN
-══════════════════════════════════ -->
+══════════════════════ -->
 <div class="page" id="page-recap">
 
   <div class="recap-stats">
-    <div class="stat-box jaune">
+    <div class="stat-box s-gold">
       <div class="stat-num" id="stat-sanctions">0</div>
-      <div class="stat-label">Sanctions données</div>
+      <div class="stat-lbl">Sanctions</div>
     </div>
-    <div class="stat-box rouge">
+    <div class="stat-box s-red">
       <div class="stat-num" id="stat-erreurs">0</div>
-      <div class="stat-label">Erreurs / décisions manquées</div>
+      <div class="stat-lbl">Erreurs</div>
     </div>
-    <div class="stat-box vert">
+    <div class="stat-box s-green">
       <div class="stat-num" id="stat-positifs">0</div>
-      <div class="stat-label">Points positifs</div>
+      <div class="stat-lbl">Points +</div>
     </div>
-    <div class="stat-box">
+    <div class="stat-box s-blue">
       <div class="stat-num" id="stat-total">0</div>
-      <div class="stat-label">Événements total</div>
+      <div class="stat-lbl">Événements</div>
     </div>
   </div>
 
+  <div class="section-label"><span>Timeline complète</span></div>
   <div class="card">
-    <div class="card-header">
-      <div class="card-icon">📋</div>
-      <span class="card-title">Timeline complète du match</span>
-    </div>
     <div class="timeline-list" id="timeline-recap"></div>
   </div>
 
   <div class="nav-bar">
-    <button class="btn btn-prev" id="btn-prev" onclick="showPage('match', this)">← Retour</button>
-    <button class="btn btn-next" id="btn-next" onclick="window.location='suivi-arbitrage.html'">Remplir le suivi →</button>
+    <button class="btn btn-prev" onclick="showPage('match',this)">← Retour</button>
+    <button class="btn btn-next" onclick="window.location='suivi-arbitrage.html'">Remplir le suivi →</button>
   </div>
-
 </div>
 
-<!-- ══ MODAL SAISIE ÉVÉNEMENT ══ -->
+<!-- ══ MODAL ══ -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBg(event)">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="modal-title">Ajouter un événement</div>
-    <div style="text-align:center; margin-bottom:10px;">
-      <span class="modal-type-badge" id="modal-type-badge">Type</span>
-    </div>
+    <div class="modal-title" id="modal-title">Événement</div>
+    <span class="modal-badge" id="modal-badge">Type</span>
     <div class="modal-fields">
       <div class="modal-row">
         <div>
           <div class="field-label">Arbitre concerné</div>
-          <select class="field-select" id="modal-arbitre" style="width:100%;">
+          <select class="field-select" id="modal-arbitre">
             <option value="les deux">Les deux</option>
             <option value="arb1" id="modal-arb1-opt">Arbitre 1</option>
             <option value="arb2" id="modal-arb2-opt">Arbitre 2</option>
@@ -1140,7 +959,7 @@ body {
         </div>
         <div>
           <div class="field-label">Minute</div>
-          <input type="text" class="field-input" id="modal-minute" placeholder="auto" readonly style="background:var(--gris); color:var(--gris-dark);">
+          <input type="text" class="field-input" id="modal-minute" readonly style="color:var(--muted);">
         </div>
       </div>
       <div>
@@ -1149,21 +968,22 @@ body {
       </div>
       <div>
         <div class="field-label">Avis sur la décision</div>
-        <div class="avis-group" id="avis-group">
-          <button type="button" class="avis-btn avis-note selected"    data-avis="note"    onclick="selectAvis(this)">🗒️ Note</button>
-          <button type="button" class="avis-btn avis-ok"               data-avis="ok"      onclick="selectAvis(this)">✅ D'accord</button>
-          <button type="button" class="avis-btn avis-ko"               data-avis="ko"      onclick="selectAvis(this)">❌ Pas d'accord</button>
-          <button type="button" class="avis-btn avis-check"            data-avis="check"   onclick="selectAvis(this)">🔍 À vérifier</button>
+        <div class="avis-group">
+          <button type="button" class="avis-btn avis-note selected" data-avis="note"  onclick="selectAvis(this)">🗒️ Note</button>
+          <button type="button" class="avis-btn avis-ok"            data-avis="ok"    onclick="selectAvis(this)">✅ D'accord</button>
+          <button type="button" class="avis-btn avis-ko"            data-avis="ko"    onclick="selectAvis(this)">❌ Pas d'accord</button>
+          <button type="button" class="avis-btn avis-check"         data-avis="check" onclick="selectAvis(this)">🔍 À vérifier</button>
         </div>
       </div>
       <div>
         <div class="field-label">Description / Observation</div>
-        <textarea class="modal-textarea" id="modal-desc" placeholder="Décris rapidement ce que tu observes…" rows="3"></textarea>
+        <textarea class="field-textarea" id="modal-desc" rows="3"
+          placeholder="Décris rapidement ce que tu observes…"></textarea>
       </div>
     </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeModal()">Annuler</button>
-      <button class="btn-save" onclick="saveEvent()">✓ Enregistrer</button>
+      <button class="btn-save"   onclick="saveEvent()">✓ Enregistrer</button>
     </div>
   </div>
 </div>
@@ -1172,48 +992,54 @@ body {
 /* ══ STATE ══ */
 const state = {
   events: [],
-  scores: { a: 0, b: 0 },
-  chrono: { seconds: 0, maxSeconds: 25 * 60, running: false, periode: 1, interval: null, countDown: false },
+  scores: { a:0, b:0 },
+  chrono: { seconds:0, maxSeconds:25*60, running:false, periode:1, interval:null },
   ratings: {
-    arb1: { verbaux: 0, gestuels: 0, decision: 0, deplacement: 0, concentration: 0 },
-    arb2: { verbaux: 0, gestuels: 0, decision: 0, deplacement: 0, concentration: 0 }
+    arb1: { verbaux:0, gestuels:0, decision:0, deplacement:0, concentration:0 },
+    arb2: { verbaux:0, gestuels:0, decision:0, deplacement:0, concentration:0 }
   },
-  modal: { type: '', tagClass: '' }
+  modal: { type:'', tagClass:'', avis:'note' }
 };
 
 const CRITERIA = [
-  { key: 'verbaux', label: 'Appels verbaux' },
-  { key: 'gestuels', label: 'Signaux gestuels' },
-  { key: 'decision', label: 'Prise de décision' },
-  { key: 'deplacement', label: 'Déplacements' },
-  { key: 'concentration', label: 'Concentration' }
+  { key:'verbaux',       label:'Appels verbaux' },
+  { key:'gestuels',      label:'Signaux gestuels' },
+  { key:'decision',      label:'Prise de décision' },
+  { key:'deplacement',   label:'Déplacements' },
+  { key:'concentration', label:'Concentration' }
 ];
 
-const DOT_COLORS = {
-  'tag-sanction': 'dot-orange',
-  'tag-erreur': 'dot-red',
-  'tag-position': 'dot-blue',
-  'tag-comms': 'dot-green',
-  'tag-positif': 'dot-green',
-  'tag-gestion': 'dot-purple',
-  'tag-neutre': 'dot-gray'
+const DOT = {
+  'tag-sanction':'dot-orange', 'tag-erreur':'dot-red',
+  'tag-positif':'dot-green',   'tag-neutre':'dot-gray',
+  'tag-commotion':'dot-white'
 };
+const TAG_LABEL = {
+  'tag-sanction':'Sanction', 'tag-erreur':'Erreur',
+  'tag-positif':'Point +',   'tag-neutre':'Note',
+  'tag-commotion':'Protocole commotion'
+};
+const TAG_BG  = { 'tag-sanction':'rgba(232,0,29,0.1)', 'tag-erreur':'rgba(255,107,107,0.1)', 'tag-positif':'rgba(67,160,71,0.1)', 'tag-neutre':'#2e2e2e', 'tag-commotion':'rgba(245,242,236,0.05)' };
+const TAG_COL = { 'tag-sanction':'#ff4455', 'tag-erreur':'#ff6b6b', 'tag-positif':'#43a047', 'tag-neutre':'#9a9a9a', 'tag-commotion':'#aaa' };
+const TAG_BOR = { 'tag-sanction':'rgba(232,0,29,0.2)', 'tag-erreur':'rgba(255,107,107,0.2)', 'tag-positif':'rgba(67,160,71,0.2)', 'tag-neutre':'#333', 'tag-commotion':'#3a3a3a' };
+
+const AVIS_LABEL = { note:null, ok:"✅ D'accord", ko:"❌ Pas d'accord", check:"🔍 À vérifier" };
+const AVIS_BG    = { ok:'rgba(67,160,71,0.1)',  ko:'rgba(232,0,29,0.1)',  check:'rgba(251,140,0,0.1)' };
+const AVIS_COL   = { ok:'#43a047', ko:'#ff4455', check:'#fb8c00' };
+const AVIS_BOR   = { ok:'rgba(67,160,71,0.2)',  ko:'rgba(232,0,29,0.2)',  check:'rgba(251,140,0,0.2)' };
 
 /* ══ INIT ══ */
 document.addEventListener('DOMContentLoaded', () => {
-  const d = new Date();
-  document.getElementById('f-date').value = d.toISOString().split('T')[0];
-  document.getElementById('live-date').textContent = d.toLocaleDateString('fr-FR', { day:'2-digit', month:'short', year:'numeric' });
-  buildNotationGrid();
+  buildNotaGrid('nota-grid');
   updateStats();
 });
 
 /* ══ PAGES ══ */
 function showPage(name, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  btn.classList.add('active');
+  if (btn) btn.classList.add('active');
   if (name === 'recap') updateRecap();
 }
 
@@ -1222,371 +1048,194 @@ function changeScore(team, delta) {
   state.scores[team] = Math.max(0, state.scores[team] + delta);
   document.getElementById('score-' + team).textContent = state.scores[team];
 }
-
 function updateTeamNames() {
-  const a = document.getElementById('f-equipe-a').value || 'Équipe A';
-  const b = document.getElementById('f-equipe-b').value || 'Équipe B';
-  document.getElementById('team-a-name').textContent = a;
-  document.getElementById('team-b-name').textContent = b;
-}
-
-/* ══ CHRONO CONFIG ══ */
-function applyChronoConfig() {
-  const sel = document.getElementById('f-duree-mitemps');
-  const customWrap = document.getElementById('f-duree-custom-wrap');
-  let minutes;
-  if (sel.value === 'custom') {
-    customWrap.style.display = 'block';
-    minutes = parseInt(document.getElementById('f-duree-custom').value) || 25;
-  } else {
-    customWrap.style.display = 'none';
-    minutes = parseInt(sel.value) || 25;
-  }
-  state.chrono.maxSeconds = minutes * 60;
-  if (!state.chrono.running) {
-    state.chrono.seconds = 0;
-    updateChronoDisplay();
-  }
+  document.getElementById('team-a-name').textContent = document.getElementById('f-equipe-a').value || 'Équipe A';
+  document.getElementById('team-b-name').textContent = document.getElementById('f-equipe-b').value || 'Équipe B';
 }
 
 /* ══ CHRONO ══ */
+function applyChronoConfig() {
+  const sel = document.getElementById('f-duree-mitemps');
+  const wrap = document.getElementById('f-duree-custom-wrap');
+  let min;
+  if (sel.value === 'custom') { wrap.style.display='block'; min = parseInt(document.getElementById('f-duree-custom').value)||25; }
+  else { wrap.style.display='none'; min = parseInt(sel.value)||25; }
+  state.chrono.maxSeconds = min * 60;
+  if (!state.chrono.running) { state.chrono.seconds=0; updateChronoDisplay(); }
+}
 function toggleChrono() {
   if (state.chrono.running) {
-    clearInterval(state.chrono.interval);
-    state.chrono.running = false;
-    document.getElementById('chrono-start-btn').textContent = '▶';
+    clearInterval(state.chrono.interval); state.chrono.running=false;
+    document.getElementById('chrono-start-btn').textContent='▶';
   } else {
-    state.chrono.interval = setInterval(() => {
-      state.chrono.seconds++;
-      updateChronoDisplay();
-    }, 1000);
-    state.chrono.running = true;
-    document.getElementById('chrono-start-btn').textContent = '⏸';
+    state.chrono.interval = setInterval(()=>{ state.chrono.seconds++; updateChronoDisplay(); }, 1000);
+    state.chrono.running=true; document.getElementById('chrono-start-btn').textContent='⏸';
   }
 }
 function resetChrono() {
-  clearInterval(state.chrono.interval);
-  state.chrono.running = false;
-  state.chrono.seconds = 0;
-  document.getElementById('chrono-start-btn').textContent = '▶';
-  updateChronoDisplay();
+  clearInterval(state.chrono.interval); state.chrono.running=false; state.chrono.seconds=0;
+  document.getElementById('chrono-start-btn').textContent='▶'; updateChronoDisplay();
 }
 function switchPeriode() {
-  clearInterval(state.chrono.interval);
-  state.chrono.running = false;
-  state.chrono.seconds = 0;
-  const duree = document.getElementById('f-duree-mitemps').value;
-  const maxPeriodes = duree === '12' ? 3 : 2;
-  state.chrono.periode = state.chrono.periode >= maxPeriodes ? 1 : state.chrono.periode + 1;
-  document.getElementById('chrono-start-btn').textContent = '▶';
-  const labels = ['1ère période', '2ème période', '3ème période'];
-  document.getElementById('periode-label').textContent = labels[state.chrono.periode - 1] || (state.chrono.periode + 'ème période');
+  clearInterval(state.chrono.interval); state.chrono.running=false; state.chrono.seconds=0;
+  const max = document.getElementById('f-duree-mitemps').value==='12' ? 3 : 2;
+  state.chrono.periode = state.chrono.periode >= max ? 1 : state.chrono.periode+1;
+  document.getElementById('chrono-start-btn').textContent='▶';
+  document.getElementById('periode-label').textContent = ['1ère période','2ème période','3ème période'][state.chrono.periode-1];
   updateChronoDisplay();
 }
 function updateChronoDisplay() {
-  const elapsed = state.chrono.seconds;
-  const max = state.chrono.maxSeconds;
-  const remaining = Math.max(0, max - elapsed);
-  const m = Math.floor(remaining / 60).toString().padStart(2, '0');
-  const s = (remaining % 60).toString().padStart(2, '0');
-  const el = document.getElementById('chrono-display');
-  el.textContent = m + ':' + s;
-  el.style.color = remaining <= 60 ? '#FFD980' : '#fff';
-  if (remaining === 0 && state.chrono.running) {
-    clearInterval(state.chrono.interval);
-    state.chrono.running = false;
-    document.getElementById('chrono-start-btn').textContent = '▶';
-    document.getElementById('periode-label').textContent = state.chrono.periode === 1 ? 'Mi-temps !' : 'Fin du match !';
-  }
+  const m = Math.floor(state.chrono.seconds/60).toString().padStart(2,'0');
+  const s = (state.chrono.seconds%60).toString().padStart(2,'0');
+  document.getElementById('chrono-display').textContent = m+':'+s;
 }
 function getCurrentTime() {
-  const elapsed = state.chrono.seconds;
-  const m = Math.floor(elapsed / 60).toString().padStart(2, '0');
-  const s = (elapsed % 60).toString().padStart(2, '0');
-  return m + ':' + s + ' (P' + state.chrono.periode + ')';
+  const m = Math.floor(state.chrono.seconds/60).toString().padStart(2,'0');
+  const s = (state.chrono.seconds%60).toString().padStart(2,'0');
+  return m+':'+s+' (P'+state.chrono.periode+')';
 }
 
 /* ══ MODAL ══ */
-const tagLabels = {
-  'tag-sanction': 'Sanction',
-  'tag-erreur': 'Erreur',
-  'tag-position': 'Positionnement',
-  'tag-comms': 'Communication',
-  'tag-positif': 'Point positif',
-  'tag-gestion': 'Gestion du jeu',
-  'tag-neutre': 'Note'
-};
-const tagBgColors = {
-  'tag-sanction': '#FEF3E8',
-  'tag-erreur': '#FAEAE8',
-  'tag-position': '#E8EEF8',
-  'tag-comms': '#E6F5EC',
-  'tag-positif': '#E6F5EC',
-  'tag-gestion': '#EEEDFE',
-  'tag-neutre': '#F2F3F5'
-};
-const tagTextColors = {
-  'tag-sanction': '#B8540A',
-  'tag-erreur': '#C0392B',
-  'tag-position': '#0B2D6E',
-  'tag-comms': '#1A7A4A',
-  'tag-positif': '#1A7A4A',
-  'tag-gestion': '#534AB7',
-  'tag-neutre': '#6B7280'
-};
-
 function openModal(type, tagClass) {
-  state.modal = { type, tagClass, avis: 'note' };
+  state.modal = { type, tagClass, avis:'note' };
   document.getElementById('modal-title').textContent = type;
-  const badge = document.getElementById('modal-type-badge');
-  badge.textContent = tagLabels[tagClass] || 'Note';
-  badge.style.background = tagBgColors[tagClass] || '#F2F3F5';
-  badge.style.color = tagTextColors[tagClass] || '#6B7280';
-  document.getElementById('modal-minute').value = getCurrentTime() + ' — P' + state.chrono.periode;
-  const arb1 = document.getElementById('f-arb1-nom').value || 'Arbitre 1';
-  const arb2 = document.getElementById('f-arb2-nom').value || 'Arbitre 2';
-  document.getElementById('modal-arb1-opt').textContent = arb1;
-  document.getElementById('modal-arb2-opt').textContent = arb2;
-  document.getElementById('modal-desc').value = '';
-  document.getElementById('modal-joueur').value = '';
-  // reset avis
-  document.querySelectorAll('.avis-btn').forEach(b => b.classList.remove('selected'));
+  const badge = document.getElementById('modal-badge');
+  badge.textContent = TAG_LABEL[tagClass]||'Note';
+  badge.style.background = TAG_BG[tagClass]||'#2e2e2e';
+  badge.style.color = TAG_COL[tagClass]||'#9a9a9a';
+  badge.style.border = '1px solid '+(TAG_BOR[tagClass]||'#333');
+  document.getElementById('modal-minute').value = getCurrentTime();
+  document.getElementById('modal-arb1-opt').textContent = document.getElementById('f-arb1-nom').value||'Arbitre 1';
+  document.getElementById('modal-arb2-opt').textContent = document.getElementById('f-arb2-nom').value||'Arbitre 2';
+  document.getElementById('modal-desc').value='';
+  document.getElementById('modal-joueur').value='';
+  document.querySelectorAll('.avis-btn').forEach(b=>b.classList.remove('selected'));
   document.querySelector('.avis-btn[data-avis="note"]').classList.add('selected');
-  state.modal.avis = 'note';
   document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('modal-desc').focus(), 300);
+  setTimeout(()=>document.getElementById('modal-desc').focus(), 300);
 }
 function selectAvis(btn) {
-  document.querySelectorAll('.avis-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  state.modal.avis = btn.dataset.avis;
+  document.querySelectorAll('.avis-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected'); state.modal.avis=btn.dataset.avis;
 }
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-function closeModalOnBg(e) {
-  if (e.target === document.getElementById('modal-overlay')) closeModal();
-}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); }
+function closeModalOnBg(e) { if(e.target===document.getElementById('modal-overlay')) closeModal(); }
 function saveEvent() {
-  const desc = document.getElementById('modal-desc').value.trim();
-  const joueur = document.getElementById('modal-joueur').value.trim();
-  const arbitre = document.getElementById('modal-arbitre').value;
-  const time = document.getElementById('modal-minute').value;
   const ev = {
-    id: Date.now(),
-    type: state.modal.type,
-    tagClass: state.modal.tagClass,
-    avis: state.modal.avis,
-    time,
-    desc,
-    joueur,
-    arbitre
+    id:Date.now(), type:state.modal.type, tagClass:state.modal.tagClass,
+    avis:state.modal.avis, time:document.getElementById('modal-minute').value,
+    desc:document.getElementById('modal-desc').value.trim(),
+    joueur:document.getElementById('modal-joueur').value.trim(),
+    arbitre:document.getElementById('modal-arbitre').value
   };
-  state.events.unshift(ev);
-  closeModal();
-  renderTimeline();
-  updateStats();
+  state.events.unshift(ev); closeModal(); renderTimeline(); updateStats();
 }
 
 /* ══ TIMELINE ══ */
-const avisLabels = { note: null, ok: '✅ D\'accord', ko: '❌ Pas d\'accord', check: '🔍 À vérifier' };
-const avisBg    = { note: null, ok: '#E6F5EC', ko: '#FAEAE8', check: '#FEF3E8' };
-const avisColor = { note: null, ok: '#1A7A4A', ko: '#C0392B', check: '#B8540A' };
-function renderTimeline() {
-  const container = document.getElementById('timeline');
-  const empty = document.getElementById('timeline-empty');
-  if (state.events.length === 0) {
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-  container.innerHTML = '<div class="timeline-empty" id="timeline-empty" style="display:none;"></div>';
-  state.events.forEach(ev => {
-    const el = document.createElement('div');
-    el.className = 't-event';
-    const arb1 = document.getElementById('f-arb1-nom').value || 'Arb 1';
-    const arb2 = document.getElementById('f-arb2-nom').value || 'Arb 2';
-    const arbLabel = ev.arbitre === 'arb1' ? arb1 : ev.arbitre === 'arb2' ? arb2 : 'Binôme';
-    const avisLabel = avisLabels[ev.avis];
-    const avisBadge = avisLabel ? `<span class="t-tag" style="background:${avisBg[ev.avis]};color:${avisColor[ev.avis]};">${avisLabel}</span>` : '';
-    el.innerHTML = `
-      <span class="t-time">${ev.time}</span>
-      <span class="t-dot ${DOT_COLORS[ev.tagClass] || 'dot-gray'}"></span>
-      <div class="t-body">
-        <div class="t-type">${ev.type}${ev.joueur ? ' — <span style="color:var(--gris-dark);font-weight:400;">' + ev.joueur + '</span>' : ''}</div>
-        ${ev.desc ? `<div class="t-desc">${ev.desc}</div>` : ''}
-        <div class="t-tags">
-          <span class="t-tag ${ev.tagClass}">${tagLabels[ev.tagClass] || 'Note'}</span>
-          <span class="t-tag tag-neutre">${arbLabel}</span>
-          ${avisBadge}
-        </div>
+function buildEventHTML(ev, showDel) {
+  const arb1 = document.getElementById('f-arb1-nom').value||'Arb 1';
+  const arb2 = document.getElementById('f-arb2-nom').value||'Arb 2';
+  const arb = ev.arbitre==='arb1'?arb1:ev.arbitre==='arb2'?arb2:'Binôme';
+  const aLabel = AVIS_LABEL[ev.avis];
+  const aBadge = aLabel ? `<span class="t-tag" style="background:${AVIS_BG[ev.avis]};color:${AVIS_COL[ev.avis]};border:1px solid ${AVIS_BOR[ev.avis]};">${aLabel}</span>` : '';
+  const del = showDel ? `<button class="t-delete" onclick="deleteEvent(${ev.id})">×</button>` : '';
+  return `
+    <span class="t-time">${ev.time}</span>
+    <span class="t-dot ${DOT[ev.tagClass]||'dot-gray'}"></span>
+    <div class="t-body">
+      <div class="t-type">${ev.type}${ev.joueur?' <span style="color:var(--muted);font-weight:300;font-size:11px;">'+ev.joueur+'</span>':''}</div>
+      ${ev.desc?`<div class="t-desc">${ev.desc}</div>`:''}
+      <div class="t-tags">
+        <span class="t-tag" style="background:${TAG_BG[ev.tagClass]};color:${TAG_COL[ev.tagClass]};border:1px solid ${TAG_BOR[ev.tagClass]};">${TAG_LABEL[ev.tagClass]||'Note'}</span>
+        <span class="t-tag tag-neutre">${arb}</span>
+        ${aBadge}
       </div>
-      <button class="t-delete" onclick="deleteEvent(${ev.id})" title="Supprimer">×</button>
-    `;
-    container.appendChild(el);
+    </div>${del}`;
+}
+function renderTimeline() {
+  const c = document.getElementById('timeline');
+  const e = document.getElementById('timeline-empty');
+  if (!state.events.length) { e.style.display='block'; return; }
+  e.style.display='none';
+  c.innerHTML='<div class="timeline-empty" id="timeline-empty" style="display:none;"></div>';
+  state.events.forEach(ev=>{
+    const el=document.createElement('div'); el.className='t-event';
+    el.innerHTML=buildEventHTML(ev,true); c.appendChild(el);
   });
 }
 function deleteEvent(id) {
-  state.events = state.events.filter(e => e.id !== id);
-  renderTimeline();
-  updateStats();
+  state.events=state.events.filter(e=>e.id!==id); renderTimeline(); updateStats();
 }
 
-/* ══ NOTATION GRID ══ */
-function buildNotationGrid() {
-  const grid = document.getElementById('notation-grid');
-  if (!grid) return;
-  ['arb1', 'arb2'].forEach(arb => {
-    const block = document.createElement('div');
-    block.className = 'nota-block';
-    const nameEl = document.createElement('div');
-    nameEl.className = 'nota-name';
-    nameEl.id = 'nota-name-' + arb;
-    nameEl.textContent = arb === 'arb1' ? 'Arbitre 1' : 'Arbitre 2';
-    block.appendChild(nameEl);
-    CRITERIA.forEach(crit => {
-      const row = document.createElement('div');
-      row.className = 'nota-criterion';
-      row.innerHTML = `<div class="nota-crit-label">${crit.label}</div>`;
-      const stars = document.createElement('div');
-      stars.className = 'nota-stars';
-      for (let i = 1; i <= 5; i++) {
-        const s = document.createElement('div');
-        s.className = 'star';
-        s.textContent = i;
-        s.dataset.arb = arb;
-        s.dataset.crit = crit.key;
-        s.dataset.val = i;
-        s.onclick = function() { setRating(arb, crit.key, i); };
+/* ══ NOTATION ══ */
+function buildNotaGrid(containerId) {
+  const grid=document.getElementById(containerId);
+  if(!grid) return;
+  grid.innerHTML='';
+  ['arb1','arb2'].forEach(arb=>{
+    const b=document.createElement('div'); b.className='nota-block';
+    const nameEl=document.createElement('div'); nameEl.className='nota-name';
+    nameEl.id='nn-'+arb+'-'+containerId;
+    const inp=document.getElementById('f-arb'+(arb==='arb1'?'1':'2')+'-nom');
+    nameEl.textContent=(inp&&inp.value)||( arb==='arb1'?'Arbitre 1':'Arbitre 2');
+    b.appendChild(nameEl);
+    CRITERIA.forEach(crit=>{
+      const row=document.createElement('div'); row.className='nota-crit';
+      row.innerHTML=`<div class="nota-crit-label">${crit.label}</div>`;
+      const stars=document.createElement('div'); stars.className='nota-stars';
+      for(let i=1;i<=5;i++){
+        const s=document.createElement('div'); s.className='star';
+        s.textContent=i; s.dataset.arb=arb; s.dataset.crit=crit.key; s.dataset.val=i;
+        if(containerId==='nota-grid') s.onclick=()=>setRating(arb,crit.key,i);
+        else s.style.cursor='default';
+        if(i<=state.ratings[arb][crit.key]) s.classList.add('on');
         stars.appendChild(s);
       }
-      row.appendChild(stars);
-      block.appendChild(row);
+      row.appendChild(stars); b.appendChild(row);
     });
-    grid.appendChild(block);
+    grid.appendChild(b);
   });
-  syncNotaNames();
+  if(containerId==='nota-grid') syncNotaNames();
 }
-function syncNotaNames() {
-  const a1 = document.getElementById('f-arb1-nom');
-  const a2 = document.getElementById('f-arb2-nom');
-  if (!a1) return;
-  const n1 = document.getElementById('nota-name-arb1');
-  const n2 = document.getElementById('nota-name-arb2');
-  if (n1 && a1.value) n1.textContent = a1.value;
-  if (n2 && a2 && a2.value) n2.textContent = a2.value;
-  a1.addEventListener('input', () => { if (n1) n1.textContent = a1.value || 'Arbitre 1'; });
-  if (a2) a2.addEventListener('input', () => { if (n2) n2.textContent = a2.value || 'Arbitre 2'; });
+function syncNotaNames(){
+  ['arb1','arb2'].forEach((arb,i)=>{
+    const inp=document.getElementById('f-arb'+(i+1)+'-nom');
+    if(!inp) return;
+    inp.addEventListener('input',()=>{
+      const n=document.getElementById('nn-'+arb+'-nota-grid');
+      if(n) n.textContent=inp.value||(arb==='arb1'?'Arbitre 1':'Arbitre 2');
+    });
+  });
 }
-function setRating(arb, crit, val) {
-  state.ratings[arb][crit] = val;
-  document.querySelectorAll(`.star[data-arb="${arb}"][data-crit="${crit}"]`).forEach(s => {
-    s.classList.toggle('on', parseInt(s.dataset.val) <= val);
+function setRating(arb,crit,val){
+  state.ratings[arb][crit]=val;
+  document.querySelectorAll(`.star[data-arb="${arb}"][data-crit="${crit}"]`).forEach(s=>{
+    s.classList.toggle('on',parseInt(s.dataset.val)<=val);
   });
 }
 
 /* ══ STATS ══ */
-function updateStats() {
-  const sanctions = state.events.filter(e => e.tagClass === 'tag-sanction').length;
-  const erreurs = state.events.filter(e => e.tagClass === 'tag-erreur').length;
-  const positifs = state.events.filter(e => e.tagClass === 'tag-positif').length;
-  document.getElementById('stat-sanctions').textContent = sanctions;
-  document.getElementById('stat-erreurs').textContent = erreurs;
-  document.getElementById('stat-positifs').textContent = positifs;
-  document.getElementById('stat-total').textContent = state.events.length;
-  document.getElementById('event-count').textContent = state.events.length;
+function updateStats(){
+  document.getElementById('stat-sanctions').textContent=state.events.filter(e=>e.tagClass==='tag-sanction').length;
+  document.getElementById('stat-erreurs').textContent=state.events.filter(e=>e.tagClass==='tag-erreur').length;
+  document.getElementById('stat-positifs').textContent=state.events.filter(e=>e.tagClass==='tag-positif').length;
+  document.getElementById('stat-total').textContent=state.events.length;
+  document.getElementById('event-count').textContent=state.events.length;
 }
 
 /* ══ RECAP ══ */
-function updateRecap() {
+function updateRecap(){
   updateStats();
-  const recapTimeline = document.getElementById('timeline-recap');
-  if (state.events.length === 0) {
-    recapTimeline.innerHTML = '<div class="timeline-empty">Aucun événement enregistré</div>';
-  } else {
-    recapTimeline.innerHTML = '';
-    [...state.events].reverse().forEach(ev => {
-      const el = document.createElement('div');
-      el.className = 't-event';
-      const arb1 = document.getElementById('f-arb1-nom').value || 'Arb 1';
-      const arb2 = document.getElementById('f-arb2-nom').value || 'Arb 2';
-      const arbLabel = ev.arbitre === 'arb1' ? arb1 : ev.arbitre === 'arb2' ? arb2 : 'Binôme';
-      const avisLabelR = avisLabels[ev.avis];
-      const avisBadgeR = avisLabelR ? `<span class="t-tag" style="background:${avisBg[ev.avis]};color:${avisColor[ev.avis]};">${avisLabelR}</span>` : '';
-      el.innerHTML = `
-        <span class="t-time">${ev.time}</span>
-        <span class="t-dot ${DOT_COLORS[ev.tagClass] || 'dot-gray'}"></span>
-        <div class="t-body">
-          <div class="t-type">${ev.type}${ev.joueur ? ' — <span style="color:var(--gris-dark);">' + ev.joueur + '</span>' : ''}</div>
-          ${ev.desc ? `<div class="t-desc">${ev.desc}</div>` : ''}
-          <div class="t-tags">
-            <span class="t-tag ${ev.tagClass}">${tagLabels[ev.tagClass]||'Note'}</span>
-            <span class="t-tag tag-neutre">${arbLabel}</span>
-            ${avisBadgeR}
-          </div>
-        </div>
-      `;
-      recapTimeline.appendChild(el);
+  const rt=document.getElementById('timeline-recap');
+  if(!state.events.length){ rt.innerHTML='<div class="timeline-empty">Aucun événement enregistré</div>'; }
+  else{
+    rt.innerHTML='';
+    [...state.events].reverse().forEach(ev=>{
+      const el=document.createElement('div'); el.className='t-event';
+      el.innerHTML=buildEventHTML(ev,false); rt.appendChild(el);
     });
   }
-  const recapNota = document.getElementById('notation-recap');
-  recapNota.innerHTML = '';
-  ['arb1', 'arb2'].forEach(arb => {
-    const nameInput = document.getElementById('f-arb' + (arb === 'arb1' ? '1' : '2') + '-nom');
-    const name = nameInput ? (nameInput.value || (arb === 'arb1' ? 'Arbitre 1' : 'Arbitre 2')) : arb;
-    const block = document.createElement('div');
-    block.className = 'nota-recap-block';
-    block.innerHTML = `<div class="nota-recap-name">${name}</div>`;
-    CRITERIA.forEach(crit => {
-      const val = state.ratings[arb][crit.key];
-      const row = document.createElement('div');
-      row.className = 'nota-recap-row';
-      let dots = '<div class="nota-recap-dots">';
-      for (let i = 1; i <= 5; i++) dots += `<div class="rdot${i <= val ? ' on' : ''}"></div>`;
-      dots += '</div>';
-      row.innerHTML = `<span class="nota-recap-crit">${crit.label}</span>${dots}`;
-      block.appendChild(row);
-    });
-    recapNota.appendChild(block);
-  });
-}
-
-/* ══ EXPORT ══ */
-function exportJSON() {
-  const data = {
-    match: {
-      date: document.getElementById('f-date').value,
-      lieu: document.getElementById('f-lieu').value,
-      equipeA: document.getElementById('f-equipe-a').value,
-      equipeB: document.getElementById('f-equipe-b').value,
-      categorie: document.getElementById('f-categorie').value,
-      competition: document.getElementById('f-compet').value,
-      scoreA: state.scores.a,
-      scoreB: state.scores.b
-    },
-    arbitres: {
-      arb1: { nom: document.getElementById('f-arb1-nom').value, niveau: document.getElementById('f-arb1-niveau').value },
-      arb2: { nom: document.getElementById('f-arb2-nom').value, niveau: document.getElementById('f-arb2-niveau').value },
-      formateur: document.getElementById('f-formateur').value,
-      suivi: document.getElementById('f-suivi').value
-    },
-    objectifs: document.getElementById('f-objectifs').value,
-    events: state.events,
-    ratings: state.ratings,
-    notes: {
-      mitemps: document.getElementById('notes-mitemps').value,
-      positif: document.getElementById('bilan-positif').value,
-      axes: document.getElementById('bilan-axes').value,
-      message: document.getElementById('bilan-message').value
-    }
-  };
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  const arb1 = data.arbitres.arb1.nom.replace(/\s/g, '_') || 'arbitre';
-  const dateStr = data.match.date.replace(/-/g, '') || 'date';
-  a.download = `suivi_${arb1}_${dateStr}.json`;
-  a.click();
+  buildNotaGrid('nota-recap-grid');
 }
 </script>
 </body>
