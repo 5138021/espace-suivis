@@ -2,27 +2,32 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Feuille de match — Arbitrage JAJ · Meylan HB</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Suivi Pédagogique Complet — JAJ · Meylan HB</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 :root {
-  --rouge:   #E8001D;
-  --noir:    #0D0D0D;
-  --blanc:   #F5F2EC;
-  --gris:    #1A1A1A;
-  --gris-mid:#2E2E2E;
-  --accent:  #FFD100;
-  --muted:   #9A9A9A;
-  --bleu:    #4A9FFF;
-  --border:  #1E1E1E;
-  --ins:     #e53935;
-  --opt:     #fb8c00;
-  --cor:     #43a047;
-  --tres:    #4A9FFF;
+  --rouge:     #E8001D;
+  --noir:      #0D0D0D;
+  --blanc:     #F5F2EC;
+  --gris:      #1A1A1A;
+  --gris-mid:  #2E2E2E;
+  --gris-light:#3A3A3A;
+  --accent:    #FFD100;
+  --muted:     #9A9A9A;
+  --bleu:      #4A9FFF;
+  --vert:      #43a047;
+  --orange:    #fb8c00;
+  --ins:       #e53935;
+  --opt:       #fb8c00;
+  --cor:       #43a047;
+  --tres:      #4A9FFF;
+  --border:    #1E1E1E;
+  --touch-min: 52px;
+  --radius:    4px;
 }
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 body {
   background: var(--noir);
   color: var(--blanc);
@@ -32,7 +37,7 @@ body {
   padding-bottom: 80px;
 }
 
-/* ── STRIPE ── */
+/* ── TOP STRIPE ── */
 .top-stripe {
   height: 4px;
   background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
@@ -40,26 +45,26 @@ body {
 
 /* ── HEADER ── */
 header {
-  padding: 1.5rem 1.2rem;
+  padding: 1.1rem 1rem;
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 1rem;
   border-bottom: 1px solid #222;
   position: sticky;
   top: 0;
   z-index: 100;
   background: var(--noir);
 }
-header img { height: 48px; width: auto; }
+header img { height: 40px; width: auto; }
 .header-text h1 {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   letter-spacing: 3px;
   color: var(--blanc);
   line-height: 1;
 }
 .header-text p {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: var(--muted);
   letter-spacing: 2px;
   text-transform: uppercase;
@@ -68,49 +73,66 @@ header img { height: 48px; width: auto; }
 
 /* ── SUBNAV ── */
 .subnav {
-  padding: 0 1.2rem;
+  padding: 0 1rem;
   border-bottom: 1px solid #222;
   display: flex;
   background: var(--noir);
   overflow-x: auto;
 }
 .subnav a {
-  padding: 0.8rem 1rem;
-  font-size: 0.65rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   color: var(--muted);
   text-decoration: none;
   border-bottom: 2px solid transparent;
-  transition: color .2s, border-color .2s;
   white-space: nowrap;
 }
 .subnav a:hover { color: var(--blanc); }
-.subnav a.active { color: var(--blanc); border-bottom-color: var(--bleu); }
 
-/* ── STEP TABS ── */
-.step-tabs {
+/* ── PHASE TABS ── */
+.phase-tabs {
   display: flex;
   background: var(--gris);
   border-bottom: 1px solid #222;
   overflow-x: auto;
+  position: sticky;
+  top: 57px;
+  z-index: 90;
 }
-.step-tab {
+.phase-tab {
   font-family: 'DM Sans', sans-serif;
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   color: var(--muted);
   background: none;
   border: none;
   border-bottom: 2px solid transparent;
-  padding: 0.85rem 1.4rem;
+  padding: 0.8rem 1.2rem;
   cursor: pointer;
   white-space: nowrap;
   transition: color .2s, border-color .2s;
 }
-.step-tab:hover { color: var(--blanc); }
-.step-tab.active { color: var(--blanc); border-bottom-color: var(--accent); font-weight: 600; }
+.phase-tab:hover { color: var(--blanc); }
+.phase-tab.active { color: var(--blanc); border-bottom-color: var(--accent); font-weight: 600; }
+.phase-tab.done { color: var(--vert); }
+.phase-tab.done.active { border-bottom-color: var(--vert); }
+.phase-badge {
+  display: inline-block;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  margin-right: 5px;
+  background: var(--gris-mid);
+  color: var(--muted);
+}
+.phase-tab.done .phase-badge { background: rgba(67,160,71,0.2); color: var(--vert); }
+.phase-tab.active .phase-badge { background: rgba(255,209,0,0.2); color: var(--accent); }
 
 /* ── SCORE BAR ── */
 .score-bar {
@@ -121,20 +143,8 @@ header img { height: 48px; width: auto; }
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  position: relative;
 }
-.score-bar::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-}
-.score-team-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
+.score-team-block { display:flex; flex-direction:column; align-items:center; gap:3px; }
 .score-team-name {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 13px;
@@ -146,12 +156,7 @@ header img { height: 48px; width: auto; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.score-role {
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+.score-role { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
 .score-controls { display: flex; align-items: center; gap: 5px; margin-top: 2px; }
 .score-num {
   font-family: 'Bebas Neue', sans-serif;
@@ -172,23 +177,11 @@ header img { height: 48px; width: auto; }
   font-size: 16px;
   display: flex; align-items: center; justify-content: center;
   transition: background .1s;
-  font-family: 'DM Sans', sans-serif;
 }
 .score-btn:hover { background: #3a3a3a; }
 .score-btn:active { transform: scale(0.92); }
-
-.chrono-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  margin: 0 4px;
-}
-.score-sep {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 20px;
-  color: #333;
-}
+.chrono-center { display:flex; flex-direction:column; align-items:center; gap:2px; margin:0 4px; }
+.score-sep { font-family:'Bebas Neue',sans-serif; font-size:20px; color:#333; }
 .chrono-time {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 22px;
@@ -197,37 +190,53 @@ header img { height: 48px; width: auto; }
   line-height: 1;
 }
 .chrono-periode {
-  font-size: 9px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-  background: var(--gris-mid);
-  padding: 1px 7px;
-  border-radius: 2px;
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted);
+  background: var(--gris-mid); padding: 1px 7px; border-radius: 2px;
 }
-.chrono-btns { display: flex; gap: 4px; margin-top: 3px; }
+.chrono-btns { display:flex; gap:4px; margin-top:3px; }
 .chrono-ctrl {
   font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  letter-spacing: 1px;
+  font-size: 10px; letter-spacing: 1px;
   padding: 2px 8px;
-  border-radius: 2px;
-  border: 1px solid #333;
-  background: var(--gris-mid);
-  color: var(--blanc);
+  border-radius: 2px; border: 1px solid #333;
+  background: var(--gris-mid); color: var(--blanc);
   cursor: pointer;
-  transition: background .1s;
 }
 .chrono-ctrl:hover { background: #3a3a3a; }
 
+/* ── STEP TABS (within live) ── */
+.step-tabs {
+  display: flex;
+  background: var(--gris);
+  border-bottom: 1px solid #222;
+  overflow-x: auto;
+}
+.step-tab {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 0.75rem 1.2rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .2s, border-color .2s;
+}
+.step-tab:hover { color: var(--blanc); }
+.step-tab.active { color: var(--blanc); border-bottom-color: var(--bleu); font-weight: 600; }
+
 /* ── PAGES ── */
-.page { display: none; padding: 0 0 12px; }
-.page.active { display: block; }
+.phase { display:none; }
+.phase.active { display:block; }
+.subpage { display:none; }
+.subpage.active { display:block; padding-bottom: 12px; }
 
 /* ── SECTION LABEL ── */
 .section-label {
   padding: 1rem 1.2rem 0.6rem;
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--muted);
@@ -243,35 +252,23 @@ header img { height: 48px; width: auto; }
 .card {
   background: var(--gris);
   border-bottom: 1px solid var(--border);
-  margin-bottom: 0;
   overflow: hidden;
 }
-.card + .card { border-top: 1px solid var(--border); }
 .card-head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display:flex; align-items:center; gap:8px;
   padding: 8px 14px;
   border-bottom: 1px solid var(--border);
   background: #111;
 }
-.card-head-icon { font-size: 13px; }
-.card-head-title {
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--muted);
-  flex: 1;
-}
+.card-head-icon { font-size:13px; }
+.card-head-title { font-size:0.6rem; text-transform:uppercase; letter-spacing:2px; color:var(--muted); flex:1; }
 .card-head-count {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 0.85rem;
-  letter-spacing: 1px;
+  font-size: 0.85rem; letter-spacing:1px;
   color: var(--bleu);
   background: rgba(74,159,255,0.08);
   border: 1px solid rgba(74,159,255,0.2);
-  padding: 1px 8px;
-  border-radius: 2px;
+  padding: 1px 8px; border-radius: 2px;
 }
 
 /* ── FORM ── */
@@ -287,7 +284,9 @@ header img { height: 48px; width: auto; }
   text-transform: uppercase;
   color: var(--muted);
   margin-bottom: 4px;
+  display: block;
 }
+.field-label .required { color: var(--accent); margin-left: 3px; }
 .field-input, .field-select, .field-textarea {
   width: 100%;
   padding: 7px 10px;
@@ -305,395 +304,350 @@ header img { height: 48px; width: auto; }
 .field-textarea { resize: none; line-height: 1.5; }
 .field-input::placeholder, .field-textarea::placeholder { color: #444; }
 
-.arb-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 0 14px 12px;
-}
-.arb-block {
-  border: 1px solid #333;
-  border-radius: 2px;
-  padding: 10px;
-  background: var(--gris-mid);
-}
-.arb-block-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 0.8rem;
-  letter-spacing: 2px;
-  color: var(--rouge);
-  margin-bottom: 8px;
-}
+.arb-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:0 14px 12px; }
+.arb-block { border:1px solid #333; border-radius:2px; padding:10px; background:var(--gris-mid); }
+.arb-block-title { font-family:'Bebas Neue',sans-serif; font-size:0.8rem; letter-spacing:2px; color:var(--rouge); margin-bottom:8px; }
 
 /* ── QUICK BUTTONS ── */
-.quick-btns {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 5px;
-  padding: 10px 12px;
-}
+.quick-btns { display:grid; grid-template-columns:repeat(3,1fr); gap:5px; padding:10px 12px; }
 .qbtn {
   border-radius: 2px;
   padding: 9px 4px;
   font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 10px; font-weight: 600;
   letter-spacing: 0.5px;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
   border: 1px solid transparent;
   transition: transform .1s, filter .1s;
   text-transform: uppercase;
 }
 .qbtn:active { transform: scale(0.94); filter: brightness(1.2); }
 .qbtn .qi { font-size: 17px; }
-
-.q-jaune   { background: rgba(255,209,0,0.08);   color: var(--accent); border-color: rgba(255,209,0,0.2); }
-.q-excl    { background: rgba(251,140,0,0.08);   color: #fb8c00;       border-color: rgba(251,140,0,0.2); }
-.q-rouge   { background: rgba(232,0,29,0.08);    color: var(--rouge);  border-color: rgba(232,0,29,0.2); }
-.q-bleu    { background: rgba(74,159,255,0.08);  color: var(--bleu);   border-color: rgba(74,159,255,0.2); }
-.q-blanc   { background: rgba(245,242,236,0.05); color: #aaa;          border-color: rgba(255,255,255,0.12); }
-.q-neutre  { background: var(--gris-mid);        color: var(--muted);  border-color: #333; }
-.q-erreur  { background: rgba(232,0,29,0.06);    color: #ff6b6b;       border-color: rgba(232,0,29,0.15); }
-.q-positif { background: rgba(67,160,71,0.08);   color: #43a047;       border-color: rgba(67,160,71,0.2); }
-.q-trc     { background: rgba(251,140,0,0.06);   color: #fb8c00;       border-color: rgba(251,140,0,0.15); }
+.q-jaune   { background:rgba(255,209,0,0.08);   color:var(--accent); border-color:rgba(255,209,0,0.2); }
+.q-excl    { background:rgba(251,140,0,0.08);   color:#fb8c00;       border-color:rgba(251,140,0,0.2); }
+.q-rouge   { background:rgba(232,0,29,0.08);    color:var(--rouge);  border-color:rgba(232,0,29,0.2); }
+.q-bleu    { background:rgba(74,159,255,0.08);  color:var(--bleu);   border-color:rgba(74,159,255,0.2); }
+.q-blanc   { background:rgba(245,242,236,0.05); color:#aaa;          border-color:rgba(255,255,255,0.12); }
+.q-neutre  { background:var(--gris-mid);        color:var(--muted);  border-color:#333; }
+.q-erreur  { background:rgba(232,0,29,0.06);    color:#ff6b6b;       border-color:rgba(232,0,29,0.15); }
+.q-positif { background:rgba(67,160,71,0.08);   color:#43a047;       border-color:rgba(67,160,71,0.2); }
+.q-trc     { background:rgba(251,140,0,0.06);   color:#fb8c00;       border-color:rgba(251,140,0,0.15); }
 
 /* ── AVIS BUTTONS ── */
-.avis-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5px;
-}
+.avis-group { display:grid; grid-template-columns:1fr 1fr; gap:5px; }
 .avis-btn {
   padding: 7px 5px;
-  border-radius: 2px;
-  border: 1px solid #333;
+  border-radius: 2px; border: 1px solid #333;
   font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  text-align: center;
-  transition: all .12s;
-  background: var(--gris-mid);
-  color: var(--muted);
+  font-size: 10px; font-weight: 600; letter-spacing: 0.5px;
+  text-transform: uppercase; cursor: pointer; text-align: center;
+  transition: all .12s; background: var(--gris-mid); color: var(--muted);
 }
 .avis-btn:active { transform: scale(0.96); }
-.avis-note  { }
-.avis-ok    { background: rgba(67,160,71,0.08);  color: #43a047; border-color: rgba(67,160,71,0.25); }
-.avis-ko    { background: rgba(232,0,29,0.08);   color: var(--rouge); border-color: rgba(232,0,29,0.25); }
-.avis-check { background: rgba(251,140,0,0.08);  color: #fb8c00; border-color: rgba(251,140,0,0.25); }
+.avis-ok    { background:rgba(67,160,71,0.08);  color:#43a047; border-color:rgba(67,160,71,0.25); }
+.avis-ko    { background:rgba(232,0,29,0.08);   color:var(--rouge); border-color:rgba(232,0,29,0.25); }
+.avis-check { background:rgba(251,140,0,0.08);  color:#fb8c00; border-color:rgba(251,140,0,0.25); }
 .avis-btn.selected { box-shadow: 0 0 0 1.5px currentColor; font-weight: 700; }
 
 /* ── TIMELINE ── */
 .timeline-list { padding: 4px 0; }
-.timeline-empty {
-  text-align: center;
-  padding: 22px;
-  font-size: 0.65rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: #333;
-}
+.timeline-empty { text-align:center; padding:22px; font-size:0.62rem; letter-spacing:2px; text-transform:uppercase; color:#333; }
 .t-event {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 14px;
-  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
   transition: background .1s;
-  cursor: default;
 }
-.t-event:last-child { border-bottom: none; }
+.t-event:last-child { border-bottom:none; }
 .t-event:hover { background: #111; }
-.t-time {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 13px;
-  letter-spacing: 1px;
-  color: var(--muted);
-  min-width: 52px;
-  padding-top: 1px;
-}
-.t-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  margin-top: 5px;
-  flex-shrink: 0;
-}
-.t-body { flex: 1; }
-.t-type {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--blanc);
-  line-height: 1.3;
-}
-.t-desc {
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 2px;
-  line-height: 1.5;
-  font-weight: 300;
-}
-.t-tags { margin-top: 5px; display: flex; flex-wrap: wrap; gap: 4px; }
-.t-tag {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 2px 7px;
-  border-radius: 2px;
-}
-.tag-sanction   { background: rgba(232,0,29,0.1);   color: #ff4455; border: 1px solid rgba(232,0,29,0.2); }
-.tag-erreur     { background: rgba(255,107,107,0.1); color: #ff6b6b; border: 1px solid rgba(255,107,107,0.2); }
-.tag-positif    { background: rgba(67,160,71,0.1);   color: #43a047; border: 1px solid rgba(67,160,71,0.2); }
-.tag-neutre     { background: var(--gris-mid); color: var(--muted); border: 1px solid #333; }
-.tag-commotion  { background: rgba(245,242,236,0.05); color: #aaa; border: 1px solid #3a3a3a; }
-.t-delete {
-  background: none;
-  border: none;
-  color: #333;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 0 2px;
-  transition: color .1s;
-}
-.t-delete:hover { color: var(--rouge); }
-
-/* Dots */
-.dot-red    { background: var(--rouge); }
-.dot-orange { background: #fb8c00; }
-.dot-green  { background: #43a047; }
-.dot-blue   { background: var(--bleu); }
-.dot-gray   { background: #444; }
-.dot-white  { background: #777; border: 1px solid #555; }
-.dot-yellow { background: var(--accent); }
+.t-time { font-family:'Bebas Neue',sans-serif; font-size:13px; letter-spacing:1px; color:var(--muted); min-width:52px; padding-top:1px; }
+.t-dot { width:8px; height:8px; border-radius:50%; margin-top:5px; flex-shrink:0; }
+.t-body { flex:1; }
+.t-type { font-size:13px; font-weight:600; color:var(--blanc); line-height:1.3; }
+.t-desc { font-size:11px; color:var(--muted); margin-top:2px; line-height:1.5; font-weight:300; }
+.t-tags { margin-top:5px; display:flex; flex-wrap:wrap; gap:4px; }
+.t-tag { font-size:9px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:2px 7px; border-radius:2px; }
+.tag-sanction  { background:rgba(232,0,29,0.1);   color:#ff4455; border:1px solid rgba(232,0,29,0.2); }
+.tag-erreur    { background:rgba(255,107,107,0.1); color:#ff6b6b; border:1px solid rgba(255,107,107,0.2); }
+.tag-positif   { background:rgba(67,160,71,0.1);   color:#43a047; border:1px solid rgba(67,160,71,0.2); }
+.tag-neutre    { background:var(--gris-mid); color:var(--muted); border:1px solid #333; }
+.tag-commotion { background:rgba(245,242,236,0.05); color:#aaa; border:1px solid #3a3a3a; }
+.t-delete { background:none; border:none; color:#333; font-size:16px; cursor:pointer; padding:0 2px; transition:color .1s; }
+.t-delete:hover { color:var(--rouge); }
+.dot-red    { background:var(--rouge); }
+.dot-orange { background:#fb8c00; }
+.dot-green  { background:#43a047; }
+.dot-blue   { background:var(--bleu); }
+.dot-gray   { background:#444; }
+.dot-white  { background:#777; border:1px solid #555; }
+.dot-yellow { background:var(--accent); }
 
 /* ── NOTATION ── */
-.nota-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  padding: 12px 14px;
-}
-.nota-block {
-  background: var(--gris-mid);
-  border: 1px solid #333;
-  border-radius: 2px;
-  padding: 10px;
-}
-.nota-name {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 0.85rem;
-  letter-spacing: 2px;
-  color: var(--rouge);
-  margin-bottom: 9px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.nota-crit { margin-bottom: 7px; }
-.nota-crit-label {
-  font-size: 0.58rem;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 3px;
-}
-.nota-stars { display: flex; gap: 3px; }
-.star {
-  width: 22px; height: 22px;
-  border-radius: 2px;
-  border: 1px solid #333;
-  background: var(--gris);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px;
-  font-weight: 600;
-  color: #444;
-  transition: all .1s;
-}
-.star.on { background: var(--rouge); border-color: var(--rouge); color: var(--blanc); }
-.star:hover { border-color: var(--rouge); color: var(--muted); }
+.nota-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:12px 14px; }
+.nota-block { background:var(--gris-mid); border:1px solid #333; border-radius:2px; padding:10px; }
+.nota-name { font-family:'Bebas Neue',sans-serif; font-size:0.85rem; letter-spacing:2px; color:var(--rouge); margin-bottom:9px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.nota-crit { margin-bottom:7px; }
+.nota-crit-label { font-size:0.56rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+.nota-stars { display:flex; gap:3px; }
+.star { width:22px; height:22px; border-radius:2px; border:1px solid #333; background:var(--gris); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; color:#444; transition:all .1s; }
+.star.on { background:var(--rouge); border-color:var(--rouge); color:var(--blanc); }
+.star:hover { border-color:var(--rouge); color:var(--muted); }
 
 /* ── NOTES ── */
 .notes-area { padding: 10px 14px; }
-.notes-lbl {
-  font-size: 0.58rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 5px;
-}
+.notes-lbl { font-size:0.58rem; letter-spacing:2px; text-transform:uppercase; color:var(--accent); margin-bottom:5px; }
 
 /* ── RECAP STATS ── */
-.recap-stats {
-  display: flex;
-  gap: 1px;
-  background: var(--border);
-  border-bottom: 1px solid var(--border);
-}
+.recap-stats { display:flex; gap:1px; background:var(--border); border-bottom:1px solid var(--border); }
 .stat-box {
-  flex: 1;
-  background: var(--gris);
-  padding: 1rem 0.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  position: relative;
-  overflow: hidden;
+  flex:1; background:var(--gris); padding:1rem 0.8rem;
+  display:flex; flex-direction:column; gap:3px;
+  position:relative; overflow:hidden;
 }
-.stat-box::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-}
-.s-red::before    { background: var(--rouge); }
-.s-green::before  { background: #43a047; }
-.s-gold::before   { background: var(--accent); }
-.s-blue::before   { background: var(--bleu); }
-.stat-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 2rem;
-  letter-spacing: 2px;
-  color: var(--blanc);
-  line-height: 1;
-}
-.s-red   .stat-num { color: var(--rouge); }
-.s-green .stat-num { color: #43a047; }
-.s-gold  .stat-num { color: var(--accent); }
-.s-blue  .stat-num { color: var(--bleu); }
-.stat-lbl {
-  font-size: 0.55rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  color: var(--muted);
-}
+.stat-box::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; }
+.s-red::before   { background:var(--rouge); }
+.s-green::before { background:#43a047; }
+.s-gold::before  { background:var(--accent); }
+.s-blue::before  { background:var(--bleu); }
+.stat-num { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:2px; color:var(--blanc); line-height:1; }
+.s-red .stat-num   { color:var(--rouge); }
+.s-green .stat-num { color:#43a047; }
+.s-gold .stat-num  { color:var(--accent); }
+.s-blue .stat-num  { color:var(--bleu); }
+.stat-lbl { font-size:0.55rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); }
 
 /* ── MODAL ── */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.8);
-  z-index: 200;
-  align-items: flex-end;
-  justify-content: center;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--gris);
-  border-top: 3px solid var(--rouge);
-  border-left: 1px solid #333;
-  border-right: 1px solid #333;
-  border-radius: 4px 4px 0 0;
-  width: 100%;
-  max-width: 520px;
-  padding: 16px 14px 28px;
-  animation: slideUp .2s ease-out;
-}
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity:0; }
-  to   { transform: translateY(0);    opacity:1; }
-}
-.modal-handle {
-  width: 32px; height: 3px;
-  background: #333;
-  border-radius: 2px;
-  margin: 0 auto 12px;
-}
-.modal-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 1.1rem;
-  letter-spacing: 3px;
-  color: var(--blanc);
-  text-align: center;
-  margin-bottom: 8px;
-}
-.modal-badge {
-  display: block;
-  width: fit-content;
-  margin: 0 auto 12px;
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 3px 12px;
-  border-radius: 2px;
-}
-.modal-fields { display: flex; flex-direction: column; gap: 8px; }
-.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.modal-actions { display: flex; gap: 8px; margin-top: 14px; }
-.btn-cancel {
-  flex: 1; padding: 10px;
-  border-radius: 2px;
-  border: 1px solid #333;
-  background: var(--gris-mid);
-  color: var(--muted);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: color .1s;
-}
-.btn-cancel:hover { color: var(--blanc); }
-.btn-save {
-  flex: 2; padding: 10px;
-  border-radius: 2px;
-  border: none;
-  background: var(--rouge);
-  color: var(--blanc);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background .1s;
-}
-.btn-save:hover { background: #c40019; }
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); z-index:300; align-items:flex-end; justify-content:center; }
+.modal-overlay.open { display:flex; }
+.modal { background:var(--gris); border-top:3px solid var(--rouge); border-left:1px solid #333; border-right:1px solid #333; border-radius:4px 4px 0 0; width:100%; max-width:520px; padding:16px 14px 28px; animation:slideUp .2s ease-out; }
+@keyframes slideUp { from { transform:translateY(20px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+.modal-handle { width:32px; height:3px; background:#333; border-radius:2px; margin:0 auto 12px; }
+.modal-title { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:3px; color:var(--blanc); text-align:center; margin-bottom:8px; }
+.modal-badge { display:block; width:fit-content; margin:0 auto 12px; font-size:0.6rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; padding:3px 12px; border-radius:2px; }
+.modal-fields { display:flex; flex-direction:column; gap:8px; }
+.modal-row { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.modal-actions { display:flex; gap:8px; margin-top:14px; }
+.btn-cancel { flex:1; padding:10px; border-radius:2px; border:1px solid #333; background:var(--gris-mid); color:var(--muted); font-family:'DM Sans',sans-serif; font-size:0.7rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.btn-cancel:hover { color:var(--blanc); }
+.btn-save { flex:2; padding:10px; border-radius:2px; border:none; background:var(--rouge); color:var(--blanc); font-family:'DM Sans',sans-serif; font-size:0.7rem; font-weight:600; letter-spacing:2px; text-transform:uppercase; cursor:pointer; }
+.btn-save:hover { background:#c40019; }
 
 /* ── NAV BAR ── */
 .nav-bar {
   padding: 10px 12px;
-  display: flex;
-  gap: 8px;
+  display: flex; gap: 8px;
   background: var(--gris);
   border-top: 1px solid var(--border);
 }
-.btn {
-  flex: 1; min-height: 46px;
+.btn { flex:1; min-height:46px; border:none; border-radius:2px; font-family:'Bebas Neue',sans-serif; font-size:1rem; letter-spacing:2px; cursor:pointer; transition:all .15s; }
+.btn:active { transform:scale(0.97); }
+.btn-next  { background:var(--rouge); color:var(--blanc); }
+.btn-next:hover  { background:#c40019; }
+.btn-prev  { background:var(--gris-mid); color:var(--muted); border:1px solid #333; flex:0 0 90px; }
+.btn-prev:hover  { color:var(--blanc); border-color:var(--muted); }
+.btn-blue  { background:var(--bleu); color:#fff; }
+.btn-blue:hover { background:#3a8fe0; }
+.btn-submit { background:var(--rouge); color:white; }
+.btn-submit:hover { background:#c8001a; }
+.btn-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none !important; }
+
+/* ── BILAN CTA ── */
+.bilan-cta {
+  margin: 16px 14px;
+  background: rgba(74,159,255,0.06);
+  border: 1px solid rgba(74,159,255,0.2);
+  border-radius: 4px;
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.bilan-cta-icon { font-size: 22px; }
+.bilan-cta-body { flex: 1; }
+.bilan-cta-title { font-family:'Bebas Neue',sans-serif; font-size:0.9rem; letter-spacing:2px; color:var(--bleu); margin-bottom: 2px; }
+.bilan-cta-sub { font-size: 0.65rem; color: var(--muted); line-height: 1.4; }
+.btn-cta {
+  background: var(--bleu);
+  color: #fff;
   border: none;
   border-radius: 2px;
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 1rem;
+  font-size: 0.75rem;
   letter-spacing: 2px;
+  padding: 10px 14px;
   cursor: pointer;
-  transition: all .15s;
+  transition: background .15s;
+  white-space: nowrap;
 }
-.btn:active { transform: scale(0.97); }
-.btn-next { background: var(--rouge); color: var(--blanc); }
-.btn-next:hover { background: #c40019; }
-.btn-prev {
-  background: var(--gris-mid);
-  color: var(--muted);
+.btn-cta:hover { background: #3a8fe0; }
+
+/* ── FORMULAIRE SUIVI ── */
+.form-body-arb { padding: 1rem; }
+.step-arb { display:none; animation: fadeSlide .25s ease; }
+.step-arb.active { display:block; }
+@keyframes fadeSlide { from { opacity:0; transform:translateX(14px); } to { opacity:1; transform:translateX(0); } }
+.step-header-arb { margin-bottom: 1.4rem; }
+.step-number-arb { font-size:0.58rem; letter-spacing:3px; text-transform:uppercase; color:var(--bleu); margin-bottom:0.3rem; }
+.step-title-arb { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:3px; color:var(--blanc); line-height:1.05; }
+.step-title-arb span { color:var(--bleu); }
+
+.field-group { margin-bottom: 1.1rem; }
+.field-label-arb { display:block; font-size:0.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:0.4rem; }
+.field-label-arb .required { color:var(--accent); margin-left:3px; }
+input[type="text"].arb-input,
+input[type="date"].arb-input,
+input[type="time"].arb-input,
+textarea.arb-input {
+  width: 100%;
+  min-height: var(--touch-min);
+  background: var(--gris);
   border: 1px solid #333;
-  flex: 0 0 90px;
+  border-radius: var(--radius);
+  color: var(--blanc);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  padding: 0.8rem 1rem;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  appearance: none;
 }
-.btn-prev:hover { color: var(--blanc); border-color: var(--muted); }
+input.arb-input:focus, textarea.arb-input:focus { border-color: var(--bleu); background: #1e1e1e; }
+input.arb-input::placeholder, textarea.arb-input::placeholder { color: #444; }
+textarea.arb-input { min-height: 110px; resize: vertical; line-height: 1.5; }
+.field-row-arb { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
+.divider-arb { height:1px; background:#1E1E1E; margin:1.4rem 0; position:relative; }
+.divider-label-arb { position:absolute; top:50%; left:0; transform:translateY(-50%); background:var(--noir); padding-right:0.8rem; font-size:0.58rem; letter-spacing:2.5px; text-transform:uppercase; color:#444; }
+.info-box { background:rgba(74,159,255,0.07); border:1px solid rgba(74,159,255,0.2); border-radius:var(--radius); padding:0.75rem 1rem; font-size:0.72rem; color:rgba(74,159,255,0.8); line-height:1.5; margin-bottom:1.2rem; }
+
+/* prefill indicator */
+.prefill-badge {
+  display: inline-block;
+  font-size: 0.55rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--vert);
+  background: rgba(67,160,71,0.1);
+  border: 1px solid rgba(67,160,71,0.25);
+  padding: 2px 7px;
+  border-radius: 2px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+.prefilled { border-color: rgba(67,160,71,0.4) !important; }
+.prefilled:focus { border-color: var(--bleu) !important; }
+
+/* ── EVAL TABLE ── */
+.eval-section-card { border:1px solid #222; border-left:3px solid var(--bleu); border-radius:var(--radius); overflow:hidden; margin-bottom:1.2rem; }
+.eval-section-header { background:#0a0a0a; padding:10px 16px; border-bottom:1px solid #1e1e1e; }
+.eval-section-header h3 { font-family:'Bebas Neue',sans-serif; font-size:0.78rem; letter-spacing:2.5px; color:var(--bleu); text-transform:uppercase; }
+.eval-wrap { overflow-x:auto; }
+table.eval { width:100%; border-collapse:collapse; font-size:0.75rem; min-width:440px; }
+table.eval thead tr { background:#080808; }
+table.eval thead th { padding:11px 8px; font-family:'Bebas Neue',sans-serif; font-size:0.72rem; letter-spacing:2px; text-align:center; white-space:nowrap; border-bottom:1px solid #222; }
+table.eval thead th:first-child { text-align:left; padding-left:16px; width:46%; color:var(--muted); }
+table.eval thead th.h-ins  { color:var(--ins); }
+table.eval thead th.h-opt  { color:var(--opt); }
+table.eval thead th.h-cor  { color:var(--cor); }
+table.eval thead th.h-tres { color:var(--tres); }
+table.eval tbody tr { border-bottom:1px solid #181818; transition:background .1s; }
+table.eval tbody tr:hover { background:#161616; }
+table.eval tbody td { padding:10px 8px; vertical-align:middle; }
+table.eval tbody td:first-child { padding-left:16px; font-weight:400; color:#c0c0c0; line-height:1.4; font-size:0.72rem; }
+table.eval tbody td:not(:first-child) { text-align:center; }
+.radio-wrap { display:flex; justify-content:center; align-items:center; }
+.radio-wrap input[type="radio"] { display:none; }
+.radio-wrap label { width:26px; height:26px; border-radius:50%; border:1.5px solid #333; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .15s; margin:0; font-size:0; }
+.col-ins  .radio-wrap label:hover,
+.col-ins  input[type="radio"]:checked + label { border-color:var(--ins);  background:var(--ins); }
+.col-opt  .radio-wrap label:hover,
+.col-opt  input[type="radio"]:checked + label { border-color:var(--opt);  background:var(--opt); }
+.col-cor  .radio-wrap label:hover,
+.col-cor  input[type="radio"]:checked + label { border-color:var(--cor);  background:var(--cor); }
+.col-tres .radio-wrap label:hover,
+.col-tres input[type="radio"]:checked + label { border-color:var(--tres); background:var(--tres); }
+
+/* pré-rempli eval */
+.eval-prefilled-hint {
+  font-size: 0.58rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--vert);
+  padding: 2px 0 0 16px;
+  opacity: 0.7;
+}
+table.eval tbody tr.suggested td:first-child::after {
+  content: ' ✦';
+  color: var(--vert);
+  font-size: 9px;
+}
+
+.eval-legend { display:flex; gap:12px; flex-wrap:wrap; padding:10px 16px 12px; justify-content:flex-end; background:#080808; border-top:1px solid #1a1a1a; }
+.legend-item { display:flex; align-items:center; gap:5px; font-size:0.6rem; color:#555; letter-spacing:1px; text-transform:uppercase; }
+.legend-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+/* ── RECAP CARDS (formulaire) ── */
+.recap-card { background:var(--gris); border:1px solid #2A2A2A; border-radius:var(--radius); overflow:hidden; margin-bottom:1.2rem; }
+.recap-card-header { background:#222; padding:0.6rem 1rem; font-size:0.58rem; letter-spacing:2.5px; text-transform:uppercase; color:var(--muted); border-bottom:1px solid #2A2A2A; }
+.recap-row { display:flex; justify-content:space-between; align-items:baseline; padding:0.75rem 1rem; border-bottom:1px solid #222; gap:1rem; }
+.recap-row:last-child { border-bottom:none; }
+.recap-key { font-size:0.7rem; color:var(--muted); flex-shrink:0; }
+.recap-val { font-size:0.82rem; font-weight:600; color:var(--blanc); text-align:right; }
+.recap-eval-grid { padding:1rem; display:grid; grid-template-columns:1fr; gap:6px; }
+.recap-eval-row { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #222; gap:0.8rem; }
+.recap-eval-row:last-child { border-bottom:none; }
+.recap-eval-crit { font-size:0.72rem; color:#c0c0c0; flex:1; }
+.recap-eval-note { font-size:0.7rem; font-weight:600; padding:2px 10px; border-radius:100px; white-space:nowrap; flex-shrink:0; }
+.note-ins  { background:rgba(229,57,53,0.15);  color:var(--ins);  border:1px solid rgba(229,57,53,0.3); }
+.note-opt  { background:rgba(251,140,0,0.15);  color:var(--opt);  border:1px solid rgba(251,140,0,0.3); }
+.note-cor  { background:rgba(67,160,71,0.15);  color:var(--cor);  border:1px solid rgba(67,160,71,0.3); }
+.note-tres { background:rgba(74,159,255,0.15); color:var(--tres); border:1px solid rgba(74,159,255,0.3); }
+.note-nr   { background:transparent; color:#444; border:1px solid #2a2a2a; }
+.recap-comment { padding:1rem; font-size:0.8rem; color:var(--muted); line-height:1.6; font-style:italic; border-top:1px solid #222; }
+
+/* ── PROGRESS BAR ── */
+.progress-bar { height:2px; background:#222; }
+.progress-fill { height:100%; background:linear-gradient(90deg,var(--bleu),var(--accent)); width:0%; transition:width .4s ease; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed; top: 80px; left: 50%;
+  transform: translateX(-50%) translateY(-10px);
+  padding: 0.7rem 1.4rem; border-radius: 100px;
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.5px;
+  opacity: 0; transition: all .3s ease; pointer-events:none; z-index:999; white-space:nowrap;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.toast.success { background:var(--vert); color:#0a1f12; }
+.toast.warn    { background:var(--orange); color:#1a0a00; }
+.toast.error   { background:var(--ins); color:white; }
 
 /* ── PRINT ── */
+#print-view { display:none; }
 @media print {
-  header, .subnav, .step-tabs, .score-bar, .quick-btns, .modal-overlay, .nav-bar { display: none !important; }
-  body { background: #fff; color: #000; }
-  .page { display: block !important; }
-  .card { border: 1px solid #ccc; background: #fff; }
+  body { background:#fff; color:#111; padding-bottom:0; font-size:11pt; }
+  .top-stripe, header, .subnav, .phase-tabs, .score-bar, .step-tabs, .quick-btns, .modal-overlay, .nav-bar, .toast { display:none !important; }
+  #live-phase { display:none !important; }
+  #form-phase { display:none !important; }
+  #print-view { display:block !important; }
+  * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .pv-stripe { height:6px; background:#E8001D; margin-bottom:20px; }
+  .pv-header { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px; padding-bottom:12px; border-bottom:2px solid #111; }
+  .pv-title { font-family:'Bebas Neue',sans-serif; font-size:24pt; letter-spacing:4px; color:#111; }
+  .pv-subtitle { font-size:8pt; color:#888; letter-spacing:2px; text-transform:uppercase; margin-top:4px; }
+  .pv-meta { text-align:right; font-size:9pt; color:#555; line-height:1.7; }
+  .pv-section { margin-bottom:16px; }
+  .pv-section-title { font-family:'Bebas Neue',sans-serif; font-size:11pt; letter-spacing:3px; color:#E8001D; border-bottom:1px solid #eee; padding-bottom:4px; margin-bottom:10px; }
+  .pv-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .pv-field-label { font-size:7pt; color:#888; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:2px; }
+  .pv-field-value { font-size:10pt; color:#111; font-weight:600; padding:4px 0; border-bottom:1px solid #ddd; }
+  .pv-eval-row { display:flex; align-items:center; gap:12px; margin-bottom:5px; padding-bottom:5px; border-bottom:1px solid #eee; }
+  .pv-eval-crit { flex:1; font-size:9pt; color:#444; }
+  .pv-eval-note { font-weight:700; font-size:9pt; }
+  .pv-comment-box { border:1px solid #ddd; border-radius:4px; padding:10px; min-height:60px; font-size:10pt; color:#333; line-height:1.6; }
+  .pv-footer { margin-top:24px; padding-top:10px; border-top:1px solid #ddd; display:flex; justify-content:space-between; font-size:7.5pt; color:#aaa; letter-spacing:1px; }
+  .pv-signature { display:flex; gap:32px; margin-top:24px; }
+  .pv-sig-box { height:50px; border-bottom:1.5px solid #333; margin-bottom:6px; }
+  .pv-sig-label { font-size:8pt; color:#888; text-transform:uppercase; letter-spacing:1px; }
 }
 </style>
 </head>
@@ -716,232 +670,383 @@ header img { height: 48px; width: auto; }
   <a href="commission.html">Commission</a>
 </nav>
 
-<!-- ══ SCORE BAR ══ -->
-<div class="score-bar">
-  <div class="score-team-block">
-    <div class="score-team-name" id="team-a-name">Équipe A</div>
-    <div class="score-role">Domicile</div>
-    <div class="score-controls">
-      <button class="score-btn" onclick="changeScore('a',-1)">−</button>
-      <span class="score-num" id="score-a">0</span>
-      <button class="score-btn" onclick="changeScore('a',1)">+</button>
-    </div>
-  </div>
-
-  <div class="chrono-center">
-    <span class="score-sep">—</span>
-    <div class="chrono-time" id="chrono-display">00:00</div>
-    <div class="chrono-periode" id="periode-label">1ère période</div>
-    <div class="chrono-btns">
-      <button class="chrono-ctrl" id="chrono-start-btn" onclick="toggleChrono()">▶</button>
-      <button class="chrono-ctrl" onclick="resetChrono()">⟳</button>
-      <button class="chrono-ctrl" onclick="switchPeriode()">½</button>
-    </div>
-  </div>
-
-  <div class="score-team-block">
-    <div class="score-team-name" id="team-b-name">Équipe B</div>
-    <div class="score-role">Extérieur</div>
-    <div class="score-controls">
-      <button class="score-btn" onclick="changeScore('b',-1)">−</button>
-      <span class="score-num" id="score-b">0</span>
-      <button class="score-btn" onclick="changeScore('b',1)">+</button>
-    </div>
-  </div>
+<!-- ══ PHASE TABS ══ -->
+<div class="phase-tabs">
+  <button class="phase-tab active" id="tab-live" onclick="switchPhase('live', this)">
+    <span class="phase-badge">1</span>Suivi en direct
+  </button>
+  <button class="phase-tab" id="tab-form" onclick="switchPhase('form', this)">
+    <span class="phase-badge">2</span>Fiche de suivi
+  </button>
 </div>
 
-<!-- ══════════════════════
-     PAGE 1 — PRÉPARATION
-══════════════════════ -->
-<div class="page active" id="page-prep">
+<!-- ══════════════════════════════════════
+     PHASE 1 — SUIVI EN DIRECT
+══════════════════════════════════════ -->
+<div class="phase active" id="live-phase">
 
-  <div class="section-label"><span>Informations du match</span></div>
-  <div class="card">
-    <div class="form-grid">
-      <div>
-        <div class="field-label">Équipe A — Domicile</div>
-        <input type="text" class="field-input" id="f-equipe-a" placeholder="Équipe domicile" oninput="updateTeamNames()">
+  <!-- SCORE BAR -->
+  <div class="score-bar">
+    <div class="score-team-block">
+      <div class="score-team-name" id="team-a-name">Équipe A</div>
+      <div class="score-role">Domicile</div>
+      <div class="score-controls">
+        <button class="score-btn" onclick="changeScore('a',-1)">−</button>
+        <span class="score-num" id="score-a">0</span>
+        <button class="score-btn" onclick="changeScore('a',1)">+</button>
       </div>
-      <div>
-        <div class="field-label">Équipe B — Extérieur</div>
-        <input type="text" class="field-input" id="f-equipe-b" placeholder="Équipe extérieur" oninput="updateTeamNames()">
+    </div>
+    <div class="chrono-center">
+      <span class="score-sep">—</span>
+      <div class="chrono-time" id="chrono-display">00:00</div>
+      <div class="chrono-periode" id="periode-label">1ère période</div>
+      <div class="chrono-btns">
+        <button class="chrono-ctrl" id="chrono-start-btn" onclick="toggleChrono()">▶</button>
+        <button class="chrono-ctrl" onclick="resetChrono()">⟳</button>
+        <button class="chrono-ctrl" onclick="switchPeriode()">½</button>
       </div>
-      <div>
-        <div class="field-label">Catégorie</div>
-        <select class="field-select" id="f-categorie">
-          <option value="">— choisir —</option>
-          <option>-9 ans mixte</option>
-          <option>-11 ans garçons</option>
-          <option>-11 ans filles</option>
-          <option>-13 ans garçons</option>
-          <option>-13 ans filles</option>
-          <option>-15 ans garçons</option>
-          <option>-15 ans filles</option>
-          <option>-18 ans garçons</option>
-          <option>-18 ans filles</option>
-        </select>
-      </div>
-      <div>
-        <div class="field-label">Durée période</div>
-        <select class="field-select" id="f-duree-mitemps" onchange="applyChronoConfig()">
-          <option value="12">3 × 12 min — -11 ans</option>
-          <option value="20">2 × 20 min — -13 ans</option>
-          <option value="25" selected>2 × 25 min — -15 ans</option>
-          <option value="30">2 × 30 min — -18 ans</option>
-          <option value="custom">Personnalisé…</option>
-        </select>
-      </div>
-      <div id="f-duree-custom-wrap" style="display:none;">
-        <div class="field-label">Durée personnalisée (min)</div>
-        <input type="number" class="field-input" id="f-duree-custom" min="1" max="60" value="25" onchange="applyChronoConfig()">
-      </div>
-      <div>
-        <div class="field-label">Compétition</div>
-        <select class="field-select" id="f-compet">
-          <option value="">— choisir —</option>
-          <option>Championnat régional</option>
-          <option>Coupe Jacques Battu</option>
-          <option>Tournoi interne</option>
-          <option>Match amical</option>
-          <option>Autre</option>
-        </select>
+    </div>
+    <div class="score-team-block">
+      <div class="score-team-name" id="team-b-name">Équipe B</div>
+      <div class="score-role">Extérieur</div>
+      <div class="score-controls">
+        <button class="score-btn" onclick="changeScore('b',-1)">−</button>
+        <span class="score-num" id="score-b">0</span>
+        <button class="score-btn" onclick="changeScore('b',1)">+</button>
       </div>
     </div>
   </div>
 
-  <div class="section-label"><span>Arbitres observés</span></div>
-  <div class="card">
-    <div class="arb-grid">
-      <div class="arb-block">
-        <div class="arb-block-title">Arbitre 1</div>
-        <div class="field-label">Nom</div>
-        <input type="text" class="field-input" id="f-arb1-nom" placeholder="Prénom NOM" style="margin-bottom:7px;">
-        <div class="field-label">Niveau</div>
-        <select class="field-select" id="f-arb1-niveau">
-          <option value="">—</option>
-          <option>JAJ Club</option><option>JAJ T3</option><option>JAJ T1-T2</option>
-        </select>
-      </div>
-      <div class="arb-block">
-        <div class="arb-block-title">Arbitre 2</div>
-        <div class="field-label">Nom</div>
-        <input type="text" class="field-input" id="f-arb2-nom" placeholder="Prénom NOM" style="margin-bottom:7px;">
-        <div class="field-label">Niveau</div>
-        <select class="field-select" id="f-arb2-niveau">
-          <option value="">—</option>
-          <option>JAJ Club</option><option>JAJ T3</option><option>JAJ T1-T2</option>
-        </select>
+  <!-- SUB PAGE: PRÉPARATION -->
+  <div class="subpage active" id="subpage-prep">
+    <div class="section-label"><span>Informations du match</span></div>
+    <div class="card">
+      <div class="form-grid">
+        <div>
+          <div class="field-label">Équipe A — Domicile</div>
+          <input type="text" class="field-input" id="f-equipe-a" placeholder="Équipe domicile" oninput="updateTeamNames()">
+        </div>
+        <div>
+          <div class="field-label">Équipe B — Extérieur</div>
+          <input type="text" class="field-input" id="f-equipe-b" placeholder="Équipe extérieur" oninput="updateTeamNames()">
+        </div>
+        <div>
+          <div class="field-label">Catégorie</div>
+          <select class="field-select" id="f-categorie">
+            <option value="">— choisir —</option>
+            <option>-9 ans mixte</option>
+            <option>-11 ans garçons</option>
+            <option>-11 ans filles</option>
+            <option>-13 ans garçons</option>
+            <option>-13 ans filles</option>
+            <option>-15 ans garçons</option>
+            <option>-15 ans filles</option>
+            <option>-18 ans garçons</option>
+            <option>-18 ans filles</option>
+          </select>
+        </div>
+        <div>
+          <div class="field-label">Durée période</div>
+          <select class="field-select" id="f-duree-mitemps" onchange="applyChronoConfig()">
+            <option value="12">3 × 12 min — -11 ans</option>
+            <option value="20">2 × 20 min — -13 ans</option>
+            <option value="25" selected>2 × 25 min — -15 ans</option>
+            <option value="30">2 × 30 min — -18 ans</option>
+            <option value="custom">Personnalisé…</option>
+          </select>
+        </div>
+        <div id="f-duree-custom-wrap" style="display:none;">
+          <div class="field-label">Durée personnalisée (min)</div>
+          <input type="number" class="field-input" id="f-duree-custom" min="1" max="60" value="25" onchange="applyChronoConfig()">
+        </div>
+        <div>
+          <div class="field-label">Compétition</div>
+          <select class="field-select" id="f-compet">
+            <option value="">— choisir —</option>
+            <option>Championnat régional</option>
+            <option>Coupe Jacques Battu</option>
+            <option>Tournoi interne</option>
+            <option>Match amical</option>
+            <option>Autre</option>
+          </select>
+        </div>
       </div>
     </div>
-    <div class="form-grid" style="padding-top:0;">
-      <div>
-        <div class="field-label">Formateur / Observateur</div>
-        <select class="field-select" id="f-formateur">
-          <option value="">— choisir —</option>
-          <option>Xavier FINI</option><option>Patrick CHENEVIERE</option>
-          <option>Simon DESAILLOUD</option><option>Elsa GAIDET</option>
-          <option>Jules MARTEL</option><option>Antoine MELIAND</option>
-        </select>
+
+    <div class="section-label"><span>Arbitres observés</span></div>
+    <div class="card">
+      <div class="arb-grid">
+        <div class="arb-block">
+          <div class="arb-block-title">Arbitre 1</div>
+          <div class="field-label">Nom</div>
+          <input type="text" class="field-input" id="f-arb1-nom" placeholder="Prénom NOM" style="margin-bottom:7px;" oninput="syncArbNames()">
+          <div class="field-label">Niveau</div>
+          <select class="field-select" id="f-arb1-niveau">
+            <option value="">—</option>
+            <option>JAJ Club</option><option>JAJ T3</option><option>JAJ T1-T2</option>
+          </select>
+        </div>
+        <div class="arb-block">
+          <div class="arb-block-title">Arbitre 2</div>
+          <div class="field-label">Nom</div>
+          <input type="text" class="field-input" id="f-arb2-nom" placeholder="Prénom NOM" style="margin-bottom:7px;" oninput="syncArbNames()">
+          <div class="field-label">Niveau</div>
+          <select class="field-select" id="f-arb2-niveau">
+            <option value="">—</option>
+            <option>JAJ Club</option><option>JAJ T3</option><option>JAJ T1-T2</option>
+          </select>
+        </div>
       </div>
+      <div class="form-grid" style="padding-top:0;">
+        <div>
+          <div class="field-label">Formateur / Observateur</div>
+          <select class="field-select" id="f-formateur">
+            <option value="">— choisir —</option>
+            <option>Xavier FINI</option><option>Patrick CHENEVIERE</option>
+            <option>Simon DESAILLOUD</option><option>Elsa GAIDET</option>
+            <option>Jules MARTEL</option><option>Antoine MELIAND</option>
+          </select>
+        </div>
+        <div>
+          <div class="field-label">Date du match</div>
+          <input type="date" class="field-input" id="f-date-match">
+        </div>
+        <div>
+          <div class="field-label">Heure</div>
+          <input type="time" class="field-input" id="f-heure-match">
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn btn-next" onclick="showSubpage('match',null)">Passer en mode match →</button>
     </div>
   </div>
 
+  <!-- SUB PAGE: MATCH -->
+  <div class="subpage" id="subpage-match">
+    <div class="section-label"><span>Saisie rapide</span></div>
+    <div class="card">
+      <div class="quick-btns">
+        <button class="qbtn q-jaune"   onclick="openModal('Avertissement','tag-sanction')"><span class="qi">🟨</span>Avertissement</button>
+        <button class="qbtn q-excl"    onclick="openModal('Exclusion 2 min','tag-sanction')"><span class="qi">⏱️</span>Exclusion 2'</button>
+        <button class="qbtn q-rouge"   onclick="openModal('Carton rouge','tag-sanction')"><span class="qi">🟥</span>Carton rouge</button>
+        <button class="qbtn q-bleu"    onclick="openModal('Carton bleu','tag-sanction')"><span class="qi">🟦</span>Carton bleu</button>
+        <button class="qbtn q-blanc"   onclick="openModal('Carton blanc — Protocole commotion','tag-commotion')"><span class="qi">⬜</span>Carton blanc</button>
+        <button class="qbtn q-neutre"  onclick="openModal('Jet franc','tag-neutre')"><span class="qi">👋</span>Jet franc</button>
+        <button class="qbtn q-neutre"  onclick="openModal('7m — Penalty','tag-neutre')"><span class="qi">🎯</span>7m</button>
+        <button class="qbtn q-neutre"  onclick="openModal('Remise en jeu','tag-neutre')"><span class="qi">🔄</span>Remise en jeu</button>
+        <button class="qbtn q-erreur"  onclick="openModal('Hésitation — décision tardive','tag-erreur')"><span class="qi">⏳</span>Hésitation</button>
+        <button class="qbtn q-erreur"  onclick="openModal('Gestuelle incorrecte','tag-erreur')"><span class="qi">🙅</span>Gestuelle</button>
+        <button class="qbtn q-neutre"  onclick="openModal('Positionnement','tag-neutre')"><span class="qi">📍</span>Position</button>
+        <button class="qbtn q-neutre"  onclick="openModal('Communication binôme','tag-neutre')"><span class="qi">🤝</span>Communic.</button>
+        <button class="qbtn q-neutre"  onclick="openModal('Gestion du jeu','tag-neutre')"><span class="qi">⚖️</span>Gestion jeu</button>
+        <button class="qbtn q-erreur"  onclick="openModal('Erreur / décision manquée','tag-erreur')"><span class="qi">❌</span>Erreur déc.</button>
+        <button class="qbtn q-positif" onclick="openModal('Point positif','tag-positif')"><span class="qi">✅</span>Point +</button>
+        <button class="qbtn q-trc"     onclick="openModal('TRC — Temps de Régulation Comportemental','tag-neutre')"><span class="qi">🛑</span>TRC</button>
+        <button class="qbtn q-neutre"  onclick="openModal('Temps mort équipe','tag-neutre')"><span class="qi">⏸️</span>Temps mort</button>
+        <button class="qbtn q-neutre"  onclick="openModal('Note libre','tag-neutre')"><span class="qi">🗒️</span>Note libre</button>
+      </div>
+    </div>
+
+    <div class="section-label"><span>Événements du match</span></div>
+    <div class="card">
+      <div class="card-head">
+        <span class="card-head-icon">📋</span>
+        <span class="card-head-title">Timeline</span>
+        <span class="card-head-count" id="event-count">0</span>
+      </div>
+      <div class="timeline-list" id="timeline">
+        <div class="timeline-empty" id="timeline-empty">Aucun événement — utilise les boutons ci-dessus</div>
+      </div>
+    </div>
+
+    <div class="section-label"><span>Notes mi-temps</span></div>
+    <div class="card">
+      <div class="notes-area">
+        <textarea class="field-textarea" id="notes-mitemps" rows="3"
+          placeholder="Points évoqués à la mi-temps avec les arbitres…"></textarea>
+      </div>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn btn-prev" onclick="showSubpage('prep',null)">← Retour</button>
+      <button class="btn btn-next" onclick="showSubpage('recap',null)">Aller au bilan →</button>
+    </div>
+  </div>
+
+  <!-- SUB PAGE: RECAP / BILAN -->
+  <div class="subpage" id="subpage-recap">
+    <div class="recap-stats">
+      <div class="stat-box s-gold">
+        <div class="stat-num" id="stat-sanctions">0</div>
+        <div class="stat-lbl">Sanctions</div>
+      </div>
+      <div class="stat-box s-red">
+        <div class="stat-num" id="stat-erreurs">0</div>
+        <div class="stat-lbl">Erreurs</div>
+      </div>
+      <div class="stat-box s-green">
+        <div class="stat-num" id="stat-positifs">0</div>
+        <div class="stat-lbl">Points +</div>
+      </div>
+      <div class="stat-box s-blue">
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-lbl">Événements</div>
+      </div>
+    </div>
+
+    <div class="section-label"><span>Timeline complète</span></div>
+    <div class="card">
+      <div class="timeline-list" id="timeline-recap"></div>
+    </div>
+
+    <!-- CTA vers formulaire -->
+    <div class="bilan-cta">
+      <div class="bilan-cta-icon">📝</div>
+      <div class="bilan-cta-body">
+        <div class="bilan-cta-title">Remplir la fiche de suivi</div>
+        <div class="bilan-cta-sub">Les données du match seront pré-remplies automatiquement</div>
+      </div>
+      <button class="btn-cta" onclick="goToForm()">Continuer →</button>
+    </div>
+
+    <div class="nav-bar">
+      <button class="btn btn-prev" onclick="showSubpage('match',null)">← Retour</button>
+      <button class="btn btn-next" onclick="goToForm()">Remplir le suivi →</button>
+    </div>
+  </div>
+
+</div><!-- /live-phase -->
+
+<!-- ══════════════════════════════════════
+     PHASE 2 — FORMULAIRE DE SUIVI
+══════════════════════════════════════ -->
+<div class="phase" id="form-phase">
+
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+
+  <div class="form-body-arb">
+
+    <!-- STEP 1 · IDENTITÉ & CONTEXTE -->
+    <div class="step-arb active" id="arb-step-1">
+      <div class="step-header-arb">
+        <div class="step-number-arb">Étape 01 — Identité & Contexte</div>
+        <div class="step-title-arb">Qui &<br><span>Quand ?</span></div>
+      </div>
+      <div class="info-box" id="prefill-notice" style="display:none;">
+        ✦ Les champs marqués <strong style="color:var(--vert)">pré-remplis</strong> sont issus du suivi en direct. Tu peux les modifier librement.
+      </div>
+
+      <div class="field-row-arb">
+        <div class="field-group">
+          <label class="field-label-arb">Juge-Arbitre 1 <span class="required">*</span></label>
+          <input type="text" class="arb-input" id="f-ja1" placeholder="Prénom NOM" autocomplete="off">
+        </div>
+        <div class="field-group">
+          <label class="field-label-arb">Juge-Arbitre 2</label>
+          <input type="text" class="arb-input" id="f-ja2" placeholder="Prénom NOM" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label-arb">Juge Accompagnateur <span class="required">*</span></label>
+        <input type="text" class="arb-input" id="f-accompagnateur" placeholder="Prénom NOM" autocomplete="off">
+      </div>
+
+      <div class="divider-arb"><span class="divider-label-arb">La rencontre</span></div>
+
+      <div class="field-group">
+        <label class="field-label-arb">Rencontre <span class="required">*</span></label>
+        <input type="text" class="arb-input" id="f-rencontre" placeholder="Ex : Meylan HB vs Club Adversaire — M13 Régional">
+      </div>
+
+      <div class="field-row-arb">
+        <div class="field-group">
+          <label class="field-label-arb">Date</label>
+          <input type="date" class="arb-input" id="f-date">
+        </div>
+        <div class="field-group">
+          <label class="field-label-arb">Heure</label>
+          <input type="time" class="arb-input" id="f-heure">
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 · GRILLE D'ÉVALUATION -->
+    <div class="step-arb" id="arb-step-2">
+      <div class="step-header-arb">
+        <div class="step-number-arb">Étape 02 — Grille d'évaluation</div>
+        <div class="step-title-arb">Critères<br><span>techniques</span></div>
+      </div>
+      <div class="info-box">
+        Sélectionnez une appréciation pour chaque critère. Les suggestions <span style="color:var(--vert)">✦</span> sont basées sur les observations du suivi en direct.
+      </div>
+      <div class="eval-section-card">
+        <div class="eval-section-header"><h3>Évaluation par critère</h3></div>
+        <div class="eval-wrap">
+          <table class="eval">
+            <thead>
+              <tr>
+                <th>Critère</th>
+                <th class="h-ins">Insuffisant</th>
+                <th class="h-opt">À optimiser</th>
+                <th class="h-cor">Correct</th>
+                <th class="h-tres">Très correct</th>
+              </tr>
+            </thead>
+            <tbody id="evalBody"></tbody>
+          </table>
+        </div>
+        <div class="eval-legend">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--ins)"></div>Insuffisant</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--opt)"></div>À optimiser</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--cor)"></div>Correct</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--tres)"></div>Très correct</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 · POINTS & OBJECTIFS -->
+    <div class="step-arb" id="arb-step-3">
+      <div class="step-header-arb">
+        <div class="step-number-arb">Étape 03 — Bilan pédagogique</div>
+        <div class="step-title-arb">Points &<br><span>objectifs</span></div>
+      </div>
+      <div class="field-group">
+        <label class="field-label-arb">Points à travailler / Commentaire général</label>
+        <textarea class="arb-input" id="f-points" placeholder="Bilan de la prestation, axes d'amélioration, points positifs, recommandations pour la suite…" style="min-height:160px;"></textarea>
+      </div>
+      <div class="field-group">
+        <label class="field-label-arb">Objectif — Prochaine prestation</label>
+        <textarea class="arb-input" id="f-objectif" placeholder="Un objectif concret et mesurable à travailler lors de la prochaine rencontre…" style="min-height:90px;"></textarea>
+      </div>
+    </div>
+
+    <!-- STEP 4 · RÉCAP & ENVOI -->
+    <div class="step-arb" id="arb-step-4">
+      <div class="step-header-arb">
+        <div class="step-number-arb">Étape 04 — Récapitulatif</div>
+        <div class="step-title-arb">Vérifier &<br><span>Envoyer</span></div>
+      </div>
+      <div class="info-box">
+        Vérifiez les informations avant l'envoi. Le suivi sera transmis par e-mail à la commission arbitrage.
+      </div>
+      <div id="recap-content"></div>
+    </div>
+
+  </div><!-- /form-body-arb -->
+
+  <!-- NAV BAR FORMULAIRE -->
   <div class="nav-bar">
-    <button class="btn btn-next" onclick="showPage('match',this)">Passer en mode match →</button>
-  </div>
-</div>
-
-<!-- ══════════════════════
-     PAGE 2 — MATCH
-══════════════════════ -->
-<div class="page" id="page-match">
-
-  <div class="section-label"><span>Saisie rapide</span></div>
-  <div class="card">
-    <div class="quick-btns">
-      <button class="qbtn q-jaune"   onclick="openModal('Avertissement','tag-sanction')"><span class="qi">🟨</span>Avertissement</button>
-      <button class="qbtn q-excl"    onclick="openModal('Exclusion 2 min','tag-sanction')"><span class="qi">⏱️</span>Exclusion 2'</button>
-      <button class="qbtn q-rouge"   onclick="openModal('Carton rouge','tag-sanction')"><span class="qi">🟥</span>Carton rouge</button>
-      <button class="qbtn q-bleu"    onclick="openModal('Carton bleu','tag-sanction')"><span class="qi">🟦</span>Carton bleu</button>
-      <button class="qbtn q-blanc"   onclick="openModal('Carton blanc — Protocole commotion','tag-commotion')"><span class="qi">⬜</span>Carton blanc</button>
-      <button class="qbtn q-neutre"  onclick="openModal('Jet franc','tag-neutre')"><span class="qi">👋</span>Jet franc</button>
-      <button class="qbtn q-neutre"  onclick="openModal('7m — Penalty','tag-neutre')"><span class="qi">🎯</span>7m</button>
-      <button class="qbtn q-neutre"  onclick="openModal('Remise en jeu','tag-neutre')"><span class="qi">🔄</span>Remise en jeu</button>
-      <button class="qbtn q-erreur"  onclick="openModal('Hésitation — décision tardive','tag-erreur')"><span class="qi">⏳</span>Hésitation</button>
-      <button class="qbtn q-erreur"  onclick="openModal('Gestuelle incorrecte','tag-erreur')"><span class="qi">🙅</span>Gestuelle</button>
-      <button class="qbtn q-neutre"  onclick="openModal('Positionnement','tag-neutre')"><span class="qi">📍</span>Position</button>
-      <button class="qbtn q-neutre"  onclick="openModal('Communication binôme','tag-neutre')"><span class="qi">🤝</span>Communic.</button>
-      <button class="qbtn q-neutre"  onclick="openModal('Gestion du jeu','tag-neutre')"><span class="qi">⚖️</span>Gestion jeu</button>
-      <button class="qbtn q-erreur"  onclick="openModal('Erreur / décision manquée','tag-erreur')"><span class="qi">❌</span>Erreur déc.</button>
-      <button class="qbtn q-positif" onclick="openModal('Point positif','tag-positif')"><span class="qi">✅</span>Point +</button>
-      <button class="qbtn q-trc"     onclick="openModal('TRC — Temps de Régulation Comportemental','tag-neutre')"><span class="qi">🛑</span>TRC</button>
-      <button class="qbtn q-neutre"  onclick="openModal('Temps mort équipe','tag-neutre')"><span class="qi">⏸️</span>Temps mort</button>
-      <button class="qbtn q-neutre"  onclick="openModal('Note libre','tag-neutre')"><span class="qi">🗒️</span>Note libre</button>
-    </div>
+    <button class="btn btn-prev" id="btn-arb-prev" onclick="prevArbStep()" style="display:none;">← Retour</button>
+    <button class="btn btn-next btn-blue" id="btn-arb-next" onclick="nextArbStep()">Continuer →</button>
+    <button class="btn" id="btn-print" onclick="doPrint()" style="display:none; flex:0 0 52px; background:var(--gris-mid); color:var(--muted); border:1px solid #333; font-size:1.2rem;">🖨</button>
   </div>
 
-  <div class="section-label"><span>Événements du match</span></div>
-  <div class="card">
-    <div class="card-head">
-      <span class="card-head-icon">📋</span>
-      <span class="card-head-title">Timeline</span>
-      <span class="card-head-count" id="event-count">0</span>
-    </div>
-    <div class="timeline-list" id="timeline">
-      <div class="timeline-empty" id="timeline-empty">Aucun événement — utilise les boutons ci-dessus</div>
-    </div>
-  </div>
+</div><!-- /form-phase -->
 
-  <div class="section-label"><span>Notes mi-temps</span></div>
-  <div class="card">
-    <div class="notes-area">
-      <textarea class="field-textarea" id="notes-mitemps" rows="3"
-        placeholder="Points évoqués à la mi-temps avec les arbitres…"></textarea>
-    </div>
-  </div>
-
-  <div class="nav-bar">
-    <button class="btn btn-prev" onclick="showPage('prep',this)">← Retour</button>
-    <button class="btn btn-next" onclick="showPage('recap',this)">Aller au bilan →</button>
-  </div>
-</div>
-
-<!-- ══════════════════════
-     PAGE 3 — BILAN
-══════════════════════ -->
-<div class="page" id="page-recap">
-
-  <div class="recap-stats">
-    <div class="stat-box s-gold">
-      <div class="stat-num" id="stat-sanctions">0</div>
-      <div class="stat-lbl">Sanctions</div>
-    </div>
-    <div class="stat-box s-red">
-      <div class="stat-num" id="stat-erreurs">0</div>
-      <div class="stat-lbl">Erreurs</div>
-    </div>
-    <div class="stat-box s-green">
-      <div class="stat-num" id="stat-positifs">0</div>
-      <div class="stat-lbl">Points +</div>
-    </div>
-    <div class="stat-box s-blue">
-      <div class="stat-num" id="stat-total">0</div>
-      <div class="stat-lbl">Événements</div>
-    </div>
-  </div>
-
-  <div class="section-label"><span>Timeline complète</span></div>
-  <div class="card">
-    <div class="timeline-list" id="timeline-recap"></div>
-  </div>
-
-  <div class="nav-bar">
-    <button class="btn btn-prev" onclick="showPage('match',this)">← Retour</button>
-    <button class="btn btn-next" onclick="window.location='suivi-arbitrage.html'">Remplir le suivi →</button>
-  </div>
-</div>
-
-<!-- ══ MODAL ══ -->
+<!-- ══ MODAL ÉVÉNEMENT ══ -->
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBg(event)">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -969,10 +1074,10 @@ header img { height: 48px; width: auto; }
       <div>
         <div class="field-label">Avis sur la décision</div>
         <div class="avis-group">
-          <button type="button" class="avis-btn avis-note selected" data-avis="note"  onclick="selectAvis(this)">🗒️ Note</button>
-          <button type="button" class="avis-btn avis-ok"            data-avis="ok"    onclick="selectAvis(this)">✅ D'accord</button>
-          <button type="button" class="avis-btn avis-ko"            data-avis="ko"    onclick="selectAvis(this)">❌ Pas d'accord</button>
-          <button type="button" class="avis-btn avis-check"         data-avis="check" onclick="selectAvis(this)">🔍 À vérifier</button>
+          <button type="button" class="avis-btn selected" data-avis="note"  onclick="selectAvis(this)">🗒️ Note</button>
+          <button type="button" class="avis-btn avis-ok"  data-avis="ok"    onclick="selectAvis(this)">✅ D'accord</button>
+          <button type="button" class="avis-btn avis-ko"  data-avis="ko"    onclick="selectAvis(this)">❌ Pas d'accord</button>
+          <button type="button" class="avis-btn avis-check" data-avis="check" onclick="selectAvis(this)">🔍 À vérifier</button>
         </div>
       </div>
       <div>
@@ -988,8 +1093,21 @@ header img { height: 48px; width: auto; }
   </div>
 </div>
 
+<!-- ── PRINT VIEW ── -->
+<div id="print-view"></div>
+<div class="toast" id="toast"></div>
+
 <script>
-/* ══ STATE ══ */
+/* ══════════════════════════════
+   CONFIG EMAILJS
+══════════════════════════════ */
+emailjs.init("8mHDd4BaEwkycTRqI");
+const SERVICE_ID  = "service_o4midvq";
+const TEMPLATE_ID = "template_l5mmsg3";
+
+/* ══════════════════════════════
+   STATE LIVE
+══════════════════════════════ */
 const state = {
   events: [],
   scores: { a:0, b:0 },
@@ -1010,40 +1128,348 @@ const CRITERIA = [
 ];
 
 const DOT = {
-  'tag-sanction':'dot-orange', 'tag-erreur':'dot-red',
-  'tag-positif':'dot-green',   'tag-neutre':'dot-gray',
-  'tag-commotion':'dot-white'
+  'tag-sanction':'dot-orange','tag-erreur':'dot-red',
+  'tag-positif':'dot-green','tag-neutre':'dot-gray','tag-commotion':'dot-white'
 };
 const TAG_LABEL = {
-  'tag-sanction':'Sanction', 'tag-erreur':'Erreur',
-  'tag-positif':'Point +',   'tag-neutre':'Note',
-  'tag-commotion':'Protocole commotion'
+  'tag-sanction':'Sanction','tag-erreur':'Erreur',
+  'tag-positif':'Point +','tag-neutre':'Note','tag-commotion':'Protocole commotion'
 };
 const TAG_BG  = { 'tag-sanction':'rgba(232,0,29,0.1)', 'tag-erreur':'rgba(255,107,107,0.1)', 'tag-positif':'rgba(67,160,71,0.1)', 'tag-neutre':'#2e2e2e', 'tag-commotion':'rgba(245,242,236,0.05)' };
 const TAG_COL = { 'tag-sanction':'#ff4455', 'tag-erreur':'#ff6b6b', 'tag-positif':'#43a047', 'tag-neutre':'#9a9a9a', 'tag-commotion':'#aaa' };
 const TAG_BOR = { 'tag-sanction':'rgba(232,0,29,0.2)', 'tag-erreur':'rgba(255,107,107,0.2)', 'tag-positif':'rgba(67,160,71,0.2)', 'tag-neutre':'#333', 'tag-commotion':'#3a3a3a' };
-
 const AVIS_LABEL = { note:null, ok:"✅ D'accord", ko:"❌ Pas d'accord", check:"🔍 À vérifier" };
 const AVIS_BG    = { ok:'rgba(67,160,71,0.1)',  ko:'rgba(232,0,29,0.1)',  check:'rgba(251,140,0,0.1)' };
 const AVIS_COL   = { ok:'#43a047', ko:'#ff4455', check:'#fb8c00' };
 const AVIS_BOR   = { ok:'rgba(67,160,71,0.2)',  ko:'rgba(232,0,29,0.2)',  check:'rgba(251,140,0,0.2)' };
 
-/* ══ INIT ══ */
+/* ══════════════════════════════
+   STATE FORMULAIRE
+══════════════════════════════ */
+const arbState = { currentStep: 1, totalSteps: 4 };
+
+const CRITERES = [
+  "Comprend le jeu",
+  "Appréciation des duels",
+  "Sanctions sportives",
+  "Sanctions disciplinaires",
+  "Placement et déplacement",
+  "Gestes / sifflet",
+  "Personnalité",
+  "Marcher / dribble",
+  "Empiètement",
+  "Jeu passif",
+  "Autres règles",
+  "Impression générale",
+  "Communication entre arbitres"
+];
+
+const NOTE_COLS = [
+  { val:"Insuffisant",  cls:"col-ins",  hcls:"h-ins" },
+  { val:"À optimiser",  cls:"col-opt",  hcls:"h-opt" },
+  { val:"Correct",      cls:"col-cor",  hcls:"h-cor" },
+  { val:"Très correct", cls:"col-tres", hcls:"h-tres" }
+];
+const NOTE_BADGE_CLS = {
+  "Insuffisant":"note-ins","À optimiser":"note-opt",
+  "Correct":"note-cor","Très correct":"note-tres"
+};
+
+/* ══════════════════════════════
+   INIT
+══════════════════════════════ */
 document.addEventListener('DOMContentLoaded', () => {
   buildNotaGrid('nota-grid');
   updateStats();
+  buildEvalTable();
+  document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+  document.getElementById('f-date-match').value = new Date().toISOString().split('T')[0];
+  updateArbUI();
 });
 
-/* ══ PAGES ══ */
-function showPage(name, btn) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.step-tab').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
+/* ══════════════════════════════
+   PHASE SWITCHING
+══════════════════════════════ */
+function switchPhase(name, btn) {
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.phase-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(name + '-phase').classList.add('active');
   if (btn) btn.classList.add('active');
+}
+
+function goToForm() {
+  prefillForm();
+  switchPhase('form', document.getElementById('tab-form'));
+  document.getElementById('tab-live').classList.add('done');
+  arbState.currentStep = 1;
+  updateArbUI();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ══════════════════════════════
+   PRÉ-REMPLISSAGE DU FORMULAIRE
+══════════════════════════════ */
+function prefillForm() {
+  const arb1 = document.getElementById('f-arb1-nom').value.trim();
+  const arb2 = document.getElementById('f-arb2-nom').value.trim();
+  const equA = document.getElementById('f-equipe-a').value.trim();
+  const equB = document.getElementById('f-equipe-b').value.trim();
+  const cat  = document.getElementById('f-categorie').value;
+  const comp = document.getElementById('f-compet').value;
+  const form = document.getElementById('f-formateur').value;
+  const dateM = document.getElementById('f-date-match').value;
+  const heureM = document.getElementById('f-heure-match').value;
+  const scoreA = state.scores.a;
+  const scoreB = state.scores.b;
+
+  let anyPrefilled = false;
+
+  function setField(id, value) {
+    const el = document.getElementById(id);
+    if (el && value) {
+      el.value = value;
+      el.classList.add('prefilled');
+      anyPrefilled = true;
+    }
+  }
+
+  setField('f-ja1', arb1);
+  setField('f-ja2', arb2);
+  setField('f-accompagnateur', form);
+  if (dateM) setField('f-date', dateM);
+  if (heureM) setField('f-heure', heureM);
+
+  // Construire la rencontre
+  if (equA || equB) {
+    let rencontre = '';
+    if (equA && equB) rencontre = equA + ' vs ' + equB;
+    else rencontre = equA || equB;
+    if (cat) rencontre += ' — ' + cat;
+    if (comp) rencontre += ' · ' + comp;
+    if (scoreA !== 0 || scoreB !== 0) rencontre += ' (' + scoreA + '-' + scoreB + ')';
+    setField('f-rencontre', rencontre);
+  }
+
+  if (anyPrefilled) {
+    document.getElementById('prefill-notice').style.display = 'block';
+  }
+
+  // Pré-remplir grille d'évaluation basée sur observations
+  prefillEvaluation();
+
+  // Pré-remplir commentaire général
+  prefillCommentaire();
+}
+
+/* ══════════════════════════════
+   LOGIQUE DE PRÉ-REMPLISSAGE GRILLE
+   Basée sur les événements timeline + notations étoiles
+══════════════════════════════ */
+function prefillEvaluation() {
+  // Calculer des scores par critère à partir des événements
+  const evs = state.events;
+  const n = evs.length;
+
+  // Ratios
+  const nErreurs   = evs.filter(e => e.tagClass === 'tag-erreur').length;
+  const nPositifs  = evs.filter(e => e.tagClass === 'tag-positif').length;
+  const nSanctions = evs.filter(e => e.tagClass === 'tag-sanction').length;
+  const nKo        = evs.filter(e => e.avis === 'ko').length;
+  const nOk        = evs.filter(e => e.avis === 'ok').length;
+  const nCheck     = evs.filter(e => e.avis === 'check').length;
+
+  // Événements par type
+  const hasGestuelle  = evs.some(e => e.type.toLowerCase().includes('gestuelle'));
+  const hasPosition   = evs.some(e => e.type.toLowerCase().includes('position'));
+  const hasCommunic   = evs.some(e => e.type.toLowerCase().includes('communication'));
+  const hasHesitation = evs.some(e => e.type.toLowerCase().includes('hésitation'));
+  const hasErreur     = evs.some(e => e.type.toLowerCase().includes('erreur'));
+  const hasSanctions  = nSanctions > 0;
+
+  // Notations étoiles moyennes
+  const r1 = state.ratings.arb1;
+  const r2 = state.ratings.arb2;
+  function avgRating(key) {
+    const a = r1[key], b = r2[key];
+    if (a && b) return (a + b) / 2;
+    return a || b || 0;
+  }
+
+  // Fonction pour convertir un score 0-5 en note
+  function starToNote(val) {
+    if (!val) return null;
+    if (val <= 1) return "Insuffisant";
+    if (val <= 2) return "À optimiser";
+    if (val <= 3.5) return "Correct";
+    return "Très correct";
+  }
+
+  // Fonction pour convertir ratio d'erreurs en note
+  function errRatioToNote(ratio) {
+    // ratio = erreurs / total événements
+    if (ratio > 0.35) return "Insuffisant";
+    if (ratio > 0.2)  return "À optimiser";
+    if (ratio > 0.08) return "Correct";
+    return "Très correct";
+  }
+
+  function buildNote(starKey, errBased, fallback) {
+    const s = starToNote(avgRating(starKey));
+    if (s) return s;
+    if (errBased !== null) return errBased;
+    return fallback;
+  }
+
+  const errRatio = n > 0 ? nErreurs / n : 0;
+  const koRatio  = n > 0 ? nKo / n : 0;
+  const posRatio = n > 0 ? nPositifs / n : 0;
+
+  // Mapping critère → suggestion
+  const suggestions = {};
+
+  // Comprend le jeu — basé sur ratio erreur + décision
+  if (n > 0) {
+    const score = 1 - (errRatio * 0.7 + koRatio * 0.3);
+    if (score > 0.85) suggestions[0] = "Très correct";
+    else if (score > 0.65) suggestions[0] = "Correct";
+    else if (score > 0.4) suggestions[0] = "À optimiser";
+    else suggestions[0] = "Insuffisant";
+  }
+
+  // Appréciation des duels
+  if (n > 0) {
+    if (nKo > 3) suggestions[1] = "Insuffisant";
+    else if (nKo > 1 || nCheck > 2) suggestions[1] = "À optimiser";
+    else if (nOk > 0 || nPositifs > 0) suggestions[1] = "Correct";
+  }
+
+  // Sanctions sportives
+  const noteDecision = buildNote('decision', n > 0 ? errRatioToNote(errRatio) : null, null);
+  if (noteDecision && hasSanctions) suggestions[2] = noteDecision;
+
+  // Sanctions disciplinaires
+  if (hasSanctions && noteDecision) suggestions[3] = noteDecision;
+
+  // Placement et déplacement
+  const noteDeplacement = starToNote(avgRating('deplacement'));
+  if (noteDeplacement) suggestions[4] = noteDeplacement;
+  else if (hasPosition) suggestions[4] = "À optimiser";
+
+  // Gestes / sifflet
+  const noteGestuels = starToNote(avgRating('gestuels'));
+  if (noteGestuels) suggestions[5] = noteGestuels;
+  else if (hasGestuelle) suggestions[5] = "À optimiser";
+
+  // Personnalité — concentration
+  const noteConc = starToNote(avgRating('concentration'));
+  if (noteConc) suggestions[6] = noteConc;
+
+  // Marcher / dribble, empiètement, jeu passif, autres règles
+  if (n > 0) {
+    const regleNote = errRatioToNote(errRatio * 0.5);
+    suggestions[7] = regleNote;
+    suggestions[8] = regleNote;
+    suggestions[9] = regleNote;
+    suggestions[10] = regleNote;
+  }
+
+  // Impression générale
+  if (n > 0) {
+    const genScore = posRatio - errRatio - koRatio * 0.5;
+    if (genScore > 0.15) suggestions[11] = "Très correct";
+    else if (genScore > -0.05) suggestions[11] = "Correct";
+    else if (genScore > -0.2) suggestions[11] = "À optimiser";
+    else suggestions[11] = "Insuffisant";
+  }
+
+  // Communication entre arbitres
+  const noteVerbaux = starToNote(avgRating('verbaux'));
+  if (noteVerbaux) suggestions[12] = noteVerbaux;
+  else if (hasCommunic) suggestions[12] = "À optimiser";
+
+  // Appliquer les suggestions
+  Object.entries(suggestions).forEach(([idx, note]) => {
+    const radio = document.querySelector(`input[name="crit_${idx}"][value="${note}"]`);
+    if (radio) {
+      radio.checked = true;
+      const tr = radio.closest('tr');
+      if (tr) tr.classList.add('suggested');
+    }
+  });
+}
+
+function prefillCommentaire() {
+  const evs = state.events;
+  if (!evs.length) return;
+
+  const nErreurs   = evs.filter(e => e.tagClass === 'tag-erreur').length;
+  const nPositifs  = evs.filter(e => e.tagClass === 'tag-positif').length;
+  const nSanctions = evs.filter(e => e.tagClass === 'tag-sanction').length;
+  const notesMitemps = document.getElementById('notes-mitemps').value.trim();
+  const arb1 = document.getElementById('f-arb1-nom').value.trim() || 'Arbitre 1';
+  const arb2 = document.getElementById('f-arb2-nom').value.trim() || 'Arbitre 2';
+  const scoreA = state.scores.a;
+  const scoreB = state.scores.b;
+  const equA = document.getElementById('f-equipe-a').value.trim() || 'Domicile';
+  const equB = document.getElementById('f-equipe-b').value.trim() || 'Extérieur';
+
+  let commentaire = '';
+
+  // Intro
+  commentaire += `Match ${equA} vs ${equB} (${scoreA}-${scoreB}).\n`;
+  commentaire += `Arbitrage assuré par ${arb1}${arb2 && arb2 !== 'Arbitre 2' ? ' et ' + arb2 : ''}.\n\n`;
+
+  // Stats
+  commentaire += `Bilan du suivi en direct : ${evs.length} événement(s) enregistré(s) dont ${nSanctions} sanction(s), ${nErreurs} erreur(s)/point(s) à corriger, ${nPositifs} point(s) positif(s).\n\n`;
+
+  // Points positifs
+  const positifs = evs.filter(e => e.tagClass === 'tag-positif' && e.desc);
+  if (positifs.length) {
+    commentaire += 'Points positifs :\n';
+    positifs.slice(0,3).forEach(e => {
+      commentaire += `- ${e.type}${e.desc ? ' : ' + e.desc : ''}\n`;
+    });
+    commentaire += '\n';
+  }
+
+  // Points à améliorer
+  const erreurs = evs.filter(e => e.tagClass === 'tag-erreur' && e.desc);
+  if (erreurs.length) {
+    commentaire += 'Points à améliorer :\n';
+    erreurs.slice(0,3).forEach(e => {
+      commentaire += `- ${e.type}${e.desc ? ' : ' + e.desc : ''}\n`;
+    });
+    commentaire += '\n';
+  }
+
+  // Notes mi-temps
+  if (notesMitemps) {
+    commentaire += 'Notes mi-temps :\n' + notesMitemps + '\n';
+  }
+
+  document.getElementById('f-points').value = commentaire.trim();
+  document.getElementById('f-points').classList.add('prefilled');
+}
+
+/* ══════════════════════════════
+   SOUS-PAGES (suivi direct)
+══════════════════════════════ */
+function showSubpage(name, btn) {
+  document.querySelectorAll('.subpage').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.step-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('subpage-' + name).classList.add('active');
+  if (btn) btn.classList.add('active');
+  else {
+    const tabs = document.querySelectorAll('.step-tab');
+    const map = { prep:0, match:1, recap:2 };
+    if (tabs[map[name]]) tabs[map[name]].classList.add('active');
+  }
   if (name === 'recap') updateRecap();
 }
 
-/* ══ SCORE ══ */
+/* ══════════════════════════════
+   SCORE & CHRONO
+══════════════════════════════ */
 function changeScore(team, delta) {
   state.scores[team] = Math.max(0, state.scores[team] + delta);
   document.getElementById('score-' + team).textContent = state.scores[team];
@@ -1052,8 +1478,6 @@ function updateTeamNames() {
   document.getElementById('team-a-name').textContent = document.getElementById('f-equipe-a').value || 'Équipe A';
   document.getElementById('team-b-name').textContent = document.getElementById('f-equipe-b').value || 'Équipe B';
 }
-
-/* ══ CHRONO ══ */
 function applyChronoConfig() {
   const sel = document.getElementById('f-duree-mitemps');
   const wrap = document.getElementById('f-duree-custom-wrap');
@@ -1095,7 +1519,9 @@ function getCurrentTime() {
   return m+':'+s+' (P'+state.chrono.periode+')';
 }
 
-/* ══ MODAL ══ */
+/* ══════════════════════════════
+   MODAL
+══════════════════════════════ */
 function openModal(type, tagClass) {
   state.modal = { type, tagClass, avis:'note' };
   document.getElementById('modal-title').textContent = type;
@@ -1110,7 +1536,7 @@ function openModal(type, tagClass) {
   document.getElementById('modal-desc').value='';
   document.getElementById('modal-joueur').value='';
   document.querySelectorAll('.avis-btn').forEach(b=>b.classList.remove('selected'));
-  document.querySelector('.avis-btn[data-avis="note"]').classList.add('selected');
+  document.querySelectorAll('.avis-btn')[0].classList.add('selected');
   document.getElementById('modal-overlay').classList.add('open');
   setTimeout(()=>document.getElementById('modal-desc').focus(), 300);
 }
@@ -1131,7 +1557,9 @@ function saveEvent() {
   state.events.unshift(ev); closeModal(); renderTimeline(); updateStats();
 }
 
-/* ══ TIMELINE ══ */
+/* ══════════════════════════════
+   TIMELINE
+══════════════════════════════ */
 function buildEventHTML(ev, showDel) {
   const arb1 = document.getElementById('f-arb1-nom').value||'Arb 1';
   const arb2 = document.getElementById('f-arb2-nom').value||'Arb 2';
@@ -1155,19 +1583,18 @@ function buildEventHTML(ev, showDel) {
 function renderTimeline() {
   const c = document.getElementById('timeline');
   const e = document.getElementById('timeline-empty');
-  if (!state.events.length) { e.style.display='block'; return; }
+  if (!state.events.length) { e.style.display='block'; c.innerHTML='<div class="timeline-empty" id="timeline-empty">Aucun événement — utilise les boutons ci-dessus</div>'; return; }
   e.style.display='none';
   c.innerHTML='<div class="timeline-empty" id="timeline-empty" style="display:none;"></div>';
-  state.events.forEach(ev=>{
-    const el=document.createElement('div'); el.className='t-event';
-    el.innerHTML=buildEventHTML(ev,true); c.appendChild(el);
-  });
+  state.events.forEach(ev=>{ const el=document.createElement('div'); el.className='t-event'; el.innerHTML=buildEventHTML(ev,true); c.appendChild(el); });
 }
 function deleteEvent(id) {
   state.events=state.events.filter(e=>e.id!==id); renderTimeline(); updateStats();
 }
 
-/* ══ NOTATION ══ */
+/* ══════════════════════════════
+   NOTATION ÉTOILES
+══════════════════════════════ */
 function buildNotaGrid(containerId) {
   const grid=document.getElementById(containerId);
   if(!grid) return;
@@ -1177,7 +1604,7 @@ function buildNotaGrid(containerId) {
     const nameEl=document.createElement('div'); nameEl.className='nota-name';
     nameEl.id='nn-'+arb+'-'+containerId;
     const inp=document.getElementById('f-arb'+(arb==='arb1'?'1':'2')+'-nom');
-    nameEl.textContent=(inp&&inp.value)||( arb==='arb1'?'Arbitre 1':'Arbitre 2');
+    nameEl.textContent=(inp&&inp.value)||(arb==='arb1'?'Arbitre 1':'Arbitre 2');
     b.appendChild(nameEl);
     CRITERIA.forEach(crit=>{
       const row=document.createElement('div'); row.className='nota-crit';
@@ -1186,8 +1613,7 @@ function buildNotaGrid(containerId) {
       for(let i=1;i<=5;i++){
         const s=document.createElement('div'); s.className='star';
         s.textContent=i; s.dataset.arb=arb; s.dataset.crit=crit.key; s.dataset.val=i;
-        if(containerId==='nota-grid') s.onclick=()=>setRating(arb,crit.key,i);
-        else s.style.cursor='default';
+        s.onclick=()=>setRating(arb,crit.key,i);
         if(i<=state.ratings[arb][crit.key]) s.classList.add('on');
         stars.appendChild(s);
       }
@@ -1195,7 +1621,7 @@ function buildNotaGrid(containerId) {
     });
     grid.appendChild(b);
   });
-  if(containerId==='nota-grid') syncNotaNames();
+  syncNotaNames();
 }
 function syncNotaNames(){
   ['arb1','arb2'].forEach((arb,i)=>{
@@ -1207,6 +1633,11 @@ function syncNotaNames(){
     });
   });
 }
+function syncArbNames() {
+  updateTeamNames();
+  document.getElementById('modal-arb1-opt').textContent = document.getElementById('f-arb1-nom').value||'Arbitre 1';
+  document.getElementById('modal-arb2-opt').textContent = document.getElementById('f-arb2-nom').value||'Arbitre 2';
+}
 function setRating(arb,crit,val){
   state.ratings[arb][crit]=val;
   document.querySelectorAll(`.star[data-arb="${arb}"][data-crit="${crit}"]`).forEach(s=>{
@@ -1214,7 +1645,9 @@ function setRating(arb,crit,val){
   });
 }
 
-/* ══ STATS ══ */
+/* ══════════════════════════════
+   STATS
+══════════════════════════════ */
 function updateStats(){
   document.getElementById('stat-sanctions').textContent=state.events.filter(e=>e.tagClass==='tag-sanction').length;
   document.getElementById('stat-erreurs').textContent=state.events.filter(e=>e.tagClass==='tag-erreur').length;
@@ -1223,7 +1656,9 @@ function updateStats(){
   document.getElementById('event-count').textContent=state.events.length;
 }
 
-/* ══ RECAP ══ */
+/* ══════════════════════════════
+   RECAP BILAN
+══════════════════════════════ */
 function updateRecap(){
   updateStats();
   const rt=document.getElementById('timeline-recap');
@@ -1235,8 +1670,241 @@ function updateRecap(){
       el.innerHTML=buildEventHTML(ev,false); rt.appendChild(el);
     });
   }
-  buildNotaGrid('nota-recap-grid');
+}
+
+/* ══════════════════════════════
+   FORMULAIRE — TABLE EVAL
+══════════════════════════════ */
+function buildEvalTable() {
+  const tbody = document.getElementById('evalBody');
+  CRITERES.forEach((crit, i) => {
+    const tr = document.createElement('tr');
+    let cells = `<td>${crit}</td>`;
+    NOTE_COLS.forEach(col => {
+      cells += `<td class="${col.cls}">
+        <div class="radio-wrap">
+          <input type="radio" name="crit_${i}" id="crit_${i}_${col.val}" value="${col.val}">
+          <label for="crit_${i}_${col.val}"></label>
+        </div>
+      </td>`;
+    });
+    tr.innerHTML = cells;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ══════════════════════════════
+   FORMULAIRE — NAVIGATION
+══════════════════════════════ */
+function nextArbStep() {
+  if (!validateArbStep(arbState.currentStep)) return;
+  if (arbState.currentStep < arbState.totalSteps) {
+    arbState.currentStep++;
+    if (arbState.currentStep === arbState.totalSteps) buildRecap();
+    updateArbUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+function prevArbStep() {
+  if (arbState.currentStep > 1) {
+    arbState.currentStep--;
+    updateArbUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+function updateArbUI() {
+  document.querySelectorAll('.step-arb').forEach((el, i) => {
+    el.classList.toggle('active', i + 1 === arbState.currentStep);
+  });
+  const pct = ((arbState.currentStep - 1) / (arbState.totalSteps - 1)) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  const prevBtn  = document.getElementById('btn-arb-prev');
+  const nextBtn  = document.getElementById('btn-arb-next');
+  const printBtn = document.getElementById('btn-print');
+  prevBtn.style.display = arbState.currentStep > 1 ? 'block' : 'none';
+  if (arbState.currentStep === arbState.totalSteps) {
+    nextBtn.textContent = '✉ Envoyer le suivi';
+    nextBtn.className   = 'btn btn-submit';
+    nextBtn.onclick     = submitForm;
+    printBtn.style.display = 'flex';
+  } else {
+    nextBtn.textContent = 'Continuer →';
+    nextBtn.className   = 'btn btn-next btn-blue';
+    nextBtn.onclick     = nextArbStep;
+    printBtn.style.display = 'none';
+  }
+}
+
+/* ══════════════════════════════
+   FORMULAIRE — VALIDATION
+══════════════════════════════ */
+function validateArbStep(step) {
+  if (step === 1) {
+    if (!document.getElementById('f-ja1').value.trim())
+      return showToast('⚠ Saisir le Juge-Arbitre 1', 'warn'), false;
+    if (!document.getElementById('f-accompagnateur').value.trim())
+      return showToast('⚠ Saisir le Juge Accompagnateur', 'warn'), false;
+    if (!document.getElementById('f-rencontre').value.trim())
+      return showToast('⚠ Saisir la rencontre', 'warn'), false;
+  }
+  return true;
+}
+
+/* ══════════════════════════════
+   FORMULAIRE — RÉCAP
+══════════════════════════════ */
+function getEvalData() {
+  return CRITERES.map((c, i) => {
+    const checked = document.querySelector(`input[name="crit_${i}"]:checked`);
+    return { critere: c, note: checked ? checked.value : null };
+  });
+}
+function buildRecap() {
+  const ja1   = document.getElementById('f-ja1').value;
+  const ja2   = document.getElementById('f-ja2').value;
+  const acc   = document.getElementById('f-accompagnateur').value;
+  const renc  = document.getElementById('f-rencontre').value;
+  const date  = document.getElementById('f-date').value;
+  const heure = document.getElementById('f-heure').value;
+  const points = document.getElementById('f-points').value;
+  const obj   = document.getElementById('f-objectif').value;
+  const evals = getEvalData();
+  const dateStr = date ? new Date(date+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) : '—';
+
+  let html = `<div class="recap-card">
+    <div class="recap-card-header">Identité & Contexte</div>
+    <div class="recap-row"><span class="recap-key">Juge-Arbitre 1</span><span class="recap-val">${ja1}</span></div>
+    ${ja2 ? `<div class="recap-row"><span class="recap-key">Juge-Arbitre 2</span><span class="recap-val">${ja2}</span></div>` : ''}
+    <div class="recap-row"><span class="recap-key">Accompagnateur</span><span class="recap-val">${acc}</span></div>
+    <div class="recap-row"><span class="recap-key">Rencontre</span><span class="recap-val">${renc}</span></div>
+    <div class="recap-row"><span class="recap-key">Date / Heure</span><span class="recap-val">${dateStr}${heure ? ' · ' + heure : ''}</span></div>
+  </div>`;
+
+  html += `<div class="recap-card">
+    <div class="recap-card-header">Grille d'évaluation</div>
+    <div class="recap-eval-grid">`;
+  evals.forEach(e => {
+    const cls = e.note ? NOTE_BADGE_CLS[e.note] : 'note-nr';
+    html += `<div class="recap-eval-row">
+      <span class="recap-eval-crit">${e.critere}</span>
+      <span class="recap-eval-note ${cls}">${e.note || 'Non renseigné'}</span>
+    </div>`;
+  });
+  html += `</div></div>`;
+  html += `<div class="recap-card">
+    <div class="recap-card-header">Commentaire général</div>
+    <div class="recap-comment">${points.replace(/\n/g,'<br>')}</div>
+  </div>`;
+  if (obj.trim()) {
+    html += `<div class="recap-card">
+      <div class="recap-card-header">Objectif — Prochaine prestation</div>
+      <div class="recap-comment">${obj.replace(/\n/g,'<br>')}</div>
+    </div>`;
+  }
+  document.getElementById('recap-content').innerHTML = html;
+}
+
+/* ══════════════════════════════
+   ENVOI EMAILJS
+══════════════════════════════ */
+async function submitForm() {
+  const btn = document.getElementById('btn-arb-next');
+  btn.disabled = true; btn.textContent = 'Envoi en cours…';
+  const evals = getEvalData();
+  const evaluations = evals.map(e => `${e.critere} : ${e.note || 'Non renseigné'}`).join('\n\n');
+  try {
+    await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+      ja1:            document.getElementById('f-ja1').value,
+      ja2:            document.getElementById('f-ja2').value,
+      accompagnateur: document.getElementById('f-accompagnateur').value,
+      rencontre:      document.getElementById('f-rencontre').value,
+      date:           document.getElementById('f-date').value,
+      heure:          document.getElementById('f-heure').value,
+      points:         document.getElementById('f-points').value,
+      objectif:       document.getElementById('f-objectif').value,
+      evaluations:    evaluations
+    });
+    showToast('✓ Suivi envoyé avec succès !', 'success');
+    setTimeout(() => {
+      document.querySelectorAll('input[type="text"].arb-input, textarea.arb-input').forEach(el => el.value = '');
+      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+      document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+      document.getElementById('f-heure').value = '';
+      arbState.currentStep = 1; updateArbUI();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 1500);
+  } catch(err) {
+    console.error('[EmailJS]', err);
+    showToast('✗ Erreur lors de l\'envoi. Réessayez.', 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = '✉ Envoyer le suivi';
+  }
+}
+
+/* ══════════════════════════════
+   IMPRESSION
+══════════════════════════════ */
+function doPrint() {
+  const ja1   = document.getElementById('f-ja1').value;
+  const ja2   = document.getElementById('f-ja2').value;
+  const acc   = document.getElementById('f-accompagnateur').value;
+  const renc  = document.getElementById('f-rencontre').value;
+  const date  = document.getElementById('f-date').value;
+  const heure = document.getElementById('f-heure').value;
+  const pts   = document.getElementById('f-points').value;
+  const obj   = document.getElementById('f-objectif').value;
+  const evals = getEvalData();
+  const dateStr = date ? new Date(date+'T12:00:00').toLocaleDateString('fr-FR',{weekday:'long',year:'numeric',month:'long',day:'numeric'}) : '—';
+  const evalRows = evals.map(e => `<div class="pv-eval-row"><span class="pv-eval-crit">${e.critere}</span><span class="pv-eval-note">${e.note || '—'}</span></div>`).join('');
+
+  document.getElementById('print-view').innerHTML = `
+  <div class="pv-stripe"></div>
+  <div class="pv-header">
+    <div>
+      <div class="pv-title">Fiche de Suivi — JAJ</div>
+      <div class="pv-subtitle">Meylan Handball · Commission Arbitrage · Saison 2025-2026</div>
+    </div>
+    <div class="pv-meta">${dateStr}<br>${heure || ''}<br>Imprimé le ${new Date().toLocaleDateString('fr-FR')}</div>
+  </div>
+  <div class="pv-section">
+    <div class="pv-section-title">Identité & Contexte</div>
+    <div class="pv-grid">
+      <div><div class="pv-field-label">Juge-Arbitre 1</div><div class="pv-field-value">${ja1}</div></div>
+      <div><div class="pv-field-label">Juge-Arbitre 2</div><div class="pv-field-value">${ja2 || '—'}</div></div>
+      <div><div class="pv-field-label">Accompagnateur</div><div class="pv-field-value">${acc}</div></div>
+      <div><div class="pv-field-label">Rencontre</div><div class="pv-field-value">${renc}</div></div>
+    </div>
+  </div>
+  <div class="pv-section">
+    <div class="pv-section-title">Grille d'évaluation</div>
+    ${evalRows}
+  </div>
+  <div class="pv-section">
+    <div class="pv-section-title">Commentaire général</div>
+    <div class="pv-comment-box">${pts.replace(/\n/g,'<br>') || ''}</div>
+  </div>
+  ${obj ? `<div class="pv-section"><div class="pv-section-title">Objectif — Prochaine prestation</div><div class="pv-comment-box">${obj.replace(/\n/g,'<br>')}</div></div>` : ''}
+  <div class="pv-signature">
+    <div><div class="pv-sig-box"></div><div class="pv-sig-label">Signature de l'arbitre</div></div>
+    <div><div class="pv-sig-box"></div><div class="pv-sig-label">Signature du juge accompagnateur</div></div>
+  </div>
+  <div class="pv-footer">
+    <span>© 2025-2026 Meylan Handball · Commission Arbitrage</span>
+    <span>JAJ — Fiche de suivi pédagogique</span>
+  </div>`;
+  window.print();
+}
+
+/* ══════════════════════════════
+   TOAST
+══════════════════════════════ */
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${type}`;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 </script>
+
 </body>
 </html>
