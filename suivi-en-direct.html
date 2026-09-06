@@ -1105,6 +1105,102 @@ emailjs.init("8mHDd4BaEwkycTRqI");
 const SERVICE_ID  = "service_o4midvq";
 const TEMPLATE_ID = "template_l5mmsg3";
 
+/* ══════════════════════════════════════════════════════════════
+   SYNCHRONISATION DES SUIVIS (fichier JSON versionné sur GitHub)
+   — alimente suivi.html
+   Renseignez les constantes ci-dessous une fois pour toutes
+   (mêmes valeurs que dans suivi-arbitrage.html et suivi.html) :
+   1. Créez un token sur github.com → Settings → Developer settings
+      → Fine-grained tokens → "Only select repositories" → choisissez
+      ce dépôt → Permissions → Contents : Read and write.
+   2. Collez ce token dans GITHUB_TOKEN.
+   3. Renseignez GITHUB_OWNER / GITHUB_REPO / GITHUB_BRANCH.
+      GITHUB_PATH est le fichier JSON dans le dépôt (créé
+      automatiquement au premier envoi s'il n'existe pas encore).
+   ⚠ Ce token reste visible dans le code source de la page. Utilisez
+   un token à portée strictement limitée à CE dépôt (Contents
+   uniquement) et régénérez-le si vous suspectez une fuite.
+══════════════════════════════════════════════════════════════ */
+const GITHUB_OWNER  = ''; // ex: 'MeylanHandballTV'
+const GITHUB_REPO   = ''; // ex: 'espace-suivis'
+const GITHUB_BRANCH = 'main';
+const GITHUB_PATH   = 'suivis.json';
+const GITHUB_TOKEN  = ''; // ex: 'github_pat_xxxxxxxxxxxxxxxxxxxx'
+
+function getGithubToken() {
+  return GITHUB_TOKEN || localStorage.getItem('mhb_github_token') || '';
+}
+function githubContentsBaseUrl() {
+  return `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}`;
+}
+function utf8ToB64(str) { return btoa(unescape(encodeURIComponent(str))); }
+function b64ToUtf8(str) { return decodeURIComponent(escape(atob(str.replace(/\n/g, '')))); }
+
+async function saveSuiviJSON(record, attempt) {
+  attempt = attempt || 0;
+  const token = getGithubToken();
+  if (!token || !GITHUB_OWNER || !GITHUB_REPO) {
+    throw new Error('GitHub non configuré (voir en tête de script).');
+  }
+  const headers = {
+    'Authorization': 'Bearer ' + token,
+    'Accept': 'application/vnd.github+json'
+  };
+
+  let sha = null, list = [];
+  const getResp = await fetch(`${githubContentsBaseUrl()}?ref=${GITHUB_BRANCH}&_=${Date.now()}`, { headers });
+  if (getResp.status === 200) {
+    const data = await getResp.json();
+    sha = data.sha;
+    const parsed = JSON.parse(b64ToUtf8(data.content) || '{}');
+    list = parsed.suivis || [];
+  } else if (getResp.status !== 404) {
+    throw new Error('Lecture GitHub impossible (HTTP ' + getResp.status + ')');
+  }
+
+  list.push(record);
+
+  const body = {
+    message: `Suivi ajouté – ${record.ja1 || ''} / ${record.ja2 || ''} (${new Date().toLocaleString('fr-FR')})`,
+    content: utf8ToB64(JSON.stringify({ suivis: list }, null, 2)),
+    branch: GITHUB_BRANCH
+  };
+  if (sha) body.sha = sha;
+
+  const putResp = await fetch(githubContentsBaseUrl(), {
+    method: 'PUT',
+    headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+    body: JSON.stringify(body)
+  });
+
+  if (putResp.status === 409 && attempt < 3) {
+    // Un autre suivi a été enregistré entre-temps : on relit le fichier et on réessaie
+    return saveSuiviJSON(record, attempt + 1);
+  }
+  if (!putResp.ok) {
+    const errData = await putResp.json().catch(() => ({}));
+    throw new Error('Écriture GitHub impossible (HTTP ' + putResp.status + ') ' + (errData.message || ''));
+  }
+}
+
+function buildSuiviRecord() {
+  const evals = getEvalData();
+  const evaluations = {};
+  evals.forEach(e => { evaluations[e.critere] = e.note || ''; });
+  return {
+    id: Date.now(),
+    ja1:            document.getElementById('f-ja1').value.trim(),
+    ja2:            document.getElementById('f-ja2').value.trim(),
+    accompagnateur: document.getElementById('f-accompagnateur').value.trim(),
+    rencontre:      document.getElementById('f-rencontre').value.trim(),
+    date:           document.getElementById('f-date').value,
+    heure:          document.getElementById('f-heure').value,
+    evaluations:    evaluations,
+    points:         document.getElementById('f-points').value.trim(),
+    objectif:       document.getElementById('f-objectif').value.trim()
+  };
+}
+
 /* ══════════════════════════════
    STATE LIVE
 ══════════════════════════════ */
@@ -1810,32 +1906,54 @@ function buildRecap() {
 async function submitForm() {
   const btn = document.getElementById('btn-arb-next');
   btn.disabled = true; btn.textContent = 'Envoi en cours…';
-  const evals = getEvalData();
-  const evaluations = evals.map(e => `${e.critere} : ${e.note || 'Non renseigné'}`).join('\n\n');
+
+  const record = buildSuiviRecord();
+  const evaluations = Object.entries(record.evaluations)
+    .map(([crit, note]) => `${crit} : ${note || 'Non renseigné'}`)
+    .join('\n\n');
+
+  const resetForm = () => {
+    document.querySelectorAll('input[type="text"].arb-input, textarea.arb-input').forEach(el => el.value = '');
+    document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+    document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('f-heure').value = '';
+    arbState.currentStep = 1; updateArbUI();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  let jsonOk = false;
+  try {
+    await saveSuiviJSON(record);
+    jsonOk = true;
+  } catch (err) {
+    console.error('[GitHub]', err);
+  }
+
   try {
     await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-      ja1:            document.getElementById('f-ja1').value,
-      ja2:            document.getElementById('f-ja2').value,
-      accompagnateur: document.getElementById('f-accompagnateur').value,
-      rencontre:      document.getElementById('f-rencontre').value,
-      date:           document.getElementById('f-date').value,
-      heure:          document.getElementById('f-heure').value,
-      points:         document.getElementById('f-points').value,
-      objectif:       document.getElementById('f-objectif').value,
+      ja1:            record.ja1,
+      ja2:            record.ja2,
+      accompagnateur: record.accompagnateur,
+      rencontre:      record.rencontre,
+      date:           record.date,
+      heure:          record.heure,
+      points:         record.points,
+      objectif:       record.objectif,
       evaluations:    evaluations
     });
-    showToast('✓ Suivi envoyé avec succès !', 'success');
-    setTimeout(() => {
-      document.querySelectorAll('input[type="text"].arb-input, textarea.arb-input').forEach(el => el.value = '');
-      document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
-      document.getElementById('f-date').value = new Date().toISOString().split('T')[0];
-      document.getElementById('f-heure').value = '';
-      arbState.currentStep = 1; updateArbUI();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1500);
+    showToast(
+      jsonOk ? '✓ Suivi enregistré et envoyé !' : "✓ Suivi envoyé (⚠ non ajouté à l'historique)",
+      jsonOk ? 'success' : 'warn'
+    );
+    setTimeout(resetForm, 1500);
   } catch(err) {
     console.error('[EmailJS]', err);
-    showToast('✗ Erreur lors de l\'envoi. Réessayez.', 'error');
+    if (jsonOk) {
+      showToast('✓ Suivi enregistré (⚠ e-mail non envoyé)', 'warn');
+      setTimeout(resetForm, 1500);
+    } else {
+      showToast('✗ Erreur lors de l\'envoi. Réessayez.', 'error');
+    }
   } finally {
     btn.disabled = false; btn.textContent = '✉ Envoyer le suivi';
   }

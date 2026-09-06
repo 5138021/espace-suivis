@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historique des suivis — Meylan HB 26-27</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge:  #E8001D;
+    --noir:   #0D0D0D;
+    --blanc:  #F5F2EC;
+    --gris:   #1A1A1A;
+    --gris-mid:#2E2E2E;
+    --accent: #FFD100;
+    --muted:  #9A9A9A;
+    --bleu:   #4A9FFF;
+    --ins:    #e53935;
+    --opt:    #fb8c00;
+    --cor:    #43a047;
+    --tres:   #4A9FFF;
+    --border: #1E1E1E;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .top-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  header {
+    padding: 2.5rem 3rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .logo-badge { width:75px; height:75px; border-radius:4px; flex-shrink:0; }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: var(--blanc);
+    line-height: 1;
+  }
+
+  .header-text p {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  nav.subnav {
+    padding: 0 3rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+  }
+
+  .subnav a {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .subnav a.active, .subnav a:hover {
+    color: var(--blanc);
+    border-bottom-color: var(--bleu);
+  }
+
+  /* SYNC BAR */
+  .sync-bar {
+    padding: 0.6rem 3rem;
+    display: flex; align-items: center; gap: 0.6rem;
+    font-size: 0.68rem; letter-spacing: 1.5px; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    background: #111;
+  }
+  .sync-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--muted); flex-shrink: 0; transition: background .3s;
+  }
+  .sync-bar.loading .sync-dot { background: var(--accent); animation: pulse 1s infinite; }
+  .sync-bar.ok .sync-dot { background: #43a047; }
+  .sync-bar.error .sync-dot { background: var(--rouge); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .sync-label { color: var(--muted); }
+  .sync-bar.ok .sync-label { color: #43a047; }
+  .sync-bar.error .sync-label { color: var(--rouge); }
+  .sync-time { margin-left: auto; color: #444; font-size: 0.62rem; }
+
+  /* CONFIG BANNER */
+  .config-banner {
+    margin: 1.5rem 3rem;
+    background: rgba(255,209,0,0.06);
+    border: 1px solid rgba(255,209,0,0.25);
+    border-left: 3px solid var(--accent);
+    padding: 1.4rem 1.8rem;
+    border-radius: 2px;
+    display: none;
+  }
+  .config-banner.visible { display: block; }
+  .config-banner h4 { font-family: 'Bebas Neue'; font-size: 1rem; letter-spacing: 2px; color: var(--accent); margin-bottom: 0.6rem; }
+  .config-banner p { font-size: 0.75rem; color: var(--muted); line-height: 1.8; margin-bottom: 0.8rem; }
+  .config-banner ol { font-size: 0.75rem; color: var(--muted); line-height: 2; padding-left: 1.2rem; margin-bottom: 0.8rem; }
+  .config-banner a { color: var(--accent); }
+  .config-banner code {
+    background: #1a1a1a; border: 1px solid #333; padding: 2px 6px;
+    border-radius: 2px; font-size: 0.78rem; color: var(--blanc);
+    font-family: 'Courier New', monospace;
+  }
+  .config-input {
+    width: 100%; margin-top: 0.4rem;
+    background: var(--gris-mid); border: 1px solid #444; border-radius: 2px;
+    color: var(--blanc); font-family: 'DM Sans'; font-size: 0.82rem;
+    padding: 0.65rem 1rem; outline: none;
+  }
+  .config-input:focus { border-color: var(--accent); }
+  .config-btn {
+    margin-top: 0.8rem; padding: 0.6rem 1.4rem;
+    background: var(--accent); color: var(--noir);
+    font-family: 'Bebas Neue'; font-size: 0.9rem; letter-spacing: 2px;
+    border: none; border-radius: 2px; cursor: pointer; transition: opacity .2s;
+  }
+  .config-btn:hover { opacity: .85; }
+
+  /* HERO */
+  .hero {
+    padding: 4rem 3rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: 'SUIVIS';
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12rem;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    letter-spacing: 4px;
+    white-space: nowrap;
+  }
+
+  .hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bleu);
+    margin-bottom: 1rem;
+  }
+
+  .hero h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .hero h2 span { color: var(--bleu); }
+
+  .hero-sub {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    padding: 0 3rem 2rem;
+    display: flex;
+    gap: 1px;
+    background: #1a1a1a;
+    border-top: 1px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
+    margin-bottom: 2.5rem;
+  }
+
+  .stat-item {
+    flex: 1;
+    background: var(--gris);
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: var(--blanc);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* FILTERS */
+  .filters {
+    padding: 0 3rem 1.5rem;
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 0.62rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-right: 0.4rem;
+  }
+
+  .filter-btn {
+    background: none;
+    border: 1px solid #2a2a2a;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--bleu);
+    color: var(--bleu);
+    background: rgba(74,159,255,0.06);
+  }
+
+  .filter-btn.active { font-weight: 600; }
+
+  .search-wrap {
+    margin-left: auto;
+    position: relative;
+  }
+
+  .search-wrap input {
+    background: var(--gris);
+    border: 1px solid #2a2a2a;
+    border-radius: 2px;
+    padding: 7px 14px 7px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: var(--blanc);
+    outline: none;
+    width: 200px;
+    transition: border-color 0.15s;
+  }
+
+  .search-wrap input:focus { border-color: var(--bleu); }
+  .search-wrap input::placeholder { color: #444; }
+
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #444;
+    font-size: 0.8rem;
+    pointer-events: none;
+  }
+
+  /* SECTION LABEL */
+  .section-label {
+    padding: 0 3rem 1rem;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid #222;
+    margin-bottom: 0;
+  }
+
+  /* SUIVIS LIST */
+  .suivis-container {
+    padding: 0 3rem 3rem;
+  }
+
+  .suivis-count {
+    padding: 0.8rem 0;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #555;
+    border-bottom: 1px solid #1a1a1a;
+    margin-bottom: 0;
+  }
+
+  .suivis-count span { color: var(--bleu); }
+
+  /* SUIVI ROW */
+  .suivi-row {
+    border-bottom: 1px solid #181818;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+
+  .suivi-row:hover { background: #131313; }
+
+  .suivi-summary {
+    padding: 1.2rem 0;
+    display: grid;
+    grid-template-columns: 60px 1fr 160px 120px 80px 40px;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .suivi-date {
+    font-size: 0.62rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .suivi-date strong {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--blanc);
+    letter-spacing: 1px;
+    font-weight: 400;
+  }
+
+  .suivi-main { min-width: 0; }
+
+  .suivi-arbitres {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--blanc);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .suivi-rencontre {
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .suivi-accompagnateur {
+    font-size: 0.7rem;
+    color: var(--muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .suivi-accompagnateur strong {
+    display: block;
+    font-size: 0.58rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #444;
+    font-weight: 400;
+    margin-bottom: 2px;
+  }
+
+  /* SCORE BADGE */
+  .score-badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .score-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  .score-label {
+    font-size: 0.56rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .score-ins  { color: var(--ins); }
+  .score-opt  { color: var(--opt); }
+  .score-cor  { color: var(--cor); }
+  .score-tres { color: var(--tres); }
+
+  .expand-arrow {
+    color: #333;
+    font-size: 1rem;
+    transition: transform 0.2s, color 0.2s;
+    text-align: center;
+  }
+
+  .suivi-row.open .expand-arrow { transform: rotate(180deg); color: var(--bleu); }
+
+  /* DETAIL PANEL */
+  .suivi-detail {
+    display: none;
+    background: #0e0e0e;
+    border-top: 1px solid #1a1a1a;
+    padding: 1.5rem 0 2rem;
+  }
+
+  .suivi-row.open .suivi-detail { display: block; }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: #1a1a1a;
+    border: 1px solid #1a1a1a;
+    margin-bottom: 1.2rem;
+  }
+
+  .detail-section {
+    background: #111;
+    padding: 1rem 1.2rem;
+  }
+
+  .detail-section-title {
+    font-size: 0.58rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #555;
+    margin-bottom: 0.8rem;
+  }
+
+  /* EVAL MINI TABLE */
+  .eval-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .eval-mini-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .eval-mini-critere {
+    font-size: 0.7rem;
+    color: #888;
+    flex: 1;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .eval-mini-val {
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .val-ins  { background: rgba(229,57,53,0.12);  color: var(--ins);  border: 1px solid rgba(229,57,53,0.25);  }
+  .val-opt  { background: rgba(251,140,0,0.12);  color: var(--opt);  border: 1px solid rgba(251,140,0,0.25);  }
+  .val-cor  { background: rgba(67,160,71,0.12);  color: var(--cor);  border: 1px solid rgba(67,160,71,0.25);  }
+  .val-tres { background: rgba(74,159,255,0.12); color: var(--tres); border: 1px solid rgba(74,159,255,0.25); }
+  .val-nr   { background: rgba(100,100,100,0.1); color: #555; border: 1px solid #2a2a2a; }
+
+  /* POINTS */
+  .points-text {
+    font-size: 0.74rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .points-empty {
+    font-size: 0.7rem;
+    color: #333;
+    font-style: italic;
+  }
+
+  /* EMPTY STATE */
+  .empty-state {
+    padding: 4rem 0;
+    text-align: center;
+  }
+
+  .empty-state p {
+    font-size: 0.78rem;
+    color: #444;
+    letter-spacing: 1px;
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 3rem;
+    padding: 1.5rem 3rem;
+    border-top: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer p { font-size: 0.68rem; color: var(--muted); letter-spacing: 1px; }
+  footer a { font-size: 0.68rem; color: var(--muted); text-decoration: none; letter-spacing: 1px; transition: color 0.2s; }
+  footer a:hover { color: var(--rouge); }
+
+  .bottom-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  @media (max-width: 768px) {
+    header, nav.subnav, .hero, .filters, .section-label, .suivis-container, footer { padding-left: 1.2rem; padding-right: 1.2rem; }
+    .stats-bar { padding-left: 0; padding-right: 0; flex-wrap: wrap; }
+    .hero::before { display: none; }
+    .suivi-summary { grid-template-columns: 50px 1fr 100px 36px; }
+    .suivi-accompagnateur, .score-badge { display: none; }
+    .detail-grid { grid-template-columns: 1fr; }
+    .search-wrap input { width: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <img class="logo-badge" src="MHB_logo.png" />
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 26-27</p>
+  </div>
+</header>
+
+<nav class="subnav">
+  <a href="index.html">Accueil</a>
+  <a href="ressources.html">Fiches d'aide</a>
+  <a href="commission.html">Commission</a>
+</nav>
+
+<div class="sync-bar loading" id="sync-bar" onclick="loadSuivis()" title="Cliquer pour actualiser" style="cursor:pointer;">
+  <div class="sync-dot"></div>
+  <span class="sync-label" id="sync-label">Connexion en cours…</span>
+  <span class="sync-time" id="sync-time"></span>
+</div>
+
+<div class="config-banner" id="config-banner">
+  <h4>⚙ Configuration — 1 minute</h4>
+  <p>Les suivis remplis depuis <code>suivi-arbitrage.html</code> et <code>suivi-en-direct.html</code> sont enregistrés dans un fichier <code>suivis.json</code> versionné directement dans votre dépôt GitHub. Pour afficher l'historique ici :</p>
+  <ol>
+    <li>Ouvrez le haut du script de cette page</li>
+    <li>Renseignez <code>GITHUB_OWNER</code> (compte/organisation) et <code>GITHUB_REPO</code> (nom du dépôt) — mêmes valeurs que dans les 2 formulaires</li>
+    <li>Republiez la page ; aucune clé n'est nécessaire ici si le dépôt est public</li>
+  </ol>
+</div>
+
+<main>
+
+  <section class="hero">
+    <p class="hero-label">Saison 2026-2027</p>
+    <h2>Historique des <span>suivis</span></h2>
+    <p class="hero-sub">Ensemble des évaluations pédagogiques enregistrées cette saison. Cliquez sur un suivi pour consulter le détail.</p>
+  </section>
+
+  <div class="stats-bar" id="statsBar">
+    <div class="stat-item">
+      <div class="stat-value" id="stat-total">—</div>
+      <div class="stat-label">Suivis enregistrés</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="stat-arbitres">—</div>
+      <div class="stat-label">Arbitres suivis</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="stat-mois">—</div>
+      <div class="stat-label">Ce mois-ci</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="stat-score" style="color:var(--cor)">—</div>
+      <div class="stat-label">Note dominante</div>
+    </div>
+  </div>
+
+  <div class="filters">
+    <span class="filter-label">Filtrer :</span>
+    <button class="filter-btn active" onclick="setFilter('tous', this)">Tous</button>
+    <button class="filter-btn" onclick="setFilter('tres', this)">Très correct</button>
+    <button class="filter-btn" onclick="setFilter('cor', this)">Correct</button>
+    <button class="filter-btn" onclick="setFilter('opt', this)">À optimiser</button>
+    <button class="filter-btn" onclick="setFilter('ins', this)">Insuffisant</button>
+    <div class="search-wrap">
+      <span class="search-icon">⌕</span>
+      <input type="text" id="searchInput" placeholder="Rechercher un arbitre…" oninput="renderList()" />
+    </div>
+  </div>
+
+  <p class="section-label">Évaluations enregistrées</p>
+
+  <div class="suivis-container">
+    <div class="suivis-count" id="suivisCount"></div>
+    <div id="suivisList"></div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026-2027 Meylan Handball · Commission d'Arbitrage</p>
+  <a href="index.html">← Retour à l'accueil</a>
+</footer>
+
+<div class="bottom-stripe"></div>
+
+<script>
+
+// ─────────────────────────────────────────────────────
+// CRITÈRES ÉVALUÉS (doit correspondre aux formulaires)
+// ─────────────────────────────────────────────────────
+
+const CRITERES = [
+  "Comprend le jeu",
+  "Appréciation des duels",
+  "Sanctions sportives",
+  "Sanctions disciplinaires",
+  "Placement et déplacement",
+  "Gestes / sifflet",
+  "Personnalité",
+  "Marcher / dribble",
+  "Empiètement",
+  "Jeu passif",
+  "Autres règles",
+  "Impression générale",
+  "Communication entre arbitres"
+];
+
+// Valeurs possibles : "Insuffisant" | "À optimiser" | "Correct" | "Très correct" | ""
+let SUIVIS = [];
+
+// ─────────────────────────────────────────────────────
+// SYNCHRONISATION — lecture du fichier suivis.json sur GitHub
+// Renseignez les constantes ci-dessous une fois pour toutes
+// (mêmes valeurs que dans suivi-arbitrage.html et suivi-en-direct.html)
+// ─────────────────────────────────────────────────────
+const GITHUB_OWNER  = ''; // ex: 'MeylanHandballTV'
+const GITHUB_REPO   = ''; // ex: 'espace-suivis'
+const GITHUB_BRANCH = 'main';
+const GITHUB_PATH   = 'suivis.json';
+// Optionnel : uniquement si le dépôt est privé. Si renseigné, la lecture
+// passe par l'API GitHub authentifiée plutôt que par le fichier brut public.
+const GITHUB_TOKEN  = '';
+
+function nowTime() {
+  return new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+}
+
+function setSyncStatus(status, label, time) {
+  const bar = document.getElementById('sync-bar');
+  bar.className = 'sync-bar ' + status;
+  document.getElementById('sync-label').textContent = label;
+  document.getElementById('sync-time').textContent = time || '';
+}
+
+function b64ToUtf8(str) { return decodeURIComponent(escape(atob(str.replace(/\n/g, '')))); }
+
+async function initSync() {
+  if (!GITHUB_OWNER || !GITHUB_REPO) {
+    setSyncStatus('error', 'Non configuré');
+    document.getElementById('config-banner').classList.add('visible');
+    document.getElementById('suivisList').innerHTML = `<div class="empty-state"><p>Renseignez GITHUB_OWNER et GITHUB_REPO en haut du script pour charger l'historique des suivis.</p></div>`;
+    return;
+  }
+  await loadSuivis();
+}
+
+async function loadSuivis() {
+  setSyncStatus('loading', 'Chargement…');
+  try {
+    let list;
+    if (GITHUB_TOKEN) {
+      // Dépôt privé : lecture via l'API GitHub authentifiée
+      const resp = await fetch(
+        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_PATH}?ref=${GITHUB_BRANCH}&_=${Date.now()}`,
+        { headers: { 'Authorization': 'Bearer ' + GITHUB_TOKEN, 'Accept': 'application/vnd.github+json' } }
+      );
+      if (resp.status === 404) { list = []; }
+      else if (!resp.ok) { throw new Error('HTTP ' + resp.status); }
+      else {
+        const data = await resp.json();
+        list = (JSON.parse(b64ToUtf8(data.content) || '{}').suivis) || [];
+      }
+    } else {
+      // Dépôt public : lecture directe du fichier brut (pas de clé nécessaire)
+      const resp = await fetch(
+        `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${GITHUB_PATH}?_=${Date.now()}`,
+        { cache: 'no-store' }
+      );
+      if (resp.status === 404) { list = []; }
+      else if (!resp.ok) { throw new Error('HTTP ' + resp.status); }
+      else { list = (await resp.json()).suivis || []; }
+    }
+    SUIVIS = list;
+    document.getElementById('config-banner').classList.remove('visible');
+    setSyncStatus('ok', 'Synchronisé', nowTime());
+    computeStats();
+    renderList();
+  } catch (err) {
+    setSyncStatus('error', 'Erreur : ' + err.message);
+    document.getElementById('suivisList').innerHTML = `<div class="empty-state"><p>Impossible de charger les suivis. ${err.message}</p></div>`;
+  }
+}
+
+
+// ─────────────────────────────────────────────────────
+// LOGIQUE
+// ─────────────────────────────────────────────────────
+
+let currentFilter = 'tous';
+
+function getScoreClass(val) {
+  if (!val) return 'val-nr';
+  if (val === 'Insuffisant')   return 'val-ins';
+  if (val === 'À optimiser')   return 'val-opt';
+  if (val === 'Correct')       return 'val-cor';
+  if (val === 'Très correct')  return 'val-tres';
+  return 'val-nr';
+}
+
+function getScoreColorClass(val) {
+  if (!val) return '';
+  if (val === 'Insuffisant')   return 'score-ins';
+  if (val === 'À optimiser')   return 'score-opt';
+  if (val === 'Correct')       return 'score-cor';
+  if (val === 'Très correct')  return 'score-tres';
+  return '';
+}
+
+function dominantNote(evals) {
+  const counts = { 'Insuffisant':0, 'À optimiser':0, 'Correct':0, 'Très correct':0 };
+  Object.values(evals).forEach(v => { if(counts[v] !== undefined) counts[v]++; });
+  let max = 0; let dom = '';
+  Object.entries(counts).forEach(([k,v]) => { if(v > max){ max=v; dom=k; } });
+  return dom;
+}
+
+function dominantShort(dom) {
+  if (dom === 'Insuffisant')  return 'Insuf.';
+  if (dom === 'À optimiser') return 'Optim.';
+  if (dom === 'Correct')     return 'Correct';
+  if (dom === 'Très correct') return 'Très Cor.';
+  return '—';
+}
+
+function filterKey(suivi) {
+  const dom = dominantNote(suivi.evaluations);
+  if (dom === 'Insuffisant')  return 'ins';
+  if (dom === 'À optimiser') return 'opt';
+  if (dom === 'Correct')     return 'cor';
+  if (dom === 'Très correct') return 'tres';
+  return 'cor';
+}
+
+function formatDate(str) {
+  const d = new Date(str);
+  const j = d.getDate().toString().padStart(2,'0');
+  const m = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'][d.getMonth()];
+  return { day: j, month: m, year: d.getFullYear() };
+}
+
+function computeStats() {
+  const total = SUIVIS.length;
+  const arbitresSet = new Set();
+  SUIVIS.forEach(s => { arbitresSet.add(s.ja1); if(s.ja2) arbitresSet.add(s.ja2); });
+  const now = new Date();
+  const mois = SUIVIS.filter(s => {
+    const d = new Date(s.date);
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+  }).length;
+  const domCounts = { 'Insuffisant':0,'À optimiser':0,'Correct':0,'Très correct':0 };
+  SUIVIS.forEach(s => { const d = dominantNote(s.evaluations); if(domCounts[d]!==undefined) domCounts[d]++; });
+  let maxC=0; let globalDom='';
+  Object.entries(domCounts).forEach(([k,v])=>{ if(v>maxC){ maxC=v; globalDom=k; }});
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-arbitres').textContent = arbitresSet.size;
+  document.getElementById('stat-mois').textContent = mois;
+  const sc = document.getElementById('stat-score');
+  sc.textContent = dominantShort(globalDom);
+  sc.className = 'stat-value ' + getScoreColorClass(globalDom);
+}
+
+function renderList() {
+  const search = document.getElementById('searchInput').value.toLowerCase();
+  const list = document.getElementById('suivisList');
+  const countEl = document.getElementById('suivisCount');
+
+  const filtered = SUIVIS.filter(s => {
+    const matchFilter = currentFilter === 'tous' || filterKey(s) === currentFilter;
+    const matchSearch = !search ||
+      s.ja1.toLowerCase().includes(search) ||
+      s.ja2.toLowerCase().includes(search) ||
+      s.rencontre.toLowerCase().includes(search) ||
+      s.accompagnateur.toLowerCase().includes(search);
+    return matchFilter && matchSearch;
+  }).sort((a,b) => new Date(b.date) - new Date(a.date));
+
+  countEl.innerHTML = `<span>${filtered.length}</span> suivi${filtered.length > 1 ? 's' : ''} affiché${filtered.length > 1 ? 's' : ''}`;
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><p>Aucun suivi ne correspond à votre recherche.</p></div>`;
+    return;
+  }
+
+  list.innerHTML = filtered.map(s => {
+    const dom = dominantNote(s.evaluations);
+    const domShort = dominantShort(dom);
+    const colorCls = getScoreColorClass(dom);
+    const dt = formatDate(s.date);
+    const jaLabel = s.ja2 ? `${s.ja1} &amp; ${s.ja2}` : s.ja1;
+
+    const evalRows = CRITERES.map(c => {
+      const val = s.evaluations[c] || '';
+      const cls = getScoreClass(val);
+      const label = val || 'Non renseigné';
+      return `<div class="eval-mini-row">
+        <span class="eval-mini-critere">${c}</span>
+        <span class="eval-mini-val ${cls}">${label}</span>
+      </div>`;
+    }).join('');
+
+    return `
+    <div class="suivi-row" onclick="toggleRow(this)">
+      <div class="suivi-summary">
+        <div class="suivi-date">
+          <strong>${dt.day} ${dt.month}</strong>
+          ${dt.year}
+        </div>
+        <div class="suivi-main">
+          <div class="suivi-arbitres">${jaLabel}</div>
+          <div class="suivi-rencontre">${s.rencontre}</div>
+        </div>
+        <div class="suivi-accompagnateur">
+          <strong>Accompagnateur</strong>
+          ${s.accompagnateur}
+        </div>
+        <div class="score-badge">
+          <div class="score-val ${colorCls}">${domShort}</div>
+          <div class="score-label">Dominant</div>
+        </div>
+        <div class="expand-arrow">▾</div>
+      </div>
+      <div class="suivi-detail">
+        <div class="detail-grid">
+          <div class="detail-section">
+            <div class="detail-section-title">Évaluation par critère</div>
+            <div class="eval-mini">${evalRows}</div>
+          </div>
+          <div class="detail-section">
+            <div class="detail-section-title">Points à travailler</div>
+            ${s.points
+              ? `<p class="points-text">${s.points}</p>`
+              : `<p class="points-empty">Aucun commentaire renseigné.</p>`
+            }
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleRow(el) {
+  el.classList.toggle('open');
+}
+
+function setFilter(key, btn) {
+  currentFilter = key;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderList();
+}
+
+// INIT
+initSync();
+
+</script>
+
+</body>
+</html>
