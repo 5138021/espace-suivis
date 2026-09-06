@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -861,11 +860,11 @@ const TEMPLATE_ID = "template_l5mmsg3";
    un token à portée strictement limitée à CE dépôt (Contents
    uniquement) et régénérez-le si vous suspectez une fuite.
 ═══════════════════════════════════════════════════════════════ */
-const GITHUB_OWNER  = ''; // ex: 'MeylanHandballTV'
-const GITHUB_REPO   = ''; // ex: 'espace-suivis'
+const GITHUB_OWNER  = '5138021'; // ex: 'MeylanHandballTV'
+const GITHUB_REPO   = 'espace-suivis'; // ex: 'espace-suivis'
 const GITHUB_BRANCH = 'main';
 const GITHUB_PATH   = 'suivis.json';
-const GITHUB_TOKEN  = ''; // ex: 'github_pat_xxxxxxxxxxxxxxxxxxxx'
+const GITHUB_TOKEN  = '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'; // ex: 'github_pat_xxxxxxxxxxxxxxxxxxxx'
 
 function getGithubToken() {
   return GITHUB_TOKEN || localStorage.getItem('mhb_github_token') || '';
