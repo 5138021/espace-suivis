@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Historique des suivis — Meylan HB 26-27</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
   :root {
     --rouge:  #E8001D;
@@ -20,6 +22,7 @@
     --cor:    #43a047;
     --tres:   #4A9FFF;
     --border: #1E1E1E;
+    --or:     #FFD100;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -226,6 +229,55 @@
 
   .search-wrap input:focus { border-color: var(--bleu); }
   .search-wrap input::placeholder { color: #444; }
+
+  /* EXPORT BILAN */
+  .export-section {
+    padding: 0 3rem 2rem;
+  }
+
+  .export-box {
+    background: var(--gris);
+    border: 1px solid #2a2a2a;
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .export-box select {
+    background: #111;
+    border: 1px solid #2a2a2a;
+    color: var(--blanc);
+    padding: 8px 14px;
+    border-radius: 2px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.78rem;
+    outline: none;
+    min-width: 220px;
+  }
+
+  .export-btn {
+    background: none;
+    border: 1px solid var(--or);
+    color: var(--or);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 18px;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .export-btn:hover { background: rgba(255,209,0,0.08); }
+
+  .export-hint {
+    font-size: 0.66rem;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
 
   .search-icon {
     position: absolute;
@@ -458,6 +510,41 @@
     font-style: italic;
   }
 
+  /* REMUNERATION */
+  .remu-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    color: var(--or);
+    line-height: 1;
+    margin-bottom: 0.6rem;
+  }
+
+  .remu-detail {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .remu-detail strong {
+    color: var(--blanc);
+    font-weight: 600;
+  }
+
+  .remu-per-arbitre {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: #888;
+    padding: 3px 0;
+    border-bottom: 1px solid #1a1a1a;
+  }
+
+  .remu-per-arbitre:last-child { border-bottom: none; }
+
+  .remu-per-arbitre span:last-child { color: var(--or); font-weight: 600; }
+
   /* EMPTY STATE */
   .empty-state {
     padding: 4rem 0;
@@ -558,6 +645,15 @@
     </div>
   </div>
 
+  <section class="export-section">
+    <p class="section-label" style="border-bottom:none; padding-bottom:0.6rem;">Bilan individuel</p>
+    <div class="export-box">
+      <select id="arbitreSelect"></select>
+      <button class="export-btn" onclick="exportSelectedBilan()">⬇ Exporter le bilan en PDF</button>
+      <span class="export-hint" id="exportHint"></span>
+    </div>
+  </section>
+
   <p class="section-label">Évaluations enregistrées</p>
 
   <div class="suivis-container">
@@ -575,6 +671,43 @@
 <div class="bottom-stripe"></div>
 
 <script>
+
+// ─────────────────────────────────────────────────────
+// MONTANTS — bon d'achat par catégorie de match
+// Modifier les valeurs ci-dessous selon le barème de la commission.
+// La catégorie est déduite du 1er mot du champ "rencontre" (ex: "M15", "M13"...).
+// "default" s'applique si la catégorie n'est pas trouvée dans la liste.
+// ─────────────────────────────────────────────────────
+
+const MONTANTS_CATEGORIE = {
+  "M11": 3,
+  "M13": 4,
+  "M15": 5,
+  "M17": 6,
+  "M18": 6,
+  "Seniors": 8,
+  "default": 4
+};
+
+function getCategorie(rencontre) {
+  const m = rencontre.match(/^(\S+)/);
+  return m ? m[1] : null;
+}
+
+function getMontant(rencontre) {
+  const cat = getCategorie(rencontre);
+  if (cat && MONTANTS_CATEGORIE[cat] !== undefined) return MONTANTS_CATEGORIE[cat];
+  return MONTANTS_CATEGORIE.default;
+}
+
+function formatEuros(val) {
+  return val.toFixed(2).replace('.', ',').replace(',00', '') + ' €';
+}
+
+function formatDateFR(str) {
+  const d = new Date(str);
+  return d.toLocaleDateString('fr-FR');
+}
 
 // ─────────────────────────────────────────────────────
 // DONNÉES — ajouter/modifier les suivis ici
@@ -793,6 +926,15 @@ function renderList() {
       </div>`;
     }).join('');
 
+    const montant = getMontant(s.rencontre);
+    const categorie = getCategorie(s.rencontre);
+    const arbitresListe = [s.ja1, s.ja2].filter(Boolean);
+    const remuRows = arbitresListe.map(a => `
+      <div class="remu-per-arbitre">
+        <span>${a}</span>
+        <span>${formatEuros(montant)}</span>
+      </div>`).join('');
+
     return `
     <div class="suivi-row" onclick="toggleRow(this)">
       <div class="suivi-summary">
@@ -828,6 +970,13 @@ function renderList() {
             }
           </div>
         </div>
+        <div class="detail-grid" style="grid-template-columns: 1fr;">
+          <div class="detail-section">
+            <div class="detail-section-title">Rémunération — bon d'achat (catégorie ${categorie || '—'})</div>
+            <div class="remu-amount">${formatEuros(montant)} <span style="font-size:0.9rem;color:var(--muted);font-family:'DM Sans',sans-serif;letter-spacing:0;">par arbitre</span></div>
+            <div class="remu-detail">${remuRows}</div>
+          </div>
+        </div>
       </div>
     </div>`;
   }).join('');
@@ -835,6 +984,93 @@ function renderList() {
 
 function toggleRow(el) {
   el.classList.toggle('open');
+}
+
+// ─────────────────────────────────────────────────────
+// BILAN INDIVIDUEL — PDF
+// ─────────────────────────────────────────────────────
+
+function getArbitresUniques() {
+  const set = new Set();
+  SUIVIS.forEach(s => { if(s.ja1) set.add(s.ja1); if(s.ja2) set.add(s.ja2); });
+  return Array.from(set).sort((a,b) => a.localeCompare(b, 'fr'));
+}
+
+function populateArbitreSelect() {
+  const select = document.getElementById('arbitreSelect');
+  const arbitres = getArbitresUniques();
+  select.innerHTML = arbitres.map(a => `<option value="${a}">${a}</option>`).join('');
+  updateExportHint();
+  select.addEventListener('change', updateExportHint);
+}
+
+function updateExportHint() {
+  const select = document.getElementById('arbitreSelect');
+  const hint = document.getElementById('exportHint');
+  const arbitre = select.value;
+  const rows = SUIVIS.filter(s => s.ja1 === arbitre || s.ja2 === arbitre);
+  const total = rows.reduce((sum, s) => sum + getMontant(s.rencontre), 0);
+  hint.textContent = `${rows.length} match${rows.length > 1 ? 's' : ''} suivi${rows.length > 1 ? 's' : ''} · total cumulé ${formatEuros(total)}`;
+}
+
+function exportSelectedBilan() {
+  const arbitre = document.getElementById('arbitreSelect').value;
+  if (arbitre) generateBilanPDF(arbitre);
+}
+
+function generateBilanPDF(arbitre) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const rows = SUIVIS
+    .filter(s => s.ja1 === arbitre || s.ja2 === arbitre)
+    .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  let total = 0;
+  const body = rows.map(s => {
+    const montant = getMontant(s.rencontre);
+    total += montant;
+    const dom = dominantNote(s.evaluations) || '—';
+    return [formatDateFR(s.date), s.rencontre, getCategorie(s.rencontre) || '—', dom, formatEuros(montant)];
+  });
+
+  doc.setFontSize(16);
+  doc.setTextColor(20, 20, 20);
+  doc.text("Bilan pédagogique — " + arbitre, 14, 18);
+
+  doc.setFontSize(10);
+  doc.setTextColor(120, 120, 120);
+  doc.text("Meylan Handball · Commission d'Arbitrage · Saison 2026-2027", 14, 25);
+
+  doc.autoTable({
+    startY: 32,
+    head: [["Date", "Rencontre", "Catégorie", "Note dominante", "Montant"]],
+    body: body,
+    styles: { fontSize: 9, textColor: [30, 30, 30] },
+    headStyles: { fillColor: [232, 0, 29], textColor: [255, 255, 255] },
+    alternateRowStyles: { fillColor: [245, 245, 245] },
+    columnStyles: { 4: { halign: 'right' } }
+  });
+
+  const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : 40;
+
+  doc.setDrawColor(220, 220, 220);
+  doc.line(14, finalY + 8, 196, finalY + 8);
+
+  doc.setFontSize(13);
+  doc.setTextColor(20, 20, 20);
+  doc.setFont(undefined, 'bold');
+  doc.text(`Total cumulé : ${formatEuros(total)}`, 14, finalY + 18);
+  doc.setFont(undefined, 'normal');
+
+  doc.setFontSize(8);
+  doc.setTextColor(150, 150, 150);
+  doc.text(
+    `Document généré le ${new Date().toLocaleDateString('fr-FR')} — ${rows.length} match${rows.length > 1 ? 's' : ''} suivi${rows.length > 1 ? 's' : ''}`,
+    14, finalY + 26
+  );
+
+  doc.save(`bilan_${arbitre.replace(/\s+/g, '_')}.pdf`);
 }
 
 function setFilter(key, btn) {
@@ -847,6 +1083,7 @@ function setFilter(key, btn) {
 // INIT
 computeStats();
 renderList();
+populateArbitreSelect();
 
 </script>
 
