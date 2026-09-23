@@ -1035,13 +1035,13 @@ function generateEvolutionChartImage(rows) {
   return new Promise((resolve) => {
     const canvas = document.getElementById('evolutionChartCanvas');
     const ctx = canvas.getContext('2d');
-    if (window._evolutionChart) window._evolutionChart.destroy();
+    if (window._chartInstance) { window._chartInstance.destroy(); window._chartInstance = null; }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const labels = rows.map(s => formatDateFR(s.date));
     const data = rows.map(s => computeMatchScore(s.evaluations));
 
-    window._evolutionChart = new Chart(ctx, {
+    window._chartInstance = new Chart(ctx, {
       type: 'line',
       data: {
         labels,
@@ -1080,7 +1080,12 @@ function generateEvolutionChartImage(rows) {
       }
     });
 
-    setTimeout(() => resolve(canvas.toDataURL('image/png')), 80);
+    setTimeout(() => {
+      const img = canvas.toDataURL('image/png');
+      window._chartInstance.destroy();
+      window._chartInstance = null;
+      resolve(img);
+    }, 80);
   });
 }
 
@@ -1090,7 +1095,7 @@ async function generateCriteriaEvolutionImages(rows) {
   const images = [];
 
   for (const critere of CRITERES) {
-    if (window._critereChart) window._critereChart.destroy();
+    if (window._chartInstance) { window._chartInstance.destroy(); window._chartInstance = null; }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const data = rows.map(s => {
@@ -1098,7 +1103,7 @@ async function generateCriteriaEvolutionImages(rows) {
       return v === undefined ? null : v;
     });
 
-    window._critereChart = new Chart(ctx, {
+    window._chartInstance = new Chart(ctx, {
       type: 'line',
       data: {
         labels: rows.map((s, i) => (i + 1).toString()),
@@ -1138,6 +1143,8 @@ async function generateCriteriaEvolutionImages(rows) {
 
     await new Promise(r => setTimeout(r, 60));
     images.push(canvas.toDataURL('image/png'));
+    window._chartInstance.destroy();
+    window._chartInstance = null;
   }
 
   return images;
