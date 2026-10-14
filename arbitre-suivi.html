@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon suivi — Meylan HB 26-27</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{--rouge:#E8001D;--noir:#0D0D0D;--blanc:#F5F2EC;--gris:#1A1A1A;--muted:#9A9A9A;--accent:#FFD100;--bleu:#4A9FFF;--ins:#e53935;--opt:#fb8c00;--cor:#43a047}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--noir);color:var(--blanc);font-family:'DM Sans',sans-serif;min-height:100vh}
+.stripe{height:4px;background:linear-gradient(90deg,var(--rouge),var(--accent),var(--rouge))}
+header{padding:1.5rem 2rem;display:flex;align-items:center;gap:1.2rem;border-bottom:1px solid #222}
+header img{width:60px;height:60px;border-radius:4px}
+header h1{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;line-height:1}
+header p{font-size:.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
+#logout{margin-left:auto;background:none;border:1px solid #2a2a2a;color:var(--muted);font:inherit;font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border-radius:2px;cursor:pointer;display:none}
+#logout:hover{border-color:var(--rouge);color:var(--rouge)}
+/* LOGIN */
+#login{max-width:380px;margin:5rem auto;padding:0 1.5rem}
+#login h2{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:4px;line-height:1}
+#login h2 span{color:var(--bleu)}
+#login p.sub{font-size:.8rem;color:var(--muted);margin:.8rem 0 1.8rem;font-weight:300;line-height:1.6}
+label{display:block;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+input{width:100%;background:var(--gris);border:1px solid #2a2a2a;border-radius:2px;padding:11px 14px;font:inherit;font-size:.85rem;color:var(--blanc);outline:none;margin-bottom:1.1rem}
+input:focus{border-color:var(--bleu)}
+button.go{width:100%;background:var(--rouge);border:none;color:#fff;font:inherit;font-weight:600;font-size:.75rem;letter-spacing:2px;text-transform:uppercase;padding:13px;border-radius:2px;cursor:pointer}
+button.go:hover{opacity:.9}
+#err{color:var(--ins);font-size:.75rem;min-height:1.2rem;margin-top:.9rem}
+/* APP */
+#app{display:none;max-width:900px;margin:0 auto;padding:2rem 1.5rem 3rem}
+.hello{font-family:'Bebas Neue',sans-serif;font-size:clamp(2rem,6vw,3.4rem);letter-spacing:3px;line-height:1}
+.hello span{color:var(--bleu)}
+.stats{display:flex;gap:1px;background:#1a1a1a;margin:1.8rem 0}
+.stat{flex:1;background:var(--gris);padding:1rem 1.2rem}
+.stat b{display:block;font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;font-weight:400}
+.stat small{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.row{border-bottom:1px solid #181818;cursor:pointer}
+.row:hover{background:#131313}
+.sum{display:grid;grid-template-columns:60px 1fr 90px 30px;gap:1rem;align-items:center;padding:1.1rem 0}
+.date{text-align:center;font-size:.62rem;color:var(--muted)}
+.date strong{display:block;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--blanc);font-weight:400;letter-spacing:1px}
+.rencontre{font-size:.85rem;font-weight:600}
+.meta{font-size:.68rem;color:var(--muted);margin-top:3px}
+.dom{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px;text-align:center}
+.arrow{color:#333;transition:transform .2s;text-align:center}
+.row.open .arrow{transform:rotate(180deg);color:var(--bleu)}
+.detail{display:none;background:#0e0e0e;padding:1.2rem;margin-bottom:.5rem}
+.row.open .detail{display:block}
+.crit{display:flex;justify-content:space-between;align-items:center;gap:.6rem;padding:5px 0;font-size:.74rem;color:#888;border-bottom:1px solid #151515}
+.tag{font-size:.6rem;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:2px;white-space:nowrap;border:1px solid}
+.t-ins{color:var(--ins);background:rgba(229,57,53,.12);border-color:rgba(229,57,53,.25)}
+.t-opt{color:var(--opt);background:rgba(251,140,0,.12);border-color:rgba(251,140,0,.25)}
+.t-cor{color:var(--cor);background:rgba(67,160,71,.12);border-color:rgba(67,160,71,.25)}
+.t-tres{color:var(--bleu);background:rgba(74,159,255,.12);border-color:rgba(74,159,255,.25)}
+.t-nr{color:#555;border-color:#2a2a2a}
+.d-title{font-size:.58rem;letter-spacing:2px;text-transform:uppercase;color:#555;margin:1.2rem 0 .6rem}
+.d-title:first-child{margin-top:0}
+.comment{font-size:.78rem;color:var(--muted);line-height:1.7;font-style:italic;font-weight:300}
+.empty{padding:3rem 0;text-align:center;color:#555;font-size:.8rem}
+.c-ins{color:var(--ins)}.c-opt{color:var(--opt)}.c-cor{color:var(--cor)}.c-tres{color:var(--bleu)}
+@media(max-width:600px){.sum{grid-template-columns:50px 1fr 70px 20px}header{padding:1rem}}
+</style>
+</head>
+<body>
+<div class="stripe"></div>
+<header>
+  <img src="MHB_logo.png" alt="">
+  <div><h1>Mon suivi</h1><p>Meylan Handball · Arbitrage · Saison 26-27</p></div>
+  <button id="logout" onclick="logout()">Déconnexion</button>
+</header>
 
+<!-- PAGE DE CONNEXION -->
+<main id="login">
+  <h2>Espace <span>arbitre</span></h2>
+  <p class="sub">Connecte-toi avec l'identifiant et le mot de passe fournis par la commission pour consulter tes suivis.</p>
+  <label for="u">Identifiant</label>
+  <input id="u" autocomplete="username" autocapitalize="none">
+  <label for="p">Mot de passe</label>
+  <input id="p" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+  <button class="go" onclick="login()">Se connecter</button>
+  <div id="err"></div>
+</main>
+
+<!-- ESPACE PERSONNEL -->
+<main id="app"></main>
+
+<script>
+// ═════════════════════════════════════════════════════
+// 1) COMPTES — à personnaliser
+//    id     : identifiant saisi par l'arbitre (insensible à la casse)
+//    mdp    : mot de passe (sensible à la casse)
+//    arbitre: nom EXACT tel qu'écrit dans ja1 / ja2 des suivis
+// ═════════════════════════════════════════════════════
+const COMPTES = [
+  { id: "kylian",   mdp: "changeme-kylian",   arbitre: "Kylian Tour" },
+  { id: "tim",      mdp: "changeme-tim",      arbitre: "Tim Tour" },
+  { id: "ilona",    mdp: "changeme-ilona",    arbitre: "Ilona Tour" },
+  { id: "elena",    mdp: "changeme-elena",    arbitre: "Elena Lucatelli" },
+  { id: "augustin", mdp: "changeme-augustin", arbitre: "Augustin Mavraganis" },
+  { id: "eden",     mdp: "changeme-eden",     arbitre: "Eden Maujean" }
+];
+
+// ═════════════════════════════════════════════════════
+// 2) DONNÉES — lues directement dans la page GitHub des suivis
+//    (tableau SUIVIS et barème MONTANTS_CATEGORIE de cette page)
+// ═════════════════════════════════════════════════════
+const SOURCE_URL = "https://5138021.github.io/espace-suivis/suivis-26-27.html";
+let MONTANTS_CATEGORIE = { "default": 5 };
+let SUIVIS = [];
+const CRITERES = ["Comprend le jeu","Appréciation des duels","Sanctions sportives","Sanctions disciplinaires","Placement et déplacement","Gestes et coup de sifflet","Responsable / Décideur / Réactif","Marcher / dribble","Défense en zone","Jeu passif","Autres règles","Impression générale","Communication entre arbitres"];
+const TC="Très correct", C="Correct", O="À optimiser", I="Insuffisant";
+
+// Extrait « const NOM = ... ; » du code de la page source et l'évalue
+function extraire(texte, nom, fin){
+  const debut = texte.indexOf('const ' + nom + ' ');
+  if (debut < 0) return null;
+  const eq = texte.indexOf('=', debut) + 1;
+  const stop = texte.indexOf(fin, eq);
+  if (stop < 0) return null;
+  return new Function('return ' + texte.slice(eq, stop + fin.length - 1))();
+}
+async function chargerDonnees(){
+  const r = await fetch(SOURCE_URL + '?t=' + Date.now(), { cache: 'no-store' });
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  const t = await r.text();
+  const s = extraire(t, 'SUIVIS', '\n];');
+  if (!Array.isArray(s)) throw new Error('Tableau SUIVIS introuvable');
+  SUIVIS = s;
+  const m = extraire(t, 'MONTANTS_CATEGORIE', '\n};');
+  if (m) MONTANTS_CATEGORIE = m;
+}
+
+// ═════════════════════════════════════════════════════
+// LOGIQUE
+// ═════════════════════════════════════════════════════
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const tagCls = v => ({[I]:'t-ins',[O]:'t-opt',[C]:'t-cor',[TC]:'t-tres'}[v] || 't-nr');
+const txtCls = v => ({[I]:'c-ins',[O]:'c-opt',[C]:'c-cor',[TC]:'c-tres'}[v] || '');
+const SHORT = {[I]:'Insuf.',[O]:'Optim.',[C]:'Correct',[TC]:'Très cor.'};
+const MOIS = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'];
+
+function dominant(evals){
+  const n = {[I]:0,[O]:0,[C]:0,[TC]:0};
+  Object.values(evals).forEach(v => { if(v in n) n[v]++; });
+  let best='', max=0;
+  for (const k in n) if(n[k] > max){ max=n[k]; best=k; }
+  return best;
+}
+function montant(r){ const c=(r.match(/^(\S+)/)||[])[1]; return MONTANTS_CATEGORIE[c] ?? MONTANTS_CATEGORIE.default; }
+const euros = v => v.toFixed(2).replace('.',',').replace(',00','') + ' €';
+
+async function login(){
+  const id = $('u').value.trim().toLowerCase(), mdp = $('p').value;
+  const compte = COMPTES.find(c => c.id.toLowerCase() === id && c.mdp === mdp);
+  if(!compte){ $('err').textContent = "Identifiant ou mot de passe incorrect."; return; }
+  $('err').textContent = "Chargement…";
+  try { await chargerDonnees(); }
+  catch(e){ $('err').textContent = "Impossible de charger les suivis. Réessaie plus tard."; return; }
+  $('err').textContent = "";
+  try { sessionStorage.setItem('mhb_user', compte.id); } catch(e){}
+  show(compte);
+}
+function logout(){
+  try { sessionStorage.removeItem('mhb_user'); } catch(e){}
+  $('u').value = $('p').value = ''; $('err').textContent = '';
+  $('app').style.display = 'none'; $('app').innerHTML = '';
+  $('login').style.display = 'block'; $('logout').style.display = 'none';
+}
+
+function show(compte){
+  const nom = compte.arbitre;
+  const mes = SUIVIS.filter(s => s.ja1 === nom || s.ja2 === nom).sort((a,b) => new Date(b.date) - new Date(a.date));
+  const total = mes.reduce((t,s) => t + montant(s.rencontre), 0);
+  const counts = {}; mes.forEach(s => { const d=dominant(s.evaluations); if(d) counts[d]=(counts[d]||0)+1; });
+  const dom = Object.keys(counts).sort((a,b) => counts[b]-counts[a])[0] || '';
+
+  const rows = mes.map(s => {
+    const d = new Date(s.date), dm = dominant(s.evaluations);
+    const coarbitre = [s.ja1, s.ja2].filter(x => x && x !== nom).join(', ');
+    const crit = CRITERES.map(c => { const v = s.evaluations[c] || '';
+      return `<div class="crit"><span>${c}</span><span class="tag ${tagCls(v)}">${v || 'Non renseigné'}</span></div>`; }).join('');
+    return `<div class="row" onclick="this.classList.toggle('open')">
+      <div class="sum">
+        <div class="date"><strong>${String(d.getDate()).padStart(2,'0')} ${MOIS[d.getMonth()]}</strong>${d.getFullYear()}</div>
+        <div><div class="rencontre">${esc(s.rencontre)}</div>
+          <div class="meta">${coarbitre ? 'Avec ' + esc(coarbitre) + ' · ' : ''}Accompagnateur : ${esc(s.accompagnateur)}</div></div>
+        <div class="dom ${txtCls(dm)}">${SHORT[dm] || '—'}</div>
+        <div class="arrow">▾</div>
+      </div>
+      <div class="detail" onclick="event.stopPropagation()">
+        <div class="d-title">Évaluation par critère</div>${crit}
+        <div class="d-title">Points à travailler</div>
+        <p class="comment">${s.points ? esc(s.points) : 'Aucun commentaire renseigné.'}</p>
+        <div class="d-title">Bon d'achat</div>
+        <p class="comment" style="font-style:normal">${euros(montant(s.rencontre))}</p>
+      </div>
+    </div>`;
+  }).join('');
+
+  $('app').innerHTML = `
+    <div class="hello">Salut <span>${esc(nom.split(' ')[0])}</span></div>
+    <div class="stats">
+      <div class="stat"><b>${mes.length}</b><small>Matchs suivis</small></div>
+      <div class="stat"><b class="${txtCls(dom)}">${SHORT[dom] || '—'}</b><small>Note dominante</small></div>
+      <div class="stat"><b style="color:var(--accent)">${euros(total)}</b><small>Bons d'achat cumulés</small></div>
+    </div>
+    ${rows || '<div class="empty">Aucun suivi enregistré pour le moment.</div>'}`;
+  $('login').style.display = 'none'; $('app').style.display = 'block'; $('logout').style.display = 'block';
+}
+
+// Reconnexion automatique pendant la session du navigateur
+try { const id = sessionStorage.getItem('mhb_user'); const c = COMPTES.find(x => x.id === id);
+  if(c) chargerDonnees().then(() => show(c)).catch(() => {}); } catch(e){}
+</script>
+<div class="stripe"></div>
+</body>
+</html>
