@@ -7,6 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 <style>
   :root {
     --rouge:  #E8001D;
@@ -209,6 +210,12 @@
 
   .filter-btn.active { font-weight: 600; }
 
+  .filter-btn.filter-inc:hover, .filter-btn.filter-inc.active {
+    border-color: var(--opt);
+    color: var(--opt);
+    background: rgba(251,140,0,0.06);
+  }
+
   .search-wrap {
     margin-left: auto;
     position: relative;
@@ -389,6 +396,32 @@
     margin-bottom: 2px;
   }
 
+  /* BADGE SUIVI INCOMPLET */
+  .badge-inc {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 0.56rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: 2px;
+    color: var(--opt);
+    border: 1px dashed rgba(251,140,0,0.5);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    vertical-align: middle;
+  }
+
+  .inc-banner {
+    font-size: 0.7rem;
+    color: var(--opt);
+    background: rgba(251,140,0,0.07);
+    border: 1px dashed rgba(251,140,0,0.35);
+    padding: 0.7rem 1rem;
+    margin-bottom: 1.2rem;
+    letter-spacing: 0.3px;
+  }
+
   /* SCORE BADGE */
   .score-badge {
     display: flex;
@@ -415,6 +448,7 @@
   .score-opt  { color: var(--opt); }
   .score-cor  { color: var(--cor); }
   .score-tres { color: var(--tres); }
+  .score-inc  { color: var(--opt); font-size: 0.95rem; text-align: center; }
 
   .expand-arrow {
     color: #333;
@@ -627,6 +661,10 @@
       <div class="stat-label">Ce mois-ci</div>
     </div>
     <div class="stat-item">
+      <div class="stat-value" id="stat-inc" style="color:var(--opt)">—</div>
+      <div class="stat-label">Non complétés</div>
+    </div>
+    <div class="stat-item">
       <div class="stat-value" id="stat-score" style="color:var(--cor)">—</div>
       <div class="stat-label">Note dominante</div>
     </div>
@@ -639,6 +677,7 @@
     <button class="filter-btn" onclick="setFilter('cor', this)">Correct</button>
     <button class="filter-btn" onclick="setFilter('opt', this)">À optimiser</button>
     <button class="filter-btn" onclick="setFilter('ins', this)">Insuffisant</button>
+    <button class="filter-btn filter-inc" onclick="setFilter('inc', this)">Non complétés</button>
     <div class="search-wrap">
       <span class="search-icon">⌕</span>
       <input type="text" id="searchInput" placeholder="Rechercher un arbitre…" oninput="renderList()" />
@@ -670,6 +709,8 @@
 
 <div class="bottom-stripe"></div>
 
+<canvas id="evolutionChartCanvas" width="1200" height="600" style="display:none;"></canvas>
+
 <script>
 
 // ─────────────────────────────────────────────────────
@@ -680,17 +721,17 @@
 // ─────────────────────────────────────────────────────
 
 const MONTANTS_CATEGORIE = {
-  "M11": 3,
-  "M13": 4,
+  "M11": 4,
+  "M13": 5,
   "M15": 5,
-  "M17": 6,
-  "M18": 6,
-  "Seniors": 8,
-  "default": 4
+  "M17": 5,
+  "M18": 5,
+  "Seniors": 5,
+  "default": 5
 };
 
 function getCategorie(rencontre) {
-  const m = rencontre.match(/^(\S+)/);
+  const m = (rencontre || '').match(/^(\S+)/);
   return m ? m[1] : null;
 }
 
@@ -711,6 +752,23 @@ function formatDateFR(str) {
 
 // ─────────────────────────────────────────────────────
 // DONNÉES — ajouter/modifier les suivis ici
+//
+// SUIVI NON COMPLÉTÉ : un suivi a eu lieu lors d'un match mais n'a pas
+// été mis en ligne. On enregistre quand même le match avec  evaluations: {}
+// → il s'affiche avec le badge « Non complété » et reste comptabilisé.
+// (Laisser quelques critères à "" dans un suivi réel est normal : il reste « complété ».)
+//
+// Exemple :
+// {
+//   id: 9,
+//   date: "2026-10-17",
+//   ja1: "Kylian Tour",
+//   ja2: "",
+//   accompagnateur: "Xavier Fini",
+//   rencontre: "M15 Masculin Excellence - Voiron",
+//   evaluations: {},
+//   points: ""
+// },
 // ─────────────────────────────────────────────────────
 
 const CRITERES = [
@@ -731,6 +789,131 @@ const CRITERES = [
 
 // Valeurs possibles : "Insuffisant" | "À optimiser" | "Correct" | "Très correct" | ""
 const SUIVIS = [
+  {
+    id: 8,
+    date: "2026-10-11",
+    ja1: "Augustin Mavraganis",
+    ja2: "Kylian Tour",
+    accompagnateur: "Xavier Fini",
+    rencontre: "M13 Masculin Div2 - Vizille",
+    evaluations: {
+      "Comprend le jeu":                  "Correct",
+      "Appréciation des duels":           "Correct",
+      "Sanctions sportives":              "Très correct",
+      "Sanctions disciplinaires":         "Correct",
+      "Placement et déplacement":         "Très correct",
+      "Gestes et coup de sifflet":        "Très correct",
+      "Responsable / Décideur / Réactif": "Très correct",
+      "Marcher / dribble":                "Très correct",
+      "Défense en zone":                  "Très correct",
+      "Jeu passif":                       "Correct",
+      "Autres règles":                    "Très correct",
+      "Impression générale":              "Très correct",
+      "Communication entre arbitres":     "Très correct"
+    },
+    points: ""
+  },
+  
+  {
+    id: 7,
+    date: "2026-10-11",
+    ja1: "Eden Maujean",
+    ja2: "Tim Tour",
+    accompagnateur: "Xavier Fini",
+    rencontre: "M11 Mixte Intermédiaire - Theys",
+    evaluations: {
+      "Comprend le jeu":                  "Très correct",
+      "Appréciation des duels":           "Très correct",
+      "Sanctions sportives":              "Très correct",
+      "Sanctions disciplinaires":         "Correct",
+      "Placement et déplacement":         "Correct",
+      "Gestes et coup de sifflet":        "Correct",
+      "Responsable / Décideur / Réactif": "Très correct",
+      "Marcher / dribble":                "Très correct",
+      "Défense en zone":                  "Correct",
+      "Jeu passif":                       "",
+      "Autres règles":                    "Très correct",
+      "Impression générale":              "Très correct",
+      "Communication entre arbitres":     "À optimiser"
+    },
+    points: ""
+  },
+  
+  {
+    id: 6,
+    date: "2026-10-10",
+    ja1: "Ilona Tour",
+    ja2: "Elena Lucatelli",
+    accompagnateur: "Xavier Fini",
+    rencontre: "M13 Féminin Excellence - Val de Leysse",
+    evaluations: {
+      "Comprend le jeu":                  "À optimiser",
+      "Appréciation des duels":           "À optimiser",
+      "Sanctions sportives":              "Correct",
+      "Sanctions disciplinaires":         "À optimiser",
+      "Placement et déplacement":         "À optimiser",
+      "Gestes et coup de sifflet":        "Très correct",
+      "Responsable / Décideur / Réactif": "Correct",
+      "Marcher / dribble":                "Correct",
+      "Défense en zone":                  "Correct",
+      "Jeu passif":                       "À optimiser",
+      "Autres règles":                    "Très correct",
+      "Impression générale":              "Correct",
+      "Communication entre arbitres":     "Correct"
+    },
+    points: ""
+  },
+  
+  {
+    id: 5,
+    date: "2026-10-10",
+    ja1: "Tim Tour",
+    ja2: "",
+    accompagnateur: "Xavier Fini",
+    rencontre: "M11 Féminin Intermédiaire - Crolles",
+    evaluations: {
+      "Comprend le jeu":                  "Très correct",
+      "Appréciation des duels":           "À optimiser",
+      "Sanctions sportives":              "Correct",
+      "Sanctions disciplinaires":         "Très correct",
+      "Placement et déplacement":         "Correct",
+      "Gestes et coup de sifflet":        "Très correct",
+      "Responsable / Décideur / Réactif": "Très correct",
+      "Marcher / dribble":                "Correct",
+      "Défense en zone":                  "",
+      "Jeu passif":                       "",
+      "Autres règles":                    "Très correct",
+      "Impression générale":              "Très correct",
+      "Communication entre arbitres":     ""
+    },
+    points: ""
+  },
+  
+  {
+    id: 4,
+    date: "2026-10-03",
+    ja1: "Kylian Tour",
+    ja2: "",
+    accompagnateur: "Xavier Fini",
+    rencontre: "M15 Masculin Excellence - Crolles",
+    evaluations: {
+      "Comprend le jeu":                  "Très correct",
+      "Appréciation des duels":           "Très correct",
+      "Sanctions sportives":              "Correct",
+      "Sanctions disciplinaires":         "Correct",
+      "Placement et déplacement":         "Très correct",
+      "Gestes et coup de sifflet":        "Très correct",
+      "Responsable / Décideur / Réactif": "Très correct",
+      "Marcher / dribble":                "Correct",
+      "Défense en zone":                  "Correct",
+      "Jeu passif":                       "Très correct",
+      "Autres règles":                    "Très correct",
+      "Impression générale":              "Très correct",
+      "Communication entre arbitres":     ""
+    },
+    points: ""
+  },
+  
   {
     id: 3,
     date: "2026-09-19",
@@ -816,6 +999,19 @@ const SUIVIS = [
 
 let currentFilter = 'tous';
 
+const NOTE_SCALE_KEYS = ['Insuffisant', 'À optimiser', 'Correct', 'Très correct'];
+
+// Nombre de critères effectivement renseignés
+function countFilled(evals) {
+  evals = evals || {};
+  return CRITERES.filter(c => NOTE_SCALE_KEYS.includes(evals[c])).length;
+}
+
+// 'vide' = suivi non complété (aucun critère renseigné) · 'complet' = suivi en ligne
+function completionStatus(s) {
+  return countFilled(s.evaluations) === 0 ? 'vide' : 'complet';
+}
+
 function getScoreClass(val) {
   if (!val) return 'val-nr';
   if (val === 'Insuffisant')   return 'val-ins';
@@ -835,11 +1031,12 @@ function getScoreColorClass(val) {
 }
 
 function dominantNote(evals) {
+  evals = evals || {};
   const counts = { 'Insuffisant':0, 'À optimiser':0, 'Correct':0, 'Très correct':0 };
   Object.values(evals).forEach(v => { if(counts[v] !== undefined) counts[v]++; });
   let max = 0; let dom = '';
   Object.entries(counts).forEach(([k,v]) => { if(v > max){ max=v; dom=k; } });
-  return dom;
+  return dom; // '' si rien n'est renseigné
 }
 
 function dominantShort(dom) {
@@ -851,6 +1048,7 @@ function dominantShort(dom) {
 }
 
 function filterKey(suivi) {
+  if (completionStatus(suivi) === 'vide') return 'inc';
   const dom = dominantNote(suivi.evaluations);
   if (dom === 'Insuffisant')  return 'ins';
   if (dom === 'À optimiser') return 'opt';
@@ -869,19 +1067,27 @@ function formatDate(str) {
 function computeStats() {
   const total = SUIVIS.length;
   const arbitresSet = new Set();
-  SUIVIS.forEach(s => { arbitresSet.add(s.ja1); if(s.ja2) arbitresSet.add(s.ja2); });
+  SUIVIS.forEach(s => { if(s.ja1) arbitresSet.add(s.ja1); if(s.ja2) arbitresSet.add(s.ja2); });
   const now = new Date();
   const mois = SUIVIS.filter(s => {
     const d = new Date(s.date);
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
   }).length;
+  const nonCompletes = SUIVIS.filter(s => completionStatus(s) === 'vide').length;
+
+  // La note dominante globale ne tient compte que des suivis ayant au moins un critère renseigné
   const domCounts = { 'Insuffisant':0,'À optimiser':0,'Correct':0,'Très correct':0 };
-  SUIVIS.forEach(s => { const d = dominantNote(s.evaluations); if(domCounts[d]!==undefined) domCounts[d]++; });
+  SUIVIS.filter(s => completionStatus(s) !== 'vide').forEach(s => {
+    const d = dominantNote(s.evaluations);
+    if (domCounts[d] !== undefined) domCounts[d]++;
+  });
   let maxC=0; let globalDom='';
   Object.entries(domCounts).forEach(([k,v])=>{ if(v>maxC){ maxC=v; globalDom=k; }});
+
   document.getElementById('stat-total').textContent = total;
   document.getElementById('stat-arbitres').textContent = arbitresSet.size;
   document.getElementById('stat-mois').textContent = mois;
+  document.getElementById('stat-inc').textContent = nonCompletes;
   const sc = document.getElementById('stat-score');
   sc.textContent = dominantShort(globalDom);
   sc.className = 'stat-value ' + getScoreColorClass(globalDom);
@@ -893,14 +1099,17 @@ function renderList() {
   const countEl = document.getElementById('suivisCount');
 
   const filtered = SUIVIS.filter(s => {
-    const matchFilter = currentFilter === 'tous' || filterKey(s) === currentFilter;
+    const matchFilter = currentFilter === 'tous'
+      || (currentFilter === 'inc'
+            ? completionStatus(s) === 'vide'
+            : filterKey(s) === currentFilter);
     const matchSearch = !search ||
-      s.ja1.toLowerCase().includes(search) ||
-      s.ja2.toLowerCase().includes(search) ||
-      s.rencontre.toLowerCase().includes(search) ||
-      s.accompagnateur.toLowerCase().includes(search);
+      (s.ja1 || '').toLowerCase().includes(search) ||
+      (s.ja2 || '').toLowerCase().includes(search) ||
+      (s.rencontre || '').toLowerCase().includes(search) ||
+      (s.accompagnateur || '').toLowerCase().includes(search);
     return matchFilter && matchSearch;
-  }).sort((a,b) => new Date(b.date) - new Date(a.date));
+  }).sort((a,b) => new Date(b.date) - new Date(a.date) || b.id - a.id);
 
   countEl.innerHTML = `<span>${filtered.length}</span> suivi${filtered.length > 1 ? 's' : ''} affiché${filtered.length > 1 ? 's' : ''}`;
 
@@ -910,14 +1119,22 @@ function renderList() {
   }
 
   list.innerHTML = filtered.map(s => {
-    const dom = dominantNote(s.evaluations);
+    const evals = s.evaluations || {};
+    const status = completionStatus(s);
+    const dom = dominantNote(evals);
     const domShort = dominantShort(dom);
     const colorCls = getScoreColorClass(dom);
     const dt = formatDate(s.date);
     const jaLabel = s.ja2 ? `${s.ja1} &amp; ${s.ja2}` : s.ja1;
 
+    const badge = status === 'vide' ? `<span class="badge-inc">Non complété</span>` : '';
+
+    const banner = status === 'vide'
+      ? `<div class="inc-banner">Suivi non complété : un suivi a eu lieu lors de ce match mais n'a pas été mis en ligne.</div>`
+      : '';
+
     const evalRows = CRITERES.map(c => {
-      const val = s.evaluations[c] || '';
+      const val = evals[c] || '';
       const cls = getScoreClass(val);
       const label = val || 'Non renseigné';
       return `<div class="eval-mini-row">
@@ -935,6 +1152,10 @@ function renderList() {
         <span>${formatEuros(montant)}</span>
       </div>`).join('');
 
+    const scoreHtml = status === 'vide'
+      ? `<div class="score-val score-inc">Non complété</div>`
+      : `<div class="score-val ${colorCls}">${domShort}</div>`;
+
     return `
     <div class="suivi-row" onclick="toggleRow(this)">
       <div class="suivi-summary">
@@ -943,7 +1164,7 @@ function renderList() {
           ${dt.year}
         </div>
         <div class="suivi-main">
-          <div class="suivi-arbitres">${jaLabel}</div>
+          <div class="suivi-arbitres">${jaLabel}${badge}</div>
           <div class="suivi-rencontre">${s.rencontre}</div>
         </div>
         <div class="suivi-accompagnateur">
@@ -951,12 +1172,13 @@ function renderList() {
           ${s.accompagnateur}
         </div>
         <div class="score-badge">
-          <div class="score-val ${colorCls}">${domShort}</div>
-          <div class="score-label">Dominant</div>
+          ${scoreHtml}
+          <div class="score-label">${status === 'vide' ? 'Statut' : 'Dominant'}</div>
         </div>
         <div class="expand-arrow">▾</div>
       </div>
       <div class="suivi-detail">
+        ${banner}
         <div class="detail-grid">
           <div class="detail-section">
             <div class="detail-section-title">Évaluation par critère</div>
@@ -1010,7 +1232,10 @@ function updateExportHint() {
   const arbitre = select.value;
   const rows = SUIVIS.filter(s => s.ja1 === arbitre || s.ja2 === arbitre);
   const total = rows.reduce((sum, s) => sum + getMontant(s.rencontre), 0);
-  hint.textContent = `${rows.length} match${rows.length > 1 ? 's' : ''} suivi${rows.length > 1 ? 's' : ''} · total cumulé ${formatEuros(total)}`;
+  const nbInc = rows.filter(s => completionStatus(s) === 'vide').length;
+  hint.textContent = `${rows.length} match${rows.length > 1 ? 's' : ''} suivi${rows.length > 1 ? 's' : ''}`
+    + (nbInc ? ` (dont ${nbInc} non complété${nbInc > 1 ? 's' : ''})` : '')
+    + ` · total cumulé ${formatEuros(total)}`;
 }
 
 function exportSelectedBilan() {
@@ -1018,7 +1243,137 @@ function exportSelectedBilan() {
   if (arbitre) generateBilanPDF(arbitre);
 }
 
-function generateBilanPDF(arbitre) {
+// Échelle numérique pour suivre l'évolution : Insuffisant=1 ... Très correct=4
+const NOTE_SCALE = { 'Insuffisant': 1, 'À optimiser': 2, 'Correct': 3, 'Très correct': 4 };
+const NOTE_SCALE_LABEL = { 1: 'Insuffisant', 2: 'À optimiser', 3: 'Correct', 4: 'Très correct' };
+
+function computeMatchScore(evaluations) {
+  const vals = Object.values(evaluations || {}).map(v => NOTE_SCALE[v]).filter(v => v !== undefined);
+  if (!vals.length) return null;
+  return vals.reduce((a, b) => a + b, 0) / vals.length;
+}
+
+function generateEvolutionChartImage(rows) {
+  return new Promise((resolve) => {
+    const canvas = document.getElementById('evolutionChartCanvas');
+    const ctx = canvas.getContext('2d');
+    if (window._chartInstance) { window._chartInstance.destroy(); window._chartInstance = null; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const labels = rows.map(s => formatDateFR(s.date));
+    const data = rows.map(s => computeMatchScore(s.evaluations));
+
+    window._chartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Score moyen du match',
+          data,
+          borderColor: '#E8001D',
+          backgroundColor: 'rgba(232,0,29,0.12)',
+          borderWidth: 3,
+          pointBackgroundColor: '#E8001D',
+          pointRadius: 5,
+          spanGaps: true,
+          tension: 0.25,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: false,
+        animation: false,
+        layout: { padding: 10 },
+        scales: {
+          y: {
+            min: 1, max: 4,
+            ticks: {
+              stepSize: 1,
+              font: { size: 16 },
+              callback: (v) => NOTE_SCALE_LABEL[v] || v
+            },
+            grid: { color: '#e5e5e5' }
+          },
+          x: {
+            ticks: { font: { size: 14 } },
+            grid: { display: false }
+          }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+
+    setTimeout(() => {
+      const img = canvas.toDataURL('image/png');
+      window._chartInstance.destroy();
+      window._chartInstance = null;
+      resolve(img);
+    }, 80);
+  });
+}
+
+async function generateCriteriaEvolutionImages(rows) {
+  const canvas = document.getElementById('evolutionChartCanvas');
+  const ctx = canvas.getContext('2d');
+  const images = [];
+
+  for (const critere of CRITERES) {
+    if (window._chartInstance) { window._chartInstance.destroy(); window._chartInstance = null; }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const data = rows.map(s => {
+      const v = NOTE_SCALE[(s.evaluations || {})[critere]];
+      return v === undefined ? null : v;
+    });
+
+    window._chartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: rows.map((s, i) => (i + 1).toString()),
+        datasets: [{
+          data,
+          borderColor: '#E8001D',
+          backgroundColor: 'rgba(232,0,29,0.12)',
+          borderWidth: 3,
+          pointRadius: 4,
+          pointBackgroundColor: '#E8001D',
+          spanGaps: true,
+          tension: 0.25,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: false,
+        animation: false,
+        layout: { padding: 8 },
+        scales: {
+          y: {
+            min: 1, max: 4,
+            ticks: { stepSize: 1, font: { size: 18 } },
+            grid: { color: '#eee' }
+          },
+          x: {
+            ticks: { font: { size: 16 } },
+            grid: { display: false }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: critere, font: { size: 22 }, color: '#111' }
+        }
+      }
+    });
+
+    await new Promise(r => setTimeout(r, 60));
+    images.push(canvas.toDataURL('image/png'));
+    window._chartInstance.destroy();
+    window._chartInstance = null;
+  }
+
+  return images;
+}
+
+async function generateBilanPDF(arbitre) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
@@ -1027,13 +1382,14 @@ function generateBilanPDF(arbitre) {
     .sort((a, b) => new Date(a.date) - new Date(b.date));
 
   let total = 0;
-  const body = rows.map(s => {
+  const recapBody = rows.map(s => {
     const montant = getMontant(s.rencontre);
     total += montant;
-    const dom = dominantNote(s.evaluations) || '—';
+    const dom = completionStatus(s) === 'vide' ? 'Non complété' : (dominantNote(s.evaluations) || '—');
     return [formatDateFR(s.date), s.rencontre, getCategorie(s.rencontre) || '—', dom, formatEuros(montant)];
   });
 
+  // ── PAGE 1 : EN-TÊTE + RÉCAPITULATIF ──
   doc.setFontSize(16);
   doc.setTextColor(20, 20, 20);
   doc.text("Bilan pédagogique — " + arbitre, 14, 18);
@@ -1042,18 +1398,23 @@ function generateBilanPDF(arbitre) {
   doc.setTextColor(120, 120, 120);
   doc.text("Meylan Handball · Commission d'Arbitrage · Saison 2026-2027", 14, 25);
 
+  doc.setFontSize(11);
+  doc.setTextColor(20, 20, 20);
+  doc.setFont(undefined, 'bold');
+  doc.text("Récapitulatif des matchs arbitrés", 14, 36);
+  doc.setFont(undefined, 'normal');
+
   doc.autoTable({
-    startY: 32,
+    startY: 40,
     head: [["Date", "Rencontre", "Catégorie", "Note dominante", "Montant"]],
-    body: body,
+    body: recapBody,
     styles: { fontSize: 9, textColor: [30, 30, 30] },
     headStyles: { fillColor: [232, 0, 29], textColor: [255, 255, 255] },
     alternateRowStyles: { fillColor: [245, 245, 245] },
     columnStyles: { 4: { halign: 'right' } }
   });
 
-  const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY : 40;
-
+  let finalY = doc.lastAutoTable.finalY;
   doc.setDrawColor(220, 220, 220);
   doc.line(14, finalY + 8, 196, finalY + 8);
 
@@ -1069,6 +1430,102 @@ function generateBilanPDF(arbitre) {
     `Document généré le ${new Date().toLocaleDateString('fr-FR')} — ${rows.length} match${rows.length > 1 ? 's' : ''} suivi${rows.length > 1 ? 's' : ''}`,
     14, finalY + 26
   );
+
+  // ── PAGE 2 : ÉVOLUTION GLOBALE SUR L'ENSEMBLE DES ARBITRAGES ──
+  // (au moins 2 suivis avec des critères renseignés pour tracer une évolution)
+  const rowsEvaluables = rows.filter(s => completionStatus(s) !== 'vide');
+  if (rowsEvaluables.length >= 2) {
+    const chartImg = await generateEvolutionChartImage(rowsEvaluables);
+    doc.addPage();
+    doc.setFontSize(14);
+    doc.setTextColor(20, 20, 20);
+    doc.setFont(undefined, 'bold');
+    doc.text("Évolution globale sur l'ensemble des arbitrages", 14, 18);
+    doc.setFont(undefined, 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(120, 120, 120);
+    doc.text("Score moyen par match (1 = Insuffisant, 2 = À optimiser, 3 = Correct, 4 = Très correct)", 14, 25);
+    doc.addImage(chartImg, 'PNG', 14, 32, 182, 91);
+
+    // ── PAGE(S) SUIVANTES : ÉVOLUTION DÉTAILLÉE PAR CRITÈRE ──
+    const critereImages = await generateCriteriaEvolutionImages(rowsEvaluables);
+    const colW = 91, rowH = 58, startX = 14, startYimg = 32, perRow = 2, rowsPerPage = 4;
+    const perPage = perRow * rowsPerPage;
+
+    critereImages.forEach((img, i) => {
+      const posOnPage = i % perPage;
+      if (posOnPage === 0) {
+        doc.addPage();
+        doc.setFontSize(14);
+        doc.setTextColor(20, 20, 20);
+        doc.setFont(undefined, 'bold');
+        doc.text("Évolution par critère" + (i === 0 ? "" : " (suite)"), 14, 18);
+        doc.setFont(undefined, 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(120, 120, 120);
+        doc.text(`Axe horizontal : matchs évalués dans l'ordre chronologique (1 à ${rowsEvaluables.length}) · Axe vertical : 1 = Insuffisant à 4 = Très correct`, 14, 25);
+      }
+      const col = posOnPage % perRow;
+      const row = Math.floor(posOnPage / perRow);
+      const x = startX + col * colW;
+      const y = startYimg + row * rowH;
+      doc.addImage(img, 'PNG', x, y, colW - 4, rowH - 6);
+    });
+  }
+
+  // ── PAGES SUIVANTES : DÉTAIL PAR MATCH ──
+  rows.forEach((s, idx) => {
+    doc.addPage();
+    const montant = getMontant(s.rencontre);
+    const status = completionStatus(s);
+
+    doc.setFontSize(13);
+    doc.setTextColor(20, 20, 20);
+    doc.setFont(undefined, 'bold');
+    doc.text(`Match ${idx + 1} — ${formatDateFR(s.date)}`, 14, 18);
+    doc.setFont(undefined, 'normal');
+
+    doc.setFontSize(10);
+    doc.setTextColor(90, 90, 90);
+    doc.text(s.rencontre, 14, 25);
+
+    doc.setFontSize(9);
+    doc.setTextColor(120, 120, 120);
+    doc.text(`Catégorie : ${getCategorie(s.rencontre) || '—'}    ·    Montant : ${formatEuros(montant)}`, 14, 31);
+
+    let tableStart = 37;
+    if (status === 'vide') {
+      doc.setFontSize(9);
+      doc.setTextColor(251, 140, 0);
+      doc.text("Suivi non complété : effectué lors du match mais non mis en ligne.", 14, 37);
+      tableStart = 42;
+    }
+
+    const critereBody = CRITERES.map(c => [c, (s.evaluations || {})[c] || 'Non renseigné']);
+    doc.autoTable({
+      startY: tableStart,
+      head: [["Critère", "Évaluation"]],
+      body: critereBody,
+      styles: { fontSize: 8.5, textColor: [30, 30, 30] },
+      headStyles: { fillColor: [40, 40, 40], textColor: [255, 255, 255] },
+      alternateRowStyles: { fillColor: [245, 245, 245] },
+      columnStyles: { 1: { cellWidth: 45 } }
+    });
+
+    let y = doc.lastAutoTable.finalY + 8;
+    doc.setFontSize(9);
+    doc.setTextColor(20, 20, 20);
+    doc.setFont(undefined, 'bold');
+    doc.text("Points à travailler", 14, y);
+    doc.setFont(undefined, 'normal');
+    y += 6;
+
+    doc.setFontSize(8.5);
+    doc.setTextColor(90, 90, 90);
+    const pointsText = s.points || "Aucun commentaire renseigné.";
+    const lines = doc.splitTextToSize(pointsText, 182);
+    doc.text(lines, 14, y);
+  });
 
   doc.save(`bilan_${arbitre.replace(/\s+/g, '_')}.pdf`);
 }
