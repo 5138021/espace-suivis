@@ -15,10 +15,10 @@ header{padding:1.5rem 2rem;display:flex;align-items:center;gap:1.2rem;border-bot
 header img{width:60px;height:60px;border-radius:4px}
 header h1{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3px;line-height:1}
 header p{font-size:.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
-#logout{margin-left:auto;background:none;border:1px solid #2a2a2a;color:var(--muted);font:inherit;font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border-radius:2px;cursor:pointer;display:none}
-#logout:hover{border-color:var(--rouge);color:var(--rouge)}
+#logout{margin-left:auto;background:none;border:1px solid #ffffff;color:#ffffff;font:inherit;font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border-radius:2px;cursor:pointer;display:none}
+#logout:hover{border-color:#ff0000;color:#ff0000}
 /* LOGIN */
-#login{max-width:380px;margin:5rem auto;padding:0 1.5rem}
+#login{max-width:680px;margin:5rem auto;padding:0 1.5rem}
 #login h2{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:4px;line-height:1}
 #login h2 span{color:var(--bleu)}
 #login p.sub{font-size:.8rem;color:var(--muted);margin:.8rem 0 1.8rem;font-weight:300;line-height:1.6}
@@ -67,7 +67,7 @@ button.go:hover{opacity:.9}
 <div class="stripe"></div>
 <header>
   <img src="MHB_logo.png" alt="">
-  <div><h1>Mon suivi</h1><p>Meylan Handball · Arbitrage · Saison 26-27</p></div>
+  <div><h1>Suivi Pédagogique</h1><p>Meylan Handball · Arbitrage · Saison 26-27</p></div>
   <button id="logout" onclick="logout()">Déconnexion</button>
 </header>
 
@@ -76,9 +76,9 @@ button.go:hover{opacity:.9}
   <h2>Espace <span>arbitre</span></h2>
   <p class="sub">Connecte-toi avec l'identifiant et le mot de passe fournis par la commission pour consulter tes suivis.</p>
   <label for="u">Identifiant</label>
-  <input id="u" autocomplete="username" autocapitalize="none">
+  <input id="u" autocomplete="username" autocapitalize="none" placeholder="z-arb-XXXXXXX">
   <label for="p">Mot de passe</label>
-  <input id="p" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()">
+  <input id="p" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()" placeholder="Mot de passe">
   <button class="go" onclick="login()">Se connecter</button>
   <div id="err"></div>
 </main>
