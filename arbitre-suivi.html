@@ -144,7 +144,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const tagCls = v => ({[I]:'t-ins',[O]:'t-opt',[C]:'t-cor',[TC]:'t-tres'}[v] || 't-nr');
 const txtCls = v => ({[I]:'c-ins',[O]:'c-opt',[C]:'c-cor',[TC]:'c-tres'}[v] || '');
-const SHORT = {[I]:'Insuf.',[O]:'Optim.',[C]:'Correct',[TC]:'Très cor.'};
+const SHORT = {[I]:'Insuffisant',[O]:'À optimiser',[C]:'Correct',[TC]:'Très correct'};
 const MOIS = ['Jan','Fév','Mar','Avr','Mai','Juin','Juil','Aoû','Sep','Oct','Nov','Déc'];
 
 function dominant(evals){
