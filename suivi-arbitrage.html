@@ -1055,21 +1055,28 @@ async function submitForm() {
     .join('\n\n');
 
   try {
-    await emailjs.send(
-      SERVICE_ID,
-      TEMPLATE_ID,
-      {
-        ja1:            document.getElementById('f-ja1').value,
-        ja2:            document.getElementById('f-ja2').value,
-        accompagnateur: document.getElementById('f-accompagnateur').value,
-        rencontre:      document.getElementById('f-rencontre').value,
-		  date:           document.getElementById('f-date').value,
-        heure:          document.getElementById('f-heure').value,
-        points:         document.getElementById('f-points').value,
-        objectif:       document.getElementById('f-objectif').value,
-        evaluations:    evaluations
-      }
-    );
+    const dateVal  = document.getElementById('f-date').value;
+const heureVal = document.getElementById('f-heure').value;
+
+const dateFr = dateVal
+  ? new Date(dateVal + 'T12:00:00').toLocaleDateString('fr-FR', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    })
+  : 'Non renseignée';
+
+await emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+  ja1:            document.getElementById('f-ja1').value,
+  ja2:            document.getElementById('f-ja2').value,
+  accompagnateur: document.getElementById('f-accompagnateur').value,
+  rencontre:      document.getElementById('f-rencontre').value,
+  date:           dateVal,
+  date_fr:        dateFr,
+  heure:          heureVal || 'Non renseignée',
+  date_heure:     dateFr + (heureVal ? ' à ' + heureVal : ''),
+  points:         document.getElementById('f-points').value,
+  objectif:       document.getElementById('f-objectif').value,
+  evaluations:    evaluations
+});
 
     showToast('✓ Suivi envoyé avec succès !', 'success');
     // Reset après 1.5s
