@@ -17,6 +17,9 @@ header h1{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:3p
 header p{font-size:.7rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px}
 #logout{margin-left:auto;background:none;border:1px solid #ffffff;color:#ffffff;font:inherit;font-size:.68rem;letter-spacing:1.5px;text-transform:uppercase;padding:7px 14px;border-radius:2px;cursor:pointer;display:none}
 #logout:hover{border-color:#ff0000;color:#ff0000}
+.hero h2 {font-family: 'Bebas Neue', sans-serif;font-size: clamp(2.8rem, 6vw, 5rem);letter-spacing: 4px;line-height: 1;color: var(--blanc);}
+.hero h2 span {color: var(--bleu);}
+.hero-label {font-size: 0.65rem;letter-spacing: 3px;text-transform: uppercase;color: var(--bleu);margin-bottom: 1rem;}
 /* LOGIN */
 #login{max-width:680px;margin:5rem auto;padding:0 1.5rem}
 #login h2{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;letter-spacing:4px;line-height:1}
@@ -73,7 +76,11 @@ button.go:hover{opacity:.9}
 
 <!-- PAGE DE CONNEXION -->
 <main id="login">
-  <h2>Espace <span>arbitre</span></h2>
+  <section class="hero">
+    <p class="hero-label">Suivis d'arbitrage 26-27</p>
+    <h2>Plateforme centralisée<br><span>de suivi pédagogique</span><br>des Juges-Arbitres Jeunes</h2>
+    <p class="hero-sub">Espace numérique de la Commission Arbitrage de Meylan Handball.</p>
+  </section>
   <p class="sub">Connecte-toi avec l'identifiant et le mot de passe fournis par la commission pour consulter tes suivis.</p>
   <label for="u">Identifiant</label>
   <input id="u" autocomplete="username" autocapitalize="none" placeholder="z-arb-XXXXXXX">
