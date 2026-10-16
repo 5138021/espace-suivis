@@ -79,9 +79,8 @@ button.go:hover{opacity:.9}
   <section class="hero">
     <p class="hero-label">Suivis d'arbitrage 26-27</p>
     <h2>Plateforme centralisée<br><span>de suivi pédagogique</span><br>des Juges-Arbitres Jeunes</h2>
-    <p class="sub">Espace numérique de la Commission Arbitrage de Meylan Handball.</p>
+    <p class="sub">Espace numérique de la Commission Arbitrage de Meylan Handball. Connecte-toi avec l'identifiant et le mot de passe fournis par la commission pour consulter tes suivis.</p>
   </section>
-  <p class="sub">Connecte-toi avec l'identifiant et le mot de passe fournis par la commission pour consulter tes suivis.</p>
   <label for="u">Identifiant</label>
   <input id="u" autocomplete="username" autocapitalize="none" placeholder="z-arb-XXXXXXX">
   <label for="p">Mot de passe</label>
@@ -227,6 +226,5 @@ function show(compte){
 try { const id = sessionStorage.getItem('mhb_user'); const c = COMPTES.find(x => x.id === id);
   if(c) chargerDonnees().then(() => show(c)).catch(() => {}); } catch(e){}
 </script>
-<div class="stripe"></div>
 </body>
 </html>
