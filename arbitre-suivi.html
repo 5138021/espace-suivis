@@ -82,7 +82,7 @@ button.go:hover{opacity:.9}
     <p class="sub">Espace numérique de la Commission Arbitrage de Meylan Handball. Connecte-toi avec l'identifiant et le mot de passe fournis par la commission pour consulter tes suivis.</p>
   </section>
   <label for="u">Identifiant</label>
-  <input id="u" autocomplete="username" autocapitalize="none" placeholder="z-arb-XXXXXXX">
+  <input id="u" autocomplete="username" autocapitalize="none" placeholder="prenom.nom">
   <label for="p">Mot de passe</label>
   <input id="p" type="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')login()" placeholder="Mot de passe">
   <button class="go" onclick="login()">Se connecter</button>
@@ -100,17 +100,17 @@ button.go:hover{opacity:.9}
 //    arbitre: nom EXACT tel qu'écrit dans ja1 / ja2 des suivis
 // ═════════════════════════════════════════════════════
 const COMPTES = [
-  { id: "z-arb-3509551",   mdp: "Tour.Kylian",         arbitre: "Kylian Tour" },
-  { id: "z-arb-4099256",   mdp: "Tour.Tim",            arbitre: "Tim Tour" },
-  { id: "z-arb-3509534",   mdp: "Tour.Ilona",          arbitre: "Ilona Tour" },
-  { id: "z-arb-3340893",   mdp: "Lucatelli.Elena",     arbitre: "Elena Lucatelli" },
-  { id: "z-arb-2732403",   mdp: "Mavraganis.Augustin", arbitre: "Augustin Mavraganis" },
-  { id: "z-arb-3002707",   mdp: "Maujean.Eden",        arbitre: "Eden Maujean" },
-  { id: "z-arb-3480829",   mdp: "Coynet.Nathan",       arbitre: "Nathan Coynet" },
-  { id: "z-arb-3237041",   mdp: "Mignot.Lucas",        arbitre: "Lucas Mignot" },
-  { id: "z-arb-3165834",   mdp: "Cournede.Maxime",     arbitre: "Maxime Cournede" },
-  { id: "z-arb-2510062",   mdp: "Filippi.Louis",       arbitre: "Louis Filippi" },
-  { id: "z-arb-",   mdp: "Morlot.Jens",       arbitre: "Jens Morlot" },
+  { id: "kylian.tour",         mdp: "23122010",        arbitre: "Kylian Tour" },
+  { id: "tim.tour",            mdp: "02092014",        arbitre: "Tim Tour" },
+  { id: "ilona.tour",          mdp: "23012012",        arbitre: "Ilona Tour" },
+  { id: "elena.lucatelli",     mdp: "06092012",        arbitre: "Elena Lucatelli" },
+  { id: "augustin.mavraganis", mdp: "19012011",        arbitre: "Augustin Mavraganis" },
+  { id: "eden.maujean",        mdp: "08082014",        arbitre: "Eden Maujean" },
+  { id: "nathan.coynet",       mdp: "21092013",        arbitre: "Nathan Coynet" },
+  { id: "lucas.mignot",        mdp: "28022012",        arbitre: "Lucas Mignot" },
+  { id: "maxime.cournede",     mdp: "13032015",        arbitre: "Maxime Cournede" },
+  { id: "louis.filippi",       mdp: "28082012",        arbitre: "Louis Filippi" },
+  { id: "jens.morlot",         mdp: "04082013",        arbitre: "Jens Morlot" },
 ];
 
 // ═════════════════════════════════════════════════════
