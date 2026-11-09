@@ -22,6 +22,7 @@
     --opt:    #fb8c00;
     --cor:    #43a047;
     --tres:   #4A9FFF;
+    --inc:    #B388FF;
     --border: #1E1E1E;
     --or:     #FFD100;
   }
@@ -211,9 +212,9 @@
   .filter-btn.active { font-weight: 600; }
 
   .filter-btn.filter-inc:hover, .filter-btn.filter-inc.active {
-    border-color: var(--opt);
-    color: var(--opt);
-    background: rgba(251,140,0,0.06);
+    border-color: var(--inc);
+    color: var(--inc);
+    background: rgba(179,136,255,0.06);
   }
 
   .search-wrap {
@@ -405,8 +406,8 @@
     text-transform: uppercase;
     padding: 2px 7px;
     border-radius: 2px;
-    color: var(--opt);
-    border: 1px dashed rgba(251,140,0,0.5);
+    color: var(--inc);
+    border: 1px dashed rgba(179,136,255,0.5);
     font-family: 'DM Sans', sans-serif;
     font-weight: 400;
     vertical-align: middle;
@@ -414,9 +415,9 @@
 
   .inc-banner {
     font-size: 0.7rem;
-    color: var(--opt);
-    background: rgba(251,140,0,0.07);
-    border: 1px dashed rgba(251,140,0,0.35);
+    color: var(--inc);
+    background: rgba(179,136,255,0.07);
+    border: 1px dashed rgba(179,136,255,0.35);
     padding: 0.7rem 1rem;
     margin-bottom: 1.2rem;
     letter-spacing: 0.3px;
@@ -448,7 +449,7 @@
   .score-opt  { color: var(--opt); }
   .score-cor  { color: var(--cor); }
   .score-tres { color: var(--tres); }
-  .score-inc  { color: var(--opt); font-size: 0.95rem; text-align: center; }
+  .score-inc  { color: var(--inc); font-size: 0.95rem; text-align: center; }
 
   .expand-arrow {
     color: #333;
@@ -661,8 +662,8 @@
       <div class="stat-label">Ce mois-ci</div>
     </div>
     <div class="stat-item">
-      <div class="stat-value" id="stat-inc" style="color:var(--opt)">—</div>
-      <div class="stat-label">Non complétés</div>
+      <div class="stat-value" id="stat-remu" style="color:var(--or)">—</div>
+      <div class="stat-label">Rémunération totale</div>
     </div>
     <div class="stat-item">
       <div class="stat-value" id="stat-score" style="color:var(--cor)">—</div>
@@ -870,7 +871,7 @@ const SUIVIS = [
     ja1: "Mallo Pinto",
     ja2: "",
     accompagnateur: "Xavier Fini",
-    rencontre: "M11 Féminin Div1 - Saint Egreve",
+    rencontre: "M11 Mixte Découverte - Saint Egreve",
     evaluations: {
       "Comprend le jeu":                  "À optimiser",
       "Appréciation des duels":           "À optimiser",
@@ -1245,7 +1246,12 @@ function computeStats() {
     const d = new Date(s.date);
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
   }).length;
-  const nonCompletes = SUIVIS.filter(s => completionStatus(s) === 'vide').length;
+
+  // Rémunération totale : montant par arbitre × nombre d'arbitres, sur tous les suivis
+  const totalRemu = SUIVIS.reduce(
+    (sum, s) => sum + getMontant(s.rencontre) * [s.ja1, s.ja2].filter(Boolean).length,
+    0
+  );
 
   // La note dominante globale ne tient compte que des suivis ayant au moins un critère renseigné
   const domCounts = { 'Insuffisant':0,'À optimiser':0,'Correct':0,'Très correct':0 };
@@ -1259,7 +1265,7 @@ function computeStats() {
   document.getElementById('stat-total').textContent = total;
   document.getElementById('stat-arbitres').textContent = arbitresSet.size;
   document.getElementById('stat-mois').textContent = mois;
-  document.getElementById('stat-inc').textContent = nonCompletes;
+  document.getElementById('stat-remu').textContent = formatEuros(totalRemu);
   const sc = document.getElementById('stat-score');
   sc.textContent = dominantShort(globalDom);
   sc.className = 'stat-value ' + getScoreColorClass(globalDom);
@@ -1668,7 +1674,7 @@ async function generateBilanPDF(arbitre) {
     let tableStart = 37;
     if (status === 'vide') {
       doc.setFontSize(9);
-      doc.setTextColor(251, 140, 0);
+      doc.setTextColor(124, 77, 255);
       doc.text("Suivi non complété : effectué lors du match mais non mis en ligne.", 14, 37);
       tableStart = 42;
     }
