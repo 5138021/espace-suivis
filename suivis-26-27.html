@@ -397,6 +397,43 @@
     margin-bottom: 2px;
   }
 
+  /* ACCOMPAGNATEUR VERSION MOBILE (masqué sur ordinateur) */
+  .suivi-accompagnateur-mobile {
+    display: none;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .suivi-accompagnateur-mobile strong {
+    font-size: 0.58rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #666;
+    font-weight: 400;
+    margin-right: 4px;
+  }
+
+  /* NOTE DOMINANTE VERSION MOBILE (masquée sur ordinateur) */
+  .suivi-dominant-mobile {
+    display: none;
+    font-size: 0.68rem;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  .suivi-dominant-mobile strong {
+    font-size: 0.58rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #666;
+    font-weight: 400;
+    margin-right: 4px;
+  }
+
+  .suivi-dominant-mobile .dom-val { font-weight: 600; font-size: 0.74rem; }
+  .suivi-dominant-mobile .score-inc { font-size: 0.74rem; }
+
   /* BADGE SUIVI INCOMPLET */
   .badge-inc {
     display: inline-block;
@@ -615,8 +652,22 @@
     header, nav.subnav, .hero, .filters, .section-label, .suivis-container, footer { padding-left: 1.2rem; padding-right: 1.2rem; }
     .stats-bar { padding-left: 0; padding-right: 0; flex-wrap: wrap; }
     .hero::before { display: none; }
-    .suivi-summary { grid-template-columns: 50px 1fr 100px 36px; }
-    .suivi-accompagnateur, .score-badge { display: none; }
+
+    /* 3 colonnes : date / contenu / flèche */
+    .suivi-summary { grid-template-columns: 50px 1fr 30px; }
+    .suivi-summary > .suivi-accompagnateur, .score-badge { display: none; }
+
+    /* Noms des arbitres et rencontre : retour à la ligne autorisé */
+    .suivi-arbitres, .suivi-rencontre {
+      white-space: normal;
+      overflow: visible;
+      text-overflow: clip;
+    }
+
+    /* Accompagnateur affiché sous la rencontre */
+    .suivi-accompagnateur-mobile { display: block; }
+    .suivi-dominant-mobile { display: block; }
+
     .detail-grid { grid-template-columns: 1fr; }
     .search-wrap input { width: 140px; }
   }
@@ -1444,6 +1495,8 @@ function renderList() {
         <div class="suivi-main">
           <div class="suivi-arbitres">${jaLabel}${badge}</div>
           <div class="suivi-rencontre">${s.rencontre}</div>
+          <div class="suivi-accompagnateur-mobile"><strong>Accompagnateur</strong>${s.accompagnateur}</div>
+          <div class="suivi-dominant-mobile"><strong>Note dominante</strong>${status === 'vide' ? `<span class="dom-val score-inc">Non complété</span>` : `<span class="dom-val ${colorCls}">${domShort}</span>`}</div>
         </div>
         <div class="suivi-accompagnateur">
           <strong>Accompagnateur</strong>
