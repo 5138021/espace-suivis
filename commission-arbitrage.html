@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commission Arbitrage — Meylan HB 26-27</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rouge: #E8001D;
+    --noir: #0D0D0D;
+    --blanc: #F5F2EC;
+    --gris: #1A1A1A;
+    --gris-mid: #2E2E2E;
+    --accent: #FFD100;
+    --texte-doux: #9A9A9A;
+    --bleu: #4A9FFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--noir);
+    color: var(--blanc);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .top-stripe, .bottom-stripe {
+    height: 4px;
+    background: linear-gradient(90deg, var(--rouge) 0%, var(--accent) 50%, var(--rouge) 100%);
+  }
+
+  /* HEADER */
+  header {
+    padding: 2.5rem 3rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border-bottom: 1px solid #222;
+  }
+
+  .logo-badge {
+    width: 75px;
+    height: 75px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    object-fit: contain;
+  }
+
+  .header-text h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    line-height: 1;
+  }
+
+  .header-text p {
+    font-size: 0.72rem;
+    color: var(--texte-doux);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* NAV */
+  .subnav {
+    padding: 0 3rem;
+    border-bottom: 1px solid #222;
+    display: flex;
+  }
+
+  .subnav a {
+    padding: 0.9rem 1.4rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--texte-doux);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .subnav a.active,
+  .subnav a:hover {
+    color: var(--blanc);
+    border-bottom-color: var(--bleu);
+  }
+
+  /* HERO */
+  .hero {
+    padding: 4rem 3rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: 'COMMISSION';
+    position: absolute;
+    right: -1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 12rem;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    letter-spacing: 4px;
+    white-space: nowrap;
+  }
+
+  .hero-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--bleu);
+    margin-bottom: 1rem;
+  }
+
+  .hero h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    letter-spacing: 4px;
+    line-height: 1;
+  }
+
+  .hero h2 span { color: var(--bleu); }
+
+  .hero-sub {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: var(--texte-doux);
+    font-weight: 300;
+    max-width: 480px;
+    line-height: 1.6;
+  }
+
+  /* TITRES DE SECTION */
+  .section-title {
+    padding: 0 3rem 1.2rem;
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--texte-doux);
+    border-bottom: 1px solid #222;
+    margin-bottom: 2rem;
+  }
+
+  /* GRILLE DE PERSONNES */
+  .people-grid {
+    padding: 0 3rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 3rem;
+  }
+
+  .person {
+    background: var(--gris);
+    border: 1px solid #222;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+  }
+
+  .person::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--bleu);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s ease;
+  }
+
+  .person:hover { background: var(--gris-mid); }
+  .person:hover::after,
+  .person.lead::after { transform: scaleY(1); }
+
+  .person-photo {
+    aspect-ratio: 1 / 1;
+    background: #252525;
+    overflow: hidden;
+  }
+
+  .person-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+    display: block;
+  }
+
+  .person-info { padding: 1.2rem 1.4rem 1.5rem; }
+
+  .person-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.15rem;
+    letter-spacing: 2px;
+    line-height: 1.1;
+  }
+
+  .person-grade {
+    font-size: 0.75rem;
+    color: var(--texte-doux);
+    font-weight: 300;
+    line-height: 1.5;
+    margin-top: 0.3rem;
+  }
+
+  .person.lead .person-grade { color: var(--bleu); }
+
+  /* FOOTER */
+  footer {
+    margin-top: 3rem;
+    padding: 1.5rem 3rem;
+    border-top: 1px solid #222;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  footer p, footer a {
+    font-size: 0.68rem;
+    color: var(--texte-doux);
+    letter-spacing: 1px;
+    text-decoration: none;
+  }
+
+  footer a { transition: color 0.2s; }
+  footer a:hover { color: var(--rouge); }
+
+  @media (max-width: 700px) {
+    header, .subnav, .hero, .section-title, .people-grid, footer {
+      padding-left: 1.2rem;
+      padding-right: 1.2rem;
+    }
+    .hero::before { display: none; }
+    .people-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; }
+    .person-info { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <img class="logo-badge" src="MHB_logo.png" alt="Logo Meylan Handball"/>
+  <div class="header-text">
+    <h1>Suivi Pédagogique</h1>
+    <p>Meylan Handball · Arbitrage · Saison 26-27</p>
+  </div>
+</header>
+
+<script src="nav.js"></script>
+
+<main>
+
+  <section class="hero">
+    <p class="hero-label">Équipe 26-27</p>
+    <h2>Commission<br><span>d'arbitrage</span></h2>
+    <p class="hero-sub">Responsables, juges-arbitres et juges-arbitres jeunes de Meylan Handball.</p>
+  </section>
+
+  <!-- RESPONSABLES -->
+  <p class="section-title">Responsables</p>
+  <div class="people-grid">
+    <div class="person lead"><div class="person-photo"><img src="photos/MG_2233.jpg" alt="Xavier FINI"/></div><div class="person-info"><div class="person-name">Xavier FINI</div><div class="person-grade">Responsable de l'Arbitrage</div></div></div>
+    <div class="person lead"><div class="person-photo"><img src="photos/IMG_4127.jpg" alt="Patrick CHENEVIERE"/></div><div class="person-info"><div class="person-name">Patrick CHENEVIERE</div><div class="person-grade">Référent désignations</div></div></div>
+  </div>
+
+  <!-- JUGES ARBITRES -->
+  <p class="section-title">Juges arbitres</p>
+  <div class="people-grid">
+    <div class="person"><div class="person-photo"><img src="photos/20230518_181101.jpg" alt="Elsa GAIDET"/></div><div class="person-info"><div class="person-name">Elsa GAIDET</div><div class="person-grade">Juge Arbitre Territorial T2</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/IMG_4127.jpg" alt="Patrick CHENEVIERE"/></div><div class="person-info"><div class="person-name">Patrick CHENEVIERE</div><div class="person-grade">Juge Arbitre Territorial T3</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/MG_2233.jpg" alt="Xavier FINI"/></div><div class="person-info"><div class="person-name">Xavier FINI</div><div class="person-grade">Juge Arbitre Territorial T3</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/photo .jpg" alt="Jules MARTEL"/></div><div class="person-info"><div class="person-name">Jules MARTEL</div><div class="person-grade">Juge Arbitre Territorial T3</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/photo identite.jpg" alt="Antoine MELIAND"/></div><div class="person-info"><div class="person-name">Antoine MELIAND</div><div class="person-grade">Juge Arbitre Territorial T3</div></div></div>
+  </div>
+
+  <!-- JUGES ARBITRES JEUNES -->
+  <p class="section-title">Juges arbitres jeunes</p>
+  <div class="people-grid">
+    <div class="person"><div class="person-photo"><img src="photos/Augustin Mavraganis.jpg" alt="Augustin MAVRAGANIS"/></div><div class="person-info"><div class="person-name">Augustin MAVRAGANIS</div><div class="person-grade">Juge Arbitre Jeune Territorial T3</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/Kylian_TOUR.jpg" alt="Kylian TOUR"/></div><div class="person-info"><div class="person-name">Kylian TOUR</div><div class="person-grade">Juge Arbitre Jeune Territorial T3</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/1693921848069..jpg" alt="Elena LUCATELLI"/></div><div class="person-info"><div class="person-name">Elena LUCATELLI</div><div class="person-grade">Juge Arbitre Jeune Territorial T3</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/Ilona_TOUR.jpg" alt="Ilona TOUR"/></div><div class="person-info"><div class="person-name">Ilona TOUR</div><div class="person-grade">Juge Arbitre Jeune Territorial T3</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/IMG_0097.png" alt="Lucas MIGNOT"/></div><div class="person-info"><div class="person-name">Lucas MIGNOT</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/Louis-FILIPPI.jpg" alt="Louis FILIPPI"/></div><div class="person-info"><div class="person-name">Louis FILIPPI</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/1000084110.jpg" alt="Tim TOUR"/></div><div class="person-info"><div class="person-name">Tim TOUR</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/Nathan_COYNET.jpg" alt="Nathan COYNET"/></div><div class="person-info"><div class="person-name">Nathan COYNET</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/chrome_screenshot_3 sept. 2024 21_36_29 GMT+02_00.png" alt="Eden MAUJEAN"/></div><div class="person-info"><div class="person-name">Eden MAUJEAN</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/IMG_1518.jpg" alt="Maxime COURNEDE"/></div><div class="person-info"><div class="person-name">Maxime COURNEDE</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/Jen_MORLOT.jpg" alt="Jens MORLOT"/></div><div class="person-info"><div class="person-name">Jens MORLOT</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/Elikya_MULOMBA.jpeg" alt="Elikya MULOMBA"/></div><div class="person-info"><div class="person-name">Elikya MULOMBA</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/Meloe_GOLERET.jpg" alt="Meloe GOLERET"/></div><div class="person-info"><div class="person-name">Meloe GOLERET</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/Eliott_MAUJEAN.jpg" alt="Eliott MAUJEAN"/></div><div class="person-info"><div class="person-name">Eliott MAUJEAN</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+    <div class="person"><div class="person-photo"><img src="photos/Nathan_COURNEDE.jpeg" alt="Nathan COURNEDE"/></div><div class="person-info"><div class="person-name">Nathan COURNEDE</div><div class="person-grade">Juge Arbitre Jeune Club</div></div></div>
+  </div>
+
+</main>
+
+<footer>
+  <p>© 2026-2027 Meylan Handball · Commission d'Arbitrage</p>
+  <a href="ressources.html">Fiches d'aide →</a>
+</footer>
+
+<div class="bottom-stripe"></div>
+
+</body>
+</html>
