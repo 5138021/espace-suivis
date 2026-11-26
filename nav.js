@@ -2,8 +2,8 @@
    nav.js — En-tête + barre de navigation
    Meylan Handball · Arbitrage · Saison 26-27
 
-   Usage : placer <script src="nav.js"></script> juste après
-   <div class="top-stripe"></div> (à la place de <header> et <nav>).
+   Usage : placer <script src="nav.js"></script> en début de <body>
+   (à la place de la bande .top-stripe, du <header> et du <nav>).
    Le lien de la page courante est mis en "active" automatiquement.
 
    Options (facultatives) pour personnaliser l'en-tête d'une page :
@@ -23,6 +23,12 @@
 
   // ---- 2. Styles (injectés une seule fois) ----
   const CSS = `
+    /* BANDE DÉCORATIVE HAUT */
+    .top-stripe {
+      height: 4px;
+      background: linear-gradient(90deg, var(--rouge, #E8001D) 0%, var(--accent, #FFD100) 50%, var(--rouge, #E8001D) 100%);
+    }
+
     /* HEADER */
     .site-header {
       padding: 2.5rem 3rem 2rem;
@@ -111,6 +117,9 @@
   const titre = (script && script.dataset.titre) || TITRE;
   const sousTitre = (script && script.dataset.sousTitre) || SOUS_TITRE;
 
+  const stripe = document.createElement("div");
+  stripe.className = "top-stripe";
+
   const header = document.createElement("header");
   header.className = "site-header";
 
@@ -143,10 +152,12 @@
 
   // ---- 6. Insertion à l'emplacement du <script> ----
   if (script && script.parentNode) {
+    script.parentNode.insertBefore(stripe, script);
     script.parentNode.insertBefore(header, script);
     script.parentNode.insertBefore(nav, script);
   } else {
     document.body.prepend(nav);
     document.body.prepend(header);
+    document.body.prepend(stripe);
   }
 })();
