@@ -922,8 +922,7 @@ function updateUI() {
     el.classList.toggle('active', i + 1 === state.currentStep);
   });
 
-  document.getElementById('step-indicator').textContent =
-    `Étape ${state.currentStep} / ${state.totalSteps}`;
+
 
   const pct = ((state.currentStep - 1) / (state.totalSteps - 1)) * 100;
   document.getElementById('progress-fill').style.width = pct + '%';
