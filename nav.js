@@ -18,7 +18,7 @@
   const LIENS = [
     { label: "Accueil",       href: "index.html" },
     { label: "Fiches d'aide", href: "ressources.html" },
-    { label: "Commission",    href: "commission.html" }
+    { label: "Commission",    href: "commission-arbitrage.html" }
   ];
 
   // ---- 2. Styles (injectés une seule fois) ----
